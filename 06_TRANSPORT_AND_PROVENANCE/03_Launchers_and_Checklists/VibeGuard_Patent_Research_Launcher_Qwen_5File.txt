@@ -1,0 +1,41 @@
+Read 00_READ_FIRST_VibeGuard_Patent_Research_Instructions.md first and treat it
+as the governing task specification.
+
+This is the Qwen five-attachment transport package.
+
+Before substantive research, inventory the five attachments and confirm:
+
+1. exactly five attachments are present;
+2. the governing instruction file is readable;
+3. the remaining four evidence attachments represent all ten canonical
+   project documents;
+4. `01-03_Project_Authority_Bundle.md` contains complete and separately
+   marked canonical documents 01, 02 and 03;
+5. `04-06_VibeGuard_Phase3C_Bundle.md` contains complete and separately
+   marked canonical documents 04, 05 and 06;
+6. `07-09_Current_Evidence_and_Patent_Input_Bundle.md` contains complete and
+   separately marked canonical documents 07, 08 and 09;
+7. `10_Phase2_Report_by_Claude.md` is present as canonical document 10;
+8. every internally marked canonical document is treated as a separate
+   logical source with its original filename and authority level;
+9. Project_mC_Decision_Register_v1.2.md, not v1.1, is present inside the
+   authority bundle;
+10. the frozen concept is a passive, single-node, edge-computed machine-
+    vibration detector—not active cancellation, haptics, a wearable system,
+    a multi-sensor array or a cloud platform;
+11. any missing, duplicate, unreadable, partial or ambiguously marked input
+    is identified.
+
+The three combined files are transport wrappers only. They are not
+syntheses, summaries, modified technical documents or replacement
+authorities.
+
+Do not report documents as missing merely because several canonical documents
+share one attachment.
+
+If the complete logical input set is readable, perform the full independent
+VibeGuard patent research exactly as specified in the governing instruction.
+
+Do not use prior-chat context.
+Do not use another model's VibeGuard research or any OpenBraille synthesis.
+Do not compare VibeGuard against the other Project mC concepts.

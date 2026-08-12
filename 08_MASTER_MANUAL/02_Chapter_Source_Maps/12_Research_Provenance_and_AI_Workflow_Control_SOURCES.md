@@ -1,0 +1,206 @@
+# 12. Research Provenance and AI Workflow Control — Source Map
+
+Research-lane identity, manifests, launchers, upload bundles, model-output limitations and provenance controls.
+
+Mapped sources: **50**
+
+- `06_TRANSPORT_AND_PROVENANCE/01_Governing_Instructions/Historical_Upload_Pack_Variants/OpenBraille_Patent_Synthesis_Input__00_READ_FIRST_OpenBraille_Synthesis_Instructions.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/01_Governing_Instructions/Historical_Upload_Pack_Variants/VibeGuard_Patent_Research_Input__00_READ_FIRST_VibeGuard_Patent_Research_Instructions.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/01_Governing_Instructions/OpenBraille_Patent_Deep_Research_Instructions_LOCATED.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/01_Governing_Instructions/OpenBraille_PreBuild_Patent_Simulation_Instructions.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/01_Governing_Instructions/OpenBraille_Synthesis_Instructions_CANONICAL.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/01_Governing_Instructions/Project_mC_Final_Adjudication_Instructions_CANONICAL.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/01_Governing_Instructions/Project_mC_Teacher_Document_Instructions.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/01_Governing_Instructions/TrueMoist_Patent_Research_Instructions_CANONICAL.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/01_Governing_Instructions/TrueMoist_Synthesis_Instructions_CANONICAL.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/01_Governing_Instructions/VibeGuard_Patent_Research_Instructions_CANONICAL.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/01_Governing_Instructions/VibeGuard_PreBuild_Patent_Simulation_Instructions.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/01_Governing_Instructions/VibeGuard_Synthesis_Instructions_CANONICAL.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/02_Input_Manifests/Final_Adjudication_EXCLUSION_AND_PROVENANCE_REGISTER.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/02_Input_Manifests/OpenBraille_PreBuild_INPUT_MANIFEST.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/02_Input_Manifests/OpenBraille_Synthesis_INPUT_MANIFEST.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/02_Input_Manifests/Teacher_Document_Master_INPUT_MANIFEST.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/02_Input_Manifests/TrueMoist_Synthesis_INPUT_MANIFEST.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/02_Input_Manifests/VibeGuard_PreBuild_INPUT_MANIFEST.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/02_Input_Manifests/VibeGuard_Synthesis_INPUT_MANIFEST.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/Codex_Workflows/CODEX_CREATE_TRUEMOIST_GEMINI10_QWEN5_PACKAGES.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/Codex_Workflows/CODEX_EXTRACTION_VALIDATION.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/Codex_Workflows/CODEX_ORGANIZE_PROJECT_MC_FINAL_ADJUDICATION_PACKAGE.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/Codex_Workflows/CODEX_ORGANIZE_TRUEMOIST_PATENT_RESEARCH_PACKAGE.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/Codex_Workflows/CODEX_ORGANIZE_TRUEMOIST_SYNTHESIS_PACKAGE.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/Codex_Workflows/CODEX_ORGANIZE_VIBEGUARD_SYNTHESIS_PACKAGE.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/Codex_Workflows/CODEX_SESSION_HANDOFF.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/OpenBraille_PreBuild_Launcher_FINAL.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/OpenBraille_Synthesis_UPLOAD_CHECKLIST.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/Project_mC_Final_Adjudication_Launcher_FINAL.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/Project_mC_Teacher_Document_Master_Launcher_FINAL.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/TrueMoist_Patent_Research_Launcher_GEMINI_10.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/TrueMoist_Patent_Research_Launcher_QWEN_5.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/TrueMoist_Synthesis_Launcher_FINAL.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/VibeGuard_Patent_Research_Launcher.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/VibeGuard_Patent_Research_Launcher_10File_Limit.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/VibeGuard_Patent_Research_Launcher_Qwen_5File.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/VibeGuard_PreBuild_Launcher_FINAL.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/03_Launchers_and_Checklists/VibeGuard_Synthesis_Launcher_FINAL.txt`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/04_Reduced_File_Bundles/TrueMoist_Gemini10_04_05_Architecture_and_Memory.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/04_Reduced_File_Bundles/TrueMoist_Qwen5_01_03_Project_Authority_Bundle.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/04_Reduced_File_Bundles/TrueMoist_Qwen5_04_06_Phase3C_Bundle.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/04_Reduced_File_Bundles/TrueMoist_Qwen5_07_09_Validation_and_Patent_Input_Bundle.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/04_Reduced_File_Bundles/VibeGuard_Gemini10_07_08_Downselection_Evidence_Bundle.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/04_Reduced_File_Bundles/VibeGuard_Gemini10_Platform_Instructions.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/04_Reduced_File_Bundles/VibeGuard_Qwen5_01_03_Project_Authority_Bundle.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/04_Reduced_File_Bundles/VibeGuard_Qwen5_04_06_Phase3C_Bundle.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/04_Reduced_File_Bundles/VibeGuard_Qwen5_07_09_Current_Evidence_and_Patent_Input_Bundle.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/04_Reduced_File_Bundles/VibeGuard_Qwen5_Platform_Instructions.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/05_Package_Validation/TrueMoist_Limited_Package_Validation.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.
+- `06_TRANSPORT_AND_PROVENANCE/TRANSPORT_AND_PROVENANCE_INDEX.md`
+  - Authority: `TIER_5`
+  - Treatment: `PROVENANCE_ONLY`
+  - Reason: Instruction, manifest, launcher, bundle or package validation.

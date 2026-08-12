@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remaining 11 Concepts · Patent Pipeline</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f7fb;
+            color: #1a1a2e;
+            padding: 2rem 1rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            background: linear-gradient(145deg, #0f172a, #1e293b);
+            color: white;
+            border-radius: 2rem;
+            padding: 2.5rem 3rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.3);
+        }
+
+        .hero h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            max-width: 720px;
+            font-weight: 300;
+        }
+
+        .hero .meta {
+            margin-top: 1.2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            border-top: 1px solid #334155;
+            padding-top: 1.2rem;
+        }
+
+        .legend {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.2rem 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.8rem 2rem;
+            border: 1px solid #e9edf4;
+        }
+
+        .legend strong {
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 0.9rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            color: #334155;
+        }
+
+        .legend-item .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .dot-green { background: #22c55e; }
+        .dot-yellow { background: #eab308; }
+        .dot-orange { background: #f97316; }
+        .dot-red { background: #ef4444; }
+
+        .concept-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .concept-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem 2.5rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+            border: 1px solid #edf2f7;
+            transition: all 0.2s ease;
+        }
+
+        .concept-card:hover {
+            box-shadow: 0 16px 40px -12px rgba(0,0,0,0.12);
+            border-color: #cbd5e1;
+        }
+
+        .card-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.2rem;
+            gap: 0.8rem;
+        }
+
+        .card-header .title-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .card-header h2 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .card-header .cluster-id {
+            background: #eef2ff;
+            color: #4f46e5;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+        }
+
+        .card-content {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 800px) {
+            .card-content {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 { font-size: 1.8rem; }
+            .hero { padding: 1.8rem; }
+            .concept-card { padding: 1.5rem; }
+        }
+
+        .card-text p {
+            color: #334155;
+            margin-bottom: 0.8rem;
+            font-size: 0.98rem;
+        }
+
+        .card-text p strong {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .card-text .highlight-box {
+            background: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 0.8rem 1.2rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .card-text .highlight-box strong {
+            color: #1e293b;
+        }
+
+        .scores-table {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .scores-table .score-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            gap: 0.3rem;
+            font-size: 0.75rem;
+            padding: 0.3rem 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .scores-table .score-row:last-child {
+            border-bottom: none;
+        }
+
+        .scores-table .score-header {
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .score-cell {
+            text-align: center;
+            padding: 0.2rem;
+        }
+
+        .score-value {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .score-bar {
+            height: 4px;
+            width: 100%;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-top: 2px;
+        }
+
+        .score-bar .fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .survival-note {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: 0.75rem;
+            padding: 1rem 1.2rem;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: #064e3b;
+        }
+
+        .survival-note strong {
+            color: #065f46;
+        }
+
+        .exception-note {
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 0.75rem;
+            padding: 1rem 1.2rem;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: #78350f;
+        }
+
+        .exception-note strong {
+            color: #92400e;
+        }
+
+        .summary-section {
+            margin-top: 3rem;
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem 2.5rem;
+            border: 1px solid #edf2f7;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+        }
+
+        .summary-section h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-table-wrap {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .summary-table th {
+            background: #f1f5f9;
+            padding: 0.8rem 0.4rem;
+            text-align: center;
+            font-weight: 600;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .summary-table td {
+            padding: 0.8rem 0.4rem;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            background: white;
+        }
+
+        .summary-table .concept-name {
+            font-weight: 600;
+            text-align: left;
+            padding-left: 0.8rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.1rem 0.6rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        .tag-high { background: #dcfce7; color: #166534; }
+        .tag-med { background: #fef9c3; color: #854d0e; }
+        .tag-low { background: #fee2e2; color: #991b1b; }
+
+        .footnote {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Hero -->
+        <div class="hero">
+            <h1>📋 Remaining <span>11 Concepts</span></h1>
+            <p>All concepts that didn't make the top 5, plus the high‑risk, high‑reward exception — each evaluated on novelty, feasibility, patent potential, and real‑world impact.</p>
+            <div class="meta">
+                <span>🧩 11 ideas from the survivor list</span>
+                <span>⚡ Includes SiliconFingerprint (exception)</span>
+                <span>🎯 Ready for backup or team exploration</span>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <strong>📊 Score Legend (1–10):</strong>
+            <span class="legend-item"><span class="dot dot-green"></span> 8–10 (Strong)</span>
+            <span class="legend-item"><span class="dot dot-yellow"></span> 6–7 (Good)</span>
+            <span class="legend-item"><span class="dot dot-orange"></span> 4–5 (Moderate)</span>
+            <span class="legend-item"><span class="dot dot-red"></span> 1–3 (Weak)</span>
+        </div>
+
+        <!-- Cards -->
+        <div class="concept-grid">
+
+            <!-- OC-01 SignalGuard -->
+            <div class="concept-card">
+                <div class="card-header">
+                    <div class="title-group">
+                        <h2>SignalGuard</h2>
+                        <span class="cluster-id">OC-01</span>
+                    </div>
+                    <span style="font-size:0.85rem; background:#e0f2fe; padding:0.2rem 0.8rem; border-radius:40px;">Healthcare</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">
+                        <p><strong>❓ The Problem:</strong> Remote patient monitors often record bad data (e.g., loose ECG electrode) without warning. Doctors see the data days later and don't know it's unreliable.</p>
+                        <p><strong>💡 The Innovation:</strong> A real‑time <strong>confidence/validity score</strong> generated on‑device at the moment of capture. The device itself tells the user if the reading can be trusted.</p>
+                        <p><strong>👥 Who benefits:</strong> Rural chronic‑disease patients, community health workers, telehealth programs.</p>
+                        <div class="highlight-box">
+                            <strong>🎯 Why embedded?</strong> Signal‑quality assessment is only useful if it happens instantly at the sensor — a cloud round‑trip defeats the purpose and offline operation is non‑negotiable.
+                        </div>
+                        <p><strong>⏱️ Feasibility:</strong> <strong>Good</strong> — Single‑vital‑sign demo (ECG) is straightforward; the challenge is making the confidence score robust across different patients and electrode placements.</p>
+                        <p><strong>⚡ Key risk:</strong> False‑confidence misclassification; analog front‑end variability.</p>
+                        <div class="survival-note">
+                            <strong>📊 Strengths:</strong> Solid embedded necessity (9/10) and commercial potential (8/10). A trust layer is a differentiator many RPM devices lack.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="scores-table">
+                            <div class="score-row score-header">
+                                <span>Novelty</span><span>Patent</span><span>Sem Feas</span><span>Budget</span><span>Embedded</span><span>Research</span><span>Startup</span><span>Demo</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem; font-size:0.9rem; color:#475569; background:#f1f5f9; padding:0.8rem; border-radius:0.75rem;">
+                            <strong>⚙️ Prototype:</strong> ECG good‑vs‑bad signal confidence<br>
+                            <strong>💰 Cost:</strong> ~₹3,500<br>
+                            <strong>📅 Time:</strong> 3 months
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OC-02 FallSense -->
+            <div class="concept-card">
+                <div class="card-header">
+                    <div class="title-group">
+                        <h2>FallSense</h2>
+                        <span class="cluster-id">OC-02</span>
+                    </div>
+                    <span style="font-size:0.85rem; background:#e0f2fe; padding:0.2rem 0.8rem; border-radius:40px;">Healthcare</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">
+                        <p><strong>❓ The Problem:</strong> Elderly fall detection wearables are often not worn (especially in the bathroom), and camera‑based systems raise serious privacy concerns.</p>
+                        <p><strong>💡 The Innovation:</strong> Fuse <strong>acoustic cues</strong> (impact sounds, distress calls) with <strong>structural vibration</strong> to detect falls — no camera, no wearable.</p>
+                        <p><strong>👥 Who benefits:</strong> Elderly living alone, families, home healthcare, assisted‑living operators.</p>
+                        <div class="highlight-box">
+                            <strong>🎯 Why embedded?</strong> Latency (immediate local alert) and privacy (no raw audio leaves the device) both demand on‑device inference — cloud defeats both.
+                        </div>
+                        <p><strong>⏱️ Feasibility:</strong> <strong>Good</strong> — Single‑room demo is doable; the main challenge is avoiding false positives from dropping objects or slamming doors.</p>
+                        <p><strong>⚡ Key risk:</strong> Distinguishing genuine distress from TV/ conversation; sensor placement sensitivity.</p>
+                        <div class="survival-note">
+                            <strong>📊 Strengths:</strong> High demo value (8/10) and strong commercial potential (8/10) driven by global aging demographics. Emotionally resonant.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="scores-table">
+                            <div class="score-row score-header">
+                                <span>Novelty</span><span>Patent</span><span>Sem Feas</span><span>Budget</span><span>Embedded</span><span>Research</span><span>Startup</span><span>Demo</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem; font-size:0.9rem; color:#475569; background:#f1f5f9; padding:0.8rem; border-radius:0.75rem;">
+                            <strong>⚙️ Prototype:</strong> Fall vs. normal activity in one room<br>
+                            <strong>💰 Cost:</strong> ~₹3,000<br>
+                            <strong>📅 Time:</strong> 3 months
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OC-03 AuscultAI -->
+            <div class="concept-card">
+                <div class="card-header">
+                    <div class="title-group">
+                        <h2>AuscultAI</h2>
+                        <span class="cluster-id">OC-03</span>
+                    </div>
+                    <span style="font-size:0.85rem; background:#e0f2fe; padding:0.2rem 0.8rem; border-radius:40px;">Healthcare</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">
+                        <p><strong>❓ The Problem:</strong> Basic heart/lung sound screening is unavailable in low‑resource clinics because specialists and diagnostic‑grade equipment are scarce.</p>
+                        <p><strong>💡 The Innovation:</strong> An on‑device acoustic classifier that helps a non‑specialist health worker screen for abnormal patterns, with a simple confidence indication — not a diagnostic claim.</p>
+                        <p><strong>👥 Who benefits:</strong> Community health workers, primary‑care physicians, LMIC health ministries.</p>
+                        <div class="highlight-box">
+                            <strong>🎯 Why embedded?</strong> Real‑time, offline audio classification removes dependency on specialists and network connectivity — both absent in target settings.
+                        </div>
+                        <p><strong>⏱️ Feasibility:</strong> <strong>High</strong> — Audio classification is well‑understood; the challenge is generalization across diverse populations and noisy clinic environments.</p>
+                        <p><strong>⚡ Key risk:</strong> Classifier accuracy and the perception of making diagnostic claims.</p>
+                        <div class="survival-note">
+                            <strong>📊 Strengths:</strong> Strong feasibility (8/8) and good commercial potential (7/10). Regulatory‑sensitive but serves a huge underserved population.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="scores-table">
+                            <div class="score-row score-header">
+                                <span>Novelty</span><span>Patent</span><span>Sem Feas</span><span>Budget</span><span>Embedded</span><span>Research</span><span>Startup</span><span>Demo</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">5</span><div class="score-bar"><div class="fill" style="width:50%; background:#f97316;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem; font-size:0.9rem; color:#475569; background:#f1f5f9; padding:0.8rem; border-radius:0.75rem;">
+                            <strong>⚙️ Prototype:</strong> Heart sound classification (normal vs. abnormal)<br>
+                            <strong>💰 Cost:</strong> ~₹3,000<br>
+                            <strong>📅 Time:</strong> 3 months
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OC-11 OTShield -->
+            <div class="concept-card">
+                <div class="card-header">
+                    <div class="title-group">
+                        <h2>OTShield</h2>
+                        <span class="cluster-id">OC-11</span>
+                    </div>
+                    <span style="font-size:0.85rem; background:#dcfce7; padding:0.2rem 0.8rem; border-radius:40px;">Industrial</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">
+                        <p><strong>❓ The Problem:</strong> Legacy industrial protocols (e.g., Modbus) have no authentication or encryption. Cloud‑dependent monitoring is too slow and fragile for real‑time safety.</p>
+                        <p><strong>💡 The Innovation:</strong> A passive, in‑line gateway that learns the normal traffic pattern of one protocol and flags anomalous commands in real time — no cloud, no modification to legacy devices.</p>
+                        <p><strong>👥 Who benefits:</strong> Small‑to‑medium manufacturers, utilities, water‑treatment operators, industrial cybersecurity teams.</p>
+                        <div class="highlight-box">
+                            <strong>🎯 Why embedded?</strong> Enforcing security on legacy traffic has to happen at the exact point of transit — cloud introduces latency and single‑point‑of‑failure risk.
+                        </div>
+                        <p><strong>⏱️ Feasibility:</strong> <strong>Good</strong> — Single‑protocol demo is bounded; the challenge is keeping false positives low.</p>
+                        <p><strong>⚡ Key risk:</strong> False positives from legitimate but unusual traffic; protocol‑specific tuning.</p>
+                        <div class="survival-note">
+                            <strong>📊 Strengths:</strong> Strong research gap (9/10), commercial potential (8/10) driven by regulatory mandates (NIS2). Clean embedded necessity (9/10).
+                        </div>
+                    </div>
+                    <div>
+                        <div class="scores-table">
+                            <div class="score-row score-header">
+                                <span>Novelty</span><span>Patent</span><span>Sem Feas</span><span>Budget</span><span>Embedded</span><span>Research</span><span>Startup</span><span>Demo</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">5</span><div class="score-bar"><div class="fill" style="width:50%; background:#f97316;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem; font-size:0.9rem; color:#475569; background:#f1f5f9; padding:0.8rem; border-radius:0.75rem;">
+                            <strong>⚙️ Prototype:</strong> Modbus anomaly detection<br>
+                            <strong>💰 Cost:</strong> ~₹4,000<br>
+                            <strong>📅 Time:</strong> 3.5 months
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OC-12 ToolPulse -->
+            <div class="concept-card">
+                <div class="card-header">
+                    <div class="title-group">
+                        <h2>ToolPulse</h2>
+                        <span class="cluster-id">OC-12</span>
+                    </div>
+                    <span style="font-size:0.85rem; background:#dcfce7; padding:0.2rem 0.8rem; border-radius:40px;">Industrial</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">
+                        <p><strong>❓ The Problem:</strong> CNC tool wear is managed by scheduled replacement, wasting tool life or risking workpiece damage from unexpected wear.</p>
+                        <p><strong>💡 The Innovation:</strong> Correlate the spindle's <strong>electrical current signature</strong> with <strong>acoustic emission</strong> to estimate tool wear in real time — no dedicated force sensor.</p>
+                        <p><strong>👥 Who benefits:</strong> Small CNC machine shops, precision manufacturers.</p>
+                        <div class="highlight-box">
+                            <strong>🎯 Why embedded?</strong> Real‑time, in‑process feedback requires local signal analysis at a latency no cloud round‑trip could match.
+                        </div>
+                        <p><strong>⏱️ Feasibility:</strong> <strong>Good</strong> — Signature correlation is doable; the challenge is generalization across different tools/materials and shop‑floor electrical noise.</p>
+                        <p><strong>⚡ Key risk:</strong> Electrical noise corrupting the signal; requires physical CNC machine access.</p>
+                        <div class="survival-note">
+                            <strong>📊 Strengths:</strong> Strong patent potential (8/10) and solid commercial potential (7/10) with a direct cost‑savings story.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="scores-table">
+                            <div class="score-row score-header">
+                                <span>Novelty</span><span>Patent</span><span>Sem Feas</span><span>Budget</span><span>Embedded</span><span>Research</span><span>Startup</span><span>Demo</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem; font-size:0.9rem; color:#475569; background:#f1f5f9; padding:0.8rem; border-radius:0.75rem;">
+                            <strong>⚙️ Prototype:</strong> Current/acoustic signature drift vs. tool wear<br>
+                            <strong>💰 Cost:</strong> ~₹3,000<br>
+                            <strong>📅 Time:</strong> 3 months
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OC-13 GasPrint -->
+            <div class="concept-card">
+                <div class="card-header">
+                    <div class="title-group">
+                        <h2>GasPrint</h2>
+                        <span class="cluster-id">OC-13</span>
+                    </div>
+                    <span style="font-size:0.85rem; background:#dcfce7; padding:0.2rem 0.8rem; border-radius:40px;">Industrial</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">
+                        <p><strong>❓ The Problem:</strong> Confined‑space gas hazards are often missed because workers forget portable meters, and deploying enough expensive gas‑specific sensors is cost‑prohibitive.</p>
+                        <p><strong>💡 The Innovation:</strong> Use an array of inexpensive, non‑specific gas sensors and analyze <strong>ratio and temporal‑response patterns</strong> to distinguish different hazard types — replacing multiple dedicated sensors.</p>
+                        <p><strong>👥 Who benefits:</strong> Oil & gas, mining, construction workers; safety officers; insurers.</p>
+                        <div class="highlight-box">
+                            <strong>🎯 Why embedded?</strong> Continuous, always‑on local sensing eliminates the "worker forgot to check" failure mode — it must operate standalone without network connectivity.
+                        </div>
+                        <p><strong>⏱️ Feasibility:</strong> <strong>Good</strong> — Sensor arrays are common; the challenge is cross‑sensitivity and drift, and the safety‑critical nature demands very low false negatives.</p>
+                        <p><strong>⚡ Key risk:</strong> False negatives in a safety‑critical application; proving that convincingly is a high bar.</p>
+                        <div class="survival-note">
+                            <strong>📊 Strengths:</strong> Solid commercial potential (7/10) with steady, regulation‑driven demand.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="scores-table">
+                            <div class="score-row score-header">
+                                <span>Novelty</span><span>Patent</span><span>Sem Feas</span><span>Budget</span><span>Embedded</span><span>Research</span><span>Startup</span><span>Demo</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">5</span><div class="score-bar"><div class="fill" style="width:50%; background:#f97316;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem; font-size:0.9rem; color:#475569; background:#f1f5f9; padding:0.8rem; border-radius:0.75rem;">
+                            <strong>⚙️ Prototype:</strong> Distinguish two gas‑hazard signatures<br>
+                            <strong>💰 Cost:</strong> ~₹3,500<br>
+                            <strong>📅 Time:</strong> 3.5 months
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OC-14 PanelWatch -->
+            <div class="concept-card">
+                <div class="card-header">
+                    <div class="title-group">
+                        <h2>PanelWatch</h2>
+                        <span class="cluster-id">OC-14</span>
+                    </div>
+                    <span style="font-size:0.85rem; background:#e0e7ff; padding:0.2rem 0.8rem; border-radius:40px;">Energy</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">
+                        <p><strong>❓ The Problem:</strong> Solar panel micro‑cracks cause gradual power loss that remains invisible until a significant capacity is already gone.</p>
+                        <p><strong>💡 The Innovation:</strong> Analyze per‑panel <strong>current‑voltage (I‑V) signature drift</strong> over time to flag developing degradation before it becomes obvious.</p>
+                        <p><strong>👥 Who benefits:</strong> Solar installers, residential and utility‑scale operators, panel manufacturers (for warranty claims).</p>
+                        <div class="highlight-box">
+                            <strong>🎯 Why embedded?</strong> Continuous, per‑panel electrical‑signature monitoring at the panel itself is the only way to catch gradual degradation that a periodic survey structurally cannot.
+                        </div>
+                        <p><strong>⏱️ Feasibility:</strong> <strong>Good</strong> — I‑V monitoring is standard; the challenge is distinguishing real degradation from ordinary weather variation.</p>
+                        <p><strong>⚡ Key risk:</strong> Short observation window (2 months) may not show a clear trend; requires careful environmental compensation.</p>
+                        <div class="survival-note">
+                            <strong>📊 Strengths:</strong> Solid patent potential (7/10) and a large, growing solar market.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="scores-table">
+                            <div class="score-row score-header">
+                                <span>Novelty</span><span>Patent</span><span>Sem Feas</span><span>Budget</span><span>Embedded</span><span>Research</span><span>Startup</span><span>Demo</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem; font-size:0.9rem; color:#475569; background:#f1f5f9; padding:0.8rem; border-radius:0.75rem;">
+                            <strong>⚙️ Prototype:</strong> I‑V signature drift detection<br>
+                            <strong>💰 Cost:</strong> ~₹3,000<br>
+                            <strong>📅 Time:</strong> 3 months
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OC-17 CalibNet -->
+            <div class="concept-card">
+                <div class="card-header">
+                    <div class="title-group">
+                        <h2>CalibNet</h2>
+                        <span class="cluster-id">OC-17</span>
+                    </div>
+                    <span style="font-size:0.85rem; background:#fef3c7; padding:0.2rem 0.8rem; border-radius:40px;">Environment</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">
+                        <p><strong>❓ The Problem:</strong> Low‑cost air‑quality sensors drift over time, and expert recalibration is too expensive for dense hyperlocal monitoring.</p>
+                        <p><strong>💡 The Innovation:</strong> Nodes periodically <strong>cross‑reference readings</strong> against nearby peers to detect and correct individual sensor drift — no expensive reference instrument needed.</p>
+                        <p><strong>👥 Who benefits:</strong> City agencies, schools, community groups, watershed organizations.</p>
+                        <div class="highlight-box">
+                            <strong>🎯 Why embedded?</strong> Cross‑referencing and drift‑correction require continuous local computation and inter‑device communication — a distributed embedded problem.
+                        </div>
+                        <p><strong>⏱️ Feasibility:</strong> <strong>Very High</strong> — Well‑understood sensor networks; the challenge is distinguishing local environmental variation from actual drift.</p>
+                        <p><strong>⚡ Key risk:</strong> Distinguishing real local differences between nodes from drift; multi‑node logistics.</p>
+                        <div class="survival-note">
+                            <strong>📊 Strengths:</strong> Very high feasibility (9/9) and a clear public‑health angle. Steady NGO/public‑sector demand.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="scores-table">
+                            <div class="score-row score-header">
+                                <span>Novelty</span><span>Patent</span><span>Sem Feas</span><span>Budget</span><span>Embedded</span><span>Research</span><span>Startup</span><span>Demo</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">5</span><div class="score-bar"><div class="fill" style="width:50%; background:#f97316;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem; font-size:0.9rem; color:#475569; background:#f1f5f9; padding:0.8rem; border-radius:0.75rem;">
+                            <strong>⚙️ Prototype:</strong> 2‑node peer drift correction<br>
+                            <strong>💰 Cost:</strong> ~₹2,500<br>
+                            <strong>📅 Time:</strong> 2.5 – 3 months
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OC-19 FloodPulse -->
+            <div class="concept-card">
+                <div class="card-header">
+                    <div class="title-group">
+                        <h2>FloodPulse</h2>
+                        <span class="cluster-id">OC-19</span>
+                    </div>
+                    <span style="font-size:0.85rem; background:#e0e7ff; padding:0.2rem 0.8rem; border-radius:40px;">Environment</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">
+                        <p><strong>❓ The Problem:</strong> Cheap ultrasonic flood sensors foul with mud and debris during floods, reporting falsely shallow readings exactly when accurate data matters most.</p>
+                        <p><strong>💡 The Innovation:</strong> A <strong>debris‑resilient sensing approach</strong> that combines multiple sensing principles or adds a self‑check/self‑cleaning logic layer to maintain reliability through fouling conditions.</p>
+                        <p><strong>👥 Who benefits:</strong> Local disaster‑management authorities, at‑risk communities, transport authorities.</p>
+                        <div class="highlight-box">
+                            <strong>🎯 Why embedded?</strong> Continuous, autonomous local sensing at the exact point of risk is the only way to provide timely warnings where connectivity and satellite coverage are both insufficient.
+                        </div>
+                        <p><strong>⏱️ Feasibility:</strong> <strong>Good</strong> — Multi‑sensing or self‑check logic is doable; the challenge is realistically simulating debris/fouling in a lab.</p>
+                        <p><strong>⚡ Key risk:</strong> Real‑world long‑term reliability cannot be fully validated in two months.</p>
+                        <div class="survival-note">
+                            <strong>📊 Strengths:</strong> Strong social impact, well‑quantified problem, and a clean patent angle for debris‑resilience.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="scores-table">
+                            <div class="score-row score-header">
+                                <span>Novelty</span><span>Patent</span><span>Sem Feas</span><span>Budget</span><span>Embedded</span><span>Research</span><span>Startup</span><span>Demo</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem; font-size:0.9rem; color:#475569; background:#f1f5f9; padding:0.8rem; border-radius:0.75rem;">
+                            <strong>⚙️ Prototype:</strong> Flood level reading under simulated debris<br>
+                            <strong>💰 Cost:</strong> ~₹3,000<br>
+                            <strong>📅 Time:</strong> 3.5 months
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OC-22 SiliconFingerprint (Exception) -->
+            <div class="concept-card" style="border-color: #fcd34d; background: #fffbeb;">
+                <div class="card-header">
+                    <div class="title-group">
+                        <h2>⚡ SiliconFingerprint</h2>
+                        <span class="cluster-id">OC-22</span>
+                        <span style="font-size:0.7rem; background:#f59e0b; color:white; padding:0.1rem 0.6rem; border-radius:40px;">EXCEPTION</span>
+                    </div>
+                    <span style="font-size:0.85rem; background:#e0e7ff; padding:0.2rem 0.8rem; border-radius:40px;">Cybersecurity</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">
+                        <p><strong>❓ The Problem:</strong> Low‑cost MCUs lack a tamper‑resistant device identity, making device spoofing and credential cloning a persistent weakness.</p>
+                        <p><strong>💡 The Innovation:</strong> Derive a unique, unclonable device identity from the <strong>random power‑up state of the on‑chip SRAM</strong> — using microscopic manufacturing imperfections as a physical fingerprint.</p>
+                        <p><strong>👥 Who benefits:</strong> IoT manufacturers, embedded‑security researchers, defense/aerospace, financial‑IoT vendors.</p>
+                        <div class="highlight-box">
+                            <strong>🎯 Why embedded?</strong> A PUF is a hardware phenomenon — it exploits silicon‑level imperfections. It can only be read and processed at the hardware/firmware boundary.
+                        </div>
+                        <p><strong>⏱️ Feasibility:</strong> <strong>Low</strong> — SRAM PUF reliability across temperature, voltage, and aging is a well‑documented hard problem. Proving uniqueness requires multiple physical devices and lab equipment.</p>
+                        <p><strong>⚡ Key risk:</strong> The fingerprint changes with temperature/voltage (requires complex stabilization); long‑term aging cannot be tested in a semester.</p>
+                        <div class="exception-note">
+                            <strong>🔬 Why it's an exception:</strong> Highest originality (9/10) but lowest semester feasibility (4/10). This is a <strong>5–6 month research project</strong> — best kept as a thesis extension or backup if the team wants to lean into deep cybersecurity research.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="scores-table">
+                            <div class="score-row score-header">
+                                <span>Novelty</span><span>Patent</span><span>Sem Feas</span><span>Budget</span><span>Embedded</span><span>Research</span><span>Startup</span><span>Demo</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">4</span><div class="score-bar"><div class="fill" style="width:40%; background:#f97316;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem; font-size:0.9rem; color:#475569; background:#f1f5f9; padding:0.8rem; border-radius:0.75rem;">
+                            <strong>⚙️ Prototype:</strong> Extract unique SRAM fingerprint from multiple MCUs<br>
+                            <strong>💰 Cost:</strong> ~₹4,000 (includes lab equipment)<br>
+                            <strong>📅 Time:</strong> 5 – 6+ months
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OC-26 SpanSense -->
+            <div class="concept-card">
+                <div class="card-header">
+                    <div class="title-group">
+                        <h2>SpanSense</h2>
+                        <span class="cluster-id">OC-26</span>
+                    </div>
+                    <span style="font-size:0.85rem; background:#e0e7ff; padding:0.2rem 0.8rem; border-radius:40px;">Infrastructure</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">
+                        <p><strong>❓ The Problem:</strong> Manual bridge inspections happen only every ~2 years and miss internal fatigue damage. Wired SHM systems are too expensive for routine deployment.</p>
+                        <p><strong>💡 The Innovation:</strong> A wireless accelerometer node that computes <strong>cumulative fatigue‑cycle estimates locally</strong>, transmitting only summary damage indicators over a low‑power link.</p>
+                        <p><strong>👥 Who benefits:</strong> Transportation departments, bridge authorities, government infrastructure agencies.</p>
+                        <div class="highlight-box">
+                            <strong>🎯 Why embedded?</strong> Continuous local vibration sensing plus on‑device fatigue computation is required because transmitting raw high‑frequency data over a low‑bandwidth solar‑powered link is not viable.
+                        </div>
+                        <p><strong>⏱️ Feasibility:</strong> <strong>Good</strong> — Accelerometer‑based fatigue estimation is well‑studied; the challenge is validating accuracy against true loading in a short time.</p>
+                        <p><strong>⚡ Key risk:</strong> Distinguishing structural signals from environmental/traffic noise; long‑term validation.</p>
+                        <div class="survival-note">
+                            <strong>📊 Strengths:</strong> Large global market ($50B+) with a clear life‑safety framing, though government sales cycles are slow.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="scores-table">
+                            <div class="score-row score-header">
+                                <span>Novelty</span><span>Patent</span><span>Sem Feas</span><span>Budget</span><span>Embedded</span><span>Research</span><span>Startup</span><span>Demo</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem; font-size:0.9rem; color:#475569; background:#f1f5f9; padding:0.8rem; border-radius:0.75rem;">
+                            <strong>⚙️ Prototype:</strong> Fatigue‑cycle estimation on lab beam<br>
+                            <strong>💰 Cost:</strong> ~₹3,000<br>
+                            <strong>📅 Time:</strong> 3.5 months
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Comparison Table -->
+        <div class="summary-section">
+            <h3>📊 Side‑by‑Side Comparison (All 11)</h3>
+            <p style="color:#475569; margin-bottom:1rem;">Scores out of 10 — higher is better. The exception (SiliconFingerprint) stands out in novelty but falls short in semester feasibility.</p>
+            <div class="summary-table-wrap">
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left; padding-left:0.8rem;">Concept</th>
+                            <th>Novelty</th>
+                            <th>Patent</th>
+                            <th>Sem Feas</th>
+                            <th>Budget</th>
+                            <th>Embedded</th>
+                            <th>Research</th>
+                            <th>Startup</th>
+                            <th>Demo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="concept-name">SignalGuard</td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-high">9</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-med">7</span></td></tr>
+                        <tr><td class="concept-name">FallSense</td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-high">8</span></td></tr>
+                        <tr><td class="concept-name">AuscultAI</td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-low">5</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-med">7</span></td></tr>
+                        <tr><td class="concept-name">OTShield</td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-low">5</span></td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-high">9</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-med">6</span></td></tr>
+                        <tr><td class="concept-name">ToolPulse</td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-med">6</span></td></tr>
+                        <tr><td class="concept-name">GasPrint</td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-low">5</span></td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-med">6</span></td></tr>
+                        <tr><td class="concept-name">PanelWatch</td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-med">6</span></td></tr>
+                        <tr><td class="concept-name">CalibNet</td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-low">5</span></td><td><span class="tag tag-high">9</span></td><td><span class="tag tag-high">9</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-med">6</span></td></tr>
+                        <tr><td class="concept-name">FloodPulse</td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-med">6</span></td></tr>
+                        <tr><td class="concept-name" style="background:#fffbeb;"><strong>SiliconFingerprint</strong> ⚡</td><td><span class="tag tag-high">9</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-low">4</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-high">9</span></td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-high">8</span></td></tr>
+                        <tr><td class="concept-name">SpanSense</td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-med">6</span></td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-high">8</span></td><td><span class="tag tag-med">7</span></td><td><span class="tag tag-med">6</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top:2rem; background:#f0f9ff; border-radius:1rem; padding:1.5rem 2rem; border:1px solid #bae6fd;">
+                <h4 style="font-weight:700; margin-bottom:0.5rem;">🔍 What these ideas are good for</h4>
+                <ul style="list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:0.5rem 2rem; font-size:0.95rem;">
+                    <li><strong>FallSense</strong> – Best demo value (8/10), strong commercial story</li>
+                    <li><strong>OTShield</strong> – Regulatory tailwind, research gap (9/10)</li>
+                    <li><strong>CalibNet</strong> – Safest build (9/9 feasibility), public health angle</li>
+                    <li><strong>ToolPulse</strong> – Strong patent potential (8/10)</li>
+                    <li><strong>SiliconFingerprint</strong> – Highest novelty, but research‑level timeline</li>
+                </ul>
+                <p style="margin-top:0.8rem; font-size:0.9rem; color:#0c4a6e;">These are solid backup options if the team wants to pivot or explore alternative directions.</p>
+            </div>
+        </div>
+
+        <div class="footnote">
+            Based on Phase 1C Concept Synthesis — 11 remaining survivor clusters from the original 16. All scores and descriptions directly sourced from the document.
+        </div>
+    </div>
+</body>
+</html>

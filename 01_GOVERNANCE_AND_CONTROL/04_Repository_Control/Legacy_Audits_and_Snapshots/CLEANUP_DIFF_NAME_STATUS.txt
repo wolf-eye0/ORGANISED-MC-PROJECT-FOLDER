@@ -1,0 +1,6 @@
+M	.gitignore
+M	CURRENT_FOLDER_STRUCTURE.txt
+M	MC_Project_PHASE_DOC.md
+M	Project_mC_Decision_Register_v1.0_HISTORICAL.md
+M	Project_mC_Decision_Register_v1.2.md
+M	README.md

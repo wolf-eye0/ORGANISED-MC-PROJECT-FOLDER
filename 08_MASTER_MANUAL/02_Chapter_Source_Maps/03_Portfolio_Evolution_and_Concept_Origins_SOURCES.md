@@ -1,0 +1,90 @@
+# 03. Portfolio Evolution and Concept Origins — Source Map
+
+How the original opportunity set became the final OpenBraille, VibeGuard and TrueMoist portfolio, including retained concepts.
+
+Mapped sources: **21**
+
+- `03_CONCEPT_PORTFOLIO/OpenBraille/06_Historical_Phase3C_Research_and_Prompts/Prompts/Phase3C_OpenBraille_Deep_Research_Prompt_Final.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical OpenBraille Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/OpenBraille/06_Historical_Phase3C_Research_and_Prompts/Prompts/Phase3C_OpenBraille_Synthesis_Prompt_Claude.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical OpenBraille Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/OpenBraille/06_Historical_Phase3C_Research_and_Prompts/Raw_Engineering_Research/Phase3C_OpenBraille_Raw_Research_Gemini.docx`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical OpenBraille Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/OpenBraille/06_Historical_Phase3C_Research_and_Prompts/Raw_Engineering_Research/Phase3C_OpenBraille_Raw_Research_Mistral.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical OpenBraille Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/OpenBraille/06_Historical_Phase3C_Research_and_Prompts/Raw_Engineering_Research/Phase3C_OpenBraille_Raw_Research_Perplexity.docx`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical OpenBraille Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/OpenBraille/06_Historical_Phase3C_Research_and_Prompts/Raw_Engineering_Research/Phase3C_OpenBraille_Raw_Research_Qwen.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical OpenBraille Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/Other_Concepts/README.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Retained non-finalist Project mC concept.
+- `03_CONCEPT_PORTFOLIO/Other_Concepts/TrustLatch/HISTORICAL_Phase1C_TrustLatch_Concept_Dossier.docx`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Retained non-finalist Project mC concept.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/06_Historical_Phase3C_Research_and_Prompts/Prompts/Phase3C_TrueMoist_Deep_Research_Prompt_Final.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical TrueMoist Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/06_Historical_Phase3C_Research_and_Prompts/Prompts/Phase3C_TrueMoist_Synthesis_Prompt_Final.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical TrueMoist Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/06_Historical_Phase3C_Research_and_Prompts/Raw_Engineering_Research/Phase3C_TrueMoist_Raw_Research_ChatGPT.pdf`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical TrueMoist Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/06_Historical_Phase3C_Research_and_Prompts/Raw_Engineering_Research/Phase3C_TrueMoist_Raw_Research_Gemini.docx`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical TrueMoist Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/06_Historical_Phase3C_Research_and_Prompts/Raw_Engineering_Research/Phase3C_TrueMoist_Raw_Research_Mistral.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical TrueMoist Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/06_Historical_Phase3C_Research_and_Prompts/Raw_Engineering_Research/Phase3C_TrueMoist_Raw_Research_Perplexity.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical TrueMoist Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/VibeGuard/06_Historical_Phase3C_Research_and_Prompts/Prompts/Phase3C_VibeGuard_Deep_Research_Prompt_Final.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical VibeGuard Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/VibeGuard/06_Historical_Phase3C_Research_and_Prompts/Prompts/Phase3C_VibeGuard_Synthesis_Prompt_Claude.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical VibeGuard Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/VibeGuard/06_Historical_Phase3C_Research_and_Prompts/Prompts/Phase3C_VibeGuard_Synthesis_Prompt_Claude.mmd`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical VibeGuard Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/VibeGuard/06_Historical_Phase3C_Research_and_Prompts/Raw_Engineering_Research/Phase3C_VibeGuard_Raw_Research_Gemini.docx`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical VibeGuard Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/VibeGuard/06_Historical_Phase3C_Research_and_Prompts/Raw_Engineering_Research/Phase3C_VibeGuard_Raw_Research_Mistral.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical VibeGuard Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/VibeGuard/06_Historical_Phase3C_Research_and_Prompts/Raw_Engineering_Research/Phase3C_VibeGuard_Raw_Research_Perplexity.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical VibeGuard Phase 3C research or prompt.
+- `03_CONCEPT_PORTFOLIO/VibeGuard/06_Historical_Phase3C_Research_and_Prompts/Raw_Engineering_Research/Phase3C_VibeGuard_Raw_Research_Qwen.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical VibeGuard Phase 3C research or prompt.

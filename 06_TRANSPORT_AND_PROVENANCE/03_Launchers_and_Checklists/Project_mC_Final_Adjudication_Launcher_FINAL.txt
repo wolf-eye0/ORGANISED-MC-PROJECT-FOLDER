@@ -1,0 +1,35 @@
+Read `00_READ_FIRST_Project_mC_Final_Adjudication_Instructions.md` first and
+treat it as the governing task specification.
+
+Before substantive adjudication, inventory all 12 attached files against
+`99_EXCLUSION_AND_PROVENANCE_REGISTER.md`.
+
+Confirm:
+
+1. exactly 12 physical attachments are present;
+2. the governing instruction is readable;
+3. all four common governance/evidence files are present;
+4. each concept has exactly two valid synthesis reports:
+   - OpenBraille Work Max;
+   - OpenBraille valid secondary synthesis;
+   - VibeGuard Work Max;
+   - VibeGuard Standard High;
+   - TrueMoist Max;
+   - TrueMoist High + Deep Research;
+5. the OpenBraille filename crossing is explicitly resolved;
+6. the failed OpenBraille moving-roller synthesis is absent;
+7. the failed VibeGuard software-security synthesis is absent;
+8. the supplementary TrueMoist Work Max web audit is absent and is not inferred
+   from prior-chat context;
+9. Decision Register v1.2, not v1.1, is present;
+10. no synthesis is missing, unreadable, duplicated, partial, or concept-swapped.
+
+Treat the provenance register as file control and reliability context only,
+not technical evidence.
+
+Perform the complete blind cross-concept adjudication exactly as instructed.
+
+Do not use another adjudication output.
+Do not use prior-chat context.
+Do not treat model agreement as voting.
+Do not claim any project or enhancement will definitely receive a patent.

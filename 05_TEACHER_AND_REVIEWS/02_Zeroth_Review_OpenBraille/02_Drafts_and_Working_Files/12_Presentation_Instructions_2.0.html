@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenBraille · Team Instruction Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan: #38bdf8;
+            --cyan-glow: rgba(56, 189, 248, 0.5);
+            --purple: #a78bfa;
+            --amber: #fbbf24;
+            --pink: #f472b6;
+            --teal: #2dd4bf;
+            --bg-deep: #0a0f1c;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-deep);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+            position: relative;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 30% 40%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 70% 70%, rgba(167, 139, 250, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 20% 85%, rgba(244, 114, 182, 0.08) 0%, transparent 45%);
+            animation: bgShift 14s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgShift {
+            0% {
+                background-position: 0% 0%, 100% 100%, 0% 100%;
+            }
+            100% {
+                background-position: 20% 10%, 80% 90%, 30% 80%;
+            }
+        }
+
+        /* floating animated blobs */
+        .floating-blobs {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.25;
+            animation: floatBlob 18s infinite ease-in-out;
+        }
+        .blob1 {
+            width: 350px;
+            height: 350px;
+            background: #38bdf8;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        .blob2 {
+            width: 280px;
+            height: 280px;
+            background: #a78bfa;
+            bottom: 20%;
+            right: 15%;
+            animation-delay: -5s;
+        }
+        .blob3 {
+            width: 400px;
+            height: 400px;
+            background: #f472b6;
+            top: 50%;
+            left: 60%;
+            animation-delay: -9s;
+        }
+        @keyframes floatBlob {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(40px, -30px) scale(1.08);
+            }
+            66% {
+                transform: translate(-20px, 50px) scale(0.94);
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1200px;
+            background: rgba(18, 24, 40, 0.45);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 3.5rem;
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06),
+                0 0 40px rgba(56, 189, 248, 0.15);
+            padding: 2.8rem 2.5rem 2.5rem;
+            transition: all 0.3s ease;
+            animation: containerPulse 6s ease-in-out infinite alternate;
+        }
+        @keyframes containerPulse {
+            0% {
+                box-shadow: 0 35px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06), 0 0 40px rgba(56, 189, 248, 0.12);
+            }
+            100% {
+                box-shadow: 0 35px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06), 0 0 60px rgba(167, 139, 250, 0.25);
+            }
+        }
+
+        h1 {
+            font-size: 2.7rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            text-align: center;
+            margin-bottom: 0.2rem;
+            background: linear-gradient(135deg, #bae6fd, #c4b5fd, #fbcfe8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+            word-break: break-word;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 400;
+            font-size: 1rem;
+            margin-bottom: 2.5rem;
+            letter-spacing: 0.03em;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 0.9rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.8rem;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            border-radius: 3rem;
+            padding: 0.9rem 2.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.4);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 16px 28px rgba(0,0,0,0.5), 0 0 18px rgba(56,189,248,0.5);
+        }
+        .tab-btn:hover::before {
+            opacity: 1;
+        }
+
+        .tab-btn.active {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: rgba(56, 189, 248, 0.7);
+            color: #fff;
+            box-shadow: 0 0 32px rgba(56, 189, 248, 0.6), 0 12px 24px rgba(0,0,0,0.6);
+            font-weight: 700;
+            text-shadow: 0 0 8px rgba(255,255,255,0.4);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeSlide 0.5s ease;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(56,189,248,0.3) transparent;
+            color: rgba(255, 255, 255, 0.88);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            0% { opacity: 0; transform: translateY(24px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        .tab-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .tab-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #38bdf8, #a78bfa);
+            border-radius: 12px;
+        }
+
+        .glass-card {
+            background: rgba(20, 28, 48, 0.4);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2.2rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(255,255,255,0.04);
+            transition: transform 0.2s ease, box-shadow 0.3s;
+            position: relative;
+        }
+        .glass-card:hover {
+            box-shadow: 0 30px 55px rgba(0,0,0,0.55), 0 0 35px rgba(56,189,248,0.2);
+            transform: translateY(-2px);
+        }
+
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #38bdf8, #a78bfa, #f472b6, #fbbf24);
+            border-radius: 2.2rem 2.2rem 0 0;
+            opacity: 0.6;
+        }
+
+        h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1.4rem;
+            color: #fff;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: linear-gradient(135deg, #bae6fd, #d8b4fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 1.8rem;
+            margin-bottom: 0.7rem;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        ul, ol {
+            padding-left: 1.8rem;
+            margin: 0.8rem 0 1.4rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.82);
+        }
+        li {
+            margin-bottom: 0.6rem;
+            position: relative;
+        }
+        ul li::marker {
+            color: #38bdf8;
+        }
+        ol li::marker {
+            color: #a78bfa;
+            font-weight: bold;
+        }
+
+        strong {
+            color: #f0f9ff;
+            font-weight: 600;
+        }
+
+        pre {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            border-radius: 1.2rem;
+            padding: 1.4rem;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-top: 3px solid #38bdf8;
+            margin: 1.2rem 0;
+            line-height: 1.7;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4), 0 0 12px rgba(56,189,248,0.15);
+        }
+
+        code {
+            font-family: 'SF Mono', monospace;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            color: #fbbf24;
+        }
+
+        a {
+            color: #7dd3fc;
+            text-decoration: none;
+            border-bottom: 1px dotted rgba(125, 211, 252, 0.5);
+            transition: 0.2s;
+        }
+        a:hover {
+            color: #f0abfc;
+            border-bottom-color: #f0abfc;
+        }
+
+        blockquote {
+            border-left: 4px solid #38bdf8;
+            padding-left: 1.3rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(56,189,248,0.06);
+            border-radius: 0 1rem 1rem 0;
+            padding: 1rem 1.2rem;
+        }
+
+        .highlight-box {
+            border-radius: 1.2rem;
+            padding: 1.3rem 1.5rem;
+            margin: 1.8rem 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            font-weight: 500;
+        }
+        .highlight-box.info {
+            background: rgba(56, 189, 248, 0.08);
+            border-left: 4px solid #38bdf8;
+        }
+        .highlight-box.warning {
+            background: rgba(251, 191, 36, 0.08);
+            border-left: 4px solid #fbbf24;
+        }
+        .highlight-box.teal {
+            background: rgba(45, 212, 191, 0.08);
+            border-left: 4px solid #2dd4bf;
+        }
+
+        .inline-highlight {
+            background: rgba(56,189,248,0.18);
+            border-radius: 0.4rem;
+            padding: 0.1rem 0.4rem;
+            color: #e0f2fe;
+            font-weight: 500;
+            border: 1px solid rgba(56,189,248,0.3);
+        }
+        .pink-highlight {
+            background: rgba(244,114,182,0.18);
+            border-radius: 0.4rem;
+            padding: 0.1rem 0.4rem;
+            color: #fce7f3;
+            border: 1px solid rgba(244,114,182,0.3);
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 2rem 1.2rem;
+                border-radius: 2.5rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .tab-btn {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-blobs">
+        <div class="blob blob1"></div>
+        <div class="blob blob2"></div>
+        <div class="blob blob3"></div>
+    </div>
+
+    <div class="container">
+        <h1>✨ OpenBraille · Instruction Hub</h1>
+        <div class="subtitle">Final PPT production · Hardware audit · Speaker preparation</div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="sreehari">📄 Sreehari — PPT Production</button>
+            <button class="tab-btn" data-tab="amith">🔍 Amith — Hardware Audit</button>
+            <button class="tab-btn" data-tab="sreeprada">🎤 Sreeprada — Project Understanding</button>
+        </div>
+
+        <!-- Sreehari Tab Content -->
+        <div class="tab-content active" id="sreehari">
+            <div class="glass-card">
+                <h3>📋 1. Instructions for Sreehari — final PPT production</h3>
+                <p><strong>Sreehari is technically capable, so give him the full authoritative package rather than a simplified summary.</strong></p>
+
+                <h4>📚 Documents Sreehari should use</h4>
+                <p><em>Read them in this order:</em></p>
+                <ol>
+                    <li><strong><code>Zeroth review - Presentation.pptx</code></strong><br>This is the mandatory structure. It contains 16 slides, including the fixed Vision, Mission, PEO, PO and PSO slides.</li>
+                    <li><strong><code>Engineering_Design_Review.md</code> — OpenBraille section only</strong><br>Use this for: project identity; mission; engineering hypothesis; major risks; <span class="inline-highlight">Minimum Demonstrable Success</span>.<br>The official MDS is simply demonstrating reliable refreshable tactile output for at least one Braille cell with basic tactile and repeatability requirements. It does not define <code>≤0.1 mm over 100 cycles</code> as the MDS.</li>
+                    <li><strong><code>Project_mC_Decision_Register_v1.2.md</code></strong><br>Read: PDR-001: budget; PDR-002: timeline/team; PDR-009: future IP direction; PDR-015 to PDR-022: OpenBraille architecture and testing.<br><span class="inline-highlight">PDR v1.2 freezes</span> the servo-cam mechanism, macro-scaled cell, ESP32 controller, separate servo power, FDM fabrication and single-dot-first validation. It also states that the SG90 reset assumption remains physically unvalidated.</li>
+                    <li><strong><code>Phase3C_OpenBraille_Architecture_Report_Final.md</code></strong><br>This is the main source for the proposed method, component architecture, BOM estimate, block diagram and validation roadmap.</li>
+                    <li><strong><code>Phase3C_OpenBraille_Memory_Final.md</code></strong><br>Use this as a quick cross-check when the full architecture report is too long.</li>
+                    <li><strong>Official component sources</strong> listed later in this answer.</li>
+                </ol>
+                <div class="highlight-box warning">
+                    ⚠️ Do not use raw Gemini, Mistral, Qwen or Perplexity research for slide facts. Do not use the early Concept Dossier for exact price or market statistics.
+                </div>
+
+                <h4>📐 Template and formatting work</h4>
+                <p>Sreehari must preserve all 16 slides.</p>
+                <p><strong>Slides 1–2</strong></p>
+                <pre>Title: OpenBraille: Affordable Refreshable Single-Cell Braille Display
+Group No: Group 8
+
+Members:
+Amith Krishna Das
+Archa Pramod
+Nihad P C
+Sreehari K
+Sreeprada
+
+Project Coordinator:
+Ms. Sagna L T
+Asst. Prof. CSE(CY)</pre>
+                <p>Do not add technical job titles beside the member names.</p>
+
+                <p><strong>Slides 3–8</strong><br>Do not change the body text, wording or order.<br>Only add:</p>
+                <ul>
+                    <li>Header: <code>Topic: OpenBraille</code></li>
+                    <li>Footer: <code>Dept of CSE(CY)</code></li>
+                    <li>Date: <code>30/07/26</code></li>
+                    <li>Slide number</li>
+                </ul>
+                <p>Do not redesign these slides using cards, icons or shortened summaries.</p>
+
+                <p><strong>Slide 9</strong><br>Keep the existing contents:</p>
+                <pre>Motivation
+Introduction
+Problem Statement
+Proposed Method
+Basic Block Diagram
+Conclusion
+References</pre>
+
+                <h4>📝 Exact replacement content for Slides 10–16</h4>
+
+                <p><strong>Slide 10 — Motivation</strong><br>Replace Sreehari’s current price-heavy content with:</p>
+                <pre>• Commercial refreshable Braille displays remain expensive because
+  each tactile dot requires precise actuation and specialized manufacturing.
+
+• Audio screen readers are useful, but tactile Braille supports literacy,
+  spelling, mathematics and structured learning.
+
+• The high cost of refreshable displays limits access in schools,
+  libraries and resource-constrained institutions.
+
+• OpenBraille explores whether low-cost embedded actuation can provide
+  an affordable refreshable tactile interface.</pre>
+                <p>Do not include: <code>$3,500–$15,000</code>; <code>₹2.9L–₹12.5L</code>; <code>₹500–₹1,000 per dot</code>; <code>&lt;₹100 per dot</code>; “10× cost reduction”; “30 years of stagnation.”</p>
+                <p><strong>Visual:</strong> a qualitative comparison:</p>
+                <pre>Commercial approach
+Precision piezoelectric actuation
+High manufacturing complexity
+
+                 versus
+
+OpenBraille prototype
+Commodity servo-cam actuation
+Student-accessible fabrication</pre>
+                <p>Do not use a numerical price chart.</p>
+
+                <p><strong>Slide 11 — Introduction</strong></p>
+                <pre>• OpenBraille is an assistive embedded system exploring lower-cost
+  actuation for refreshable Braille.
+
+• The objective is to validate whether affordable electromechanical
+  components can generate refreshable tactile output.
+
+• The semester prototype targets one six-dot Braille cell.
+
+• The cell is intentionally macro-scaled to improve FDM buildability
+  and reduce dimensional-tolerance risk.</pre>
+                <p>Add a small “Scope” box:</p>
+                <pre>IS:
+A single six-dot refreshable tactile cell
+
+IS NOT:
+A Braille printer, OCR scanner, screen reader or full-page display</pre>
+                <p>Use “improve buildability,” not “ensure buildability.”</p>
+
+                <p><strong>Slide 12 — Problem Statement</strong></p>
+                <pre>• Conventional refreshable Braille systems depend on expensive
+  actuation and precision manufacturing.
+
+• Standard-size Braille geometry creates severe alignment, friction
+  and pin-binding risks for low-cost FDM fabrication.
+
+• Engineering hypothesis:
+  A lower-cost actuation strategy can replace conventional
+  piezoelectric actuation while maintaining acceptable tactile performance.
+
+• Constraints:
+  Preferred budget ≤ ₹3,000
+  Maximum budget ≤ ₹5,000
+  Development period approximately two months
+  Five-member student team</pre>
+                <p>Do not write <code>≤0.1 mm repeatability over 100 cycles</code> as the Minimum Demonstrable Success.</p>
+
+                <p><strong>Slide 13 — Proposed Method</strong></p>
+                <pre>• Six positional SG90-class micro servos drive eccentric cams.
+
+• Each cam converts servo rotation into vertical movement of one
+  tactile pin.
+
+• An ESP32-WROOM-32 development board generates six independent
+  servo-control signals.
+
+• Servos use a separate external 5 V power rail with a common ground
+  connection to the ESP32.
+
+• A 1,000 µF capacitor is proposed across the servo power rail to help
+  reduce transient voltage dips.
+
+• The frame and cam mechanisms are produced using in-house FDM
+  fabrication and off-the-shelf parts.</pre>
+                <p><span class="inline-highlight">Important wording:</span></p>
+                <ul>
+                    <li>say <strong>“control signals”</strong>, not “servo power from GPIO”;</li>
+                    <li>say <strong>“separate power rail”</strong>, not “isolated power rail”;</li>
+                    <li>say the capacitor <strong>may help reduce voltage dips</strong>, not “prevents brownouts”;</li>
+                    <li>do not claim the passive SG90 spring reset is proven;</li>
+                    <li>do not claim the 5 V/2 A supply has already been validated.</li>
+                </ul>
+                <p><strong>Visual:</strong> exploded mechanism:</p>
+                <pre>SG90 servo → eccentric cam → follower/pin → tactile output</pre>
+
+                <p><strong>Slide 14 — Basic Block Diagram</strong><br>Delete the current tiny diagram and recreate it using large PowerPoint shapes.</p>
+                <pre>Text / USB Input
+        ↓
+ESP32 Controller
+and Braille Lookup Logic
+        ↓
+Six Servo-Control Signals
+        ↓
+Six Positional Micro Servos
+        ↓
+Six Cam-and-Follower Mechanisms
+        ↓
+Six Refreshable Tactile Pins</pre>
+                <p>Power path should appear separately:</p>
+                <pre>External 5 V Supply
+        ↓
+1,000 µF Capacitor
+        ↓
+Servo Power Rail</pre>
+                <p>Ground connection:</p>
+                <pre>ESP32 GND ↔ Servo Supply GND</pre>
+                <p>Design rules: <span class="pink-highlight">blue arrows for control/data</span>; red arrows for power; black or grey line for common ground; no paragraph inside the diagram; every label readable from the back of a classroom.</p>
+
+                <p><strong>Slide 15 — Conclusion</strong></p>
+                <pre>• OpenBraille proposes a macro-scaled single-cell refreshable Braille
+  prototype using ESP32-controlled servo-cam actuation.
+
+• Macro-scaling reduces the dominant FDM tolerance risk, but friction,
+  alignment, tactile force and repeatability still require validation.
+
+• The estimated BOM is ₹2,060–₹2,850, subject to component prices
+  and prototype revisions.
+
+• Development will follow a bottom-up, single-dot-first validation
+  strategy before integrating the complete six-dot cell.
+
+• Future work may investigate multi-cell scaling and potential IP
+  directions after experimental validation.</pre>
+                <p>Do not say: the design “eliminates mechanical risk”; the project is complete in four weeks; testing has already passed; a patent filing is planned or guaranteed; BLE, Wi-Fi, cloud, AI or cybersecurity features are included.</p>
+                <p><strong>Visual:</strong> simple eight-week roadmap:</p>
+                <pre>Weeks 1–2: electronics and single-dot mechanism
+Weeks 3–4: mechanical refinement and multi-dot integration
+Weeks 5–6: six-dot cell and firmware integration
+Week 7: repeatability and tactile validation
+Week 8: correction, documentation and final demonstration</pre>
+
+                <p><strong>Slide 16 — References</strong></p>
+                <pre>1. ISO 17049:2013,
+   Accessible design — Application of Braille on signage,
+   equipment and appliances.
+
+2. Espressif Systems,
+   ESP32-WROOM-32 Datasheet, Version 3.6.
+
+3. Espressif Systems,
+   ESP32-DevKitC V4 User Guide.
+
+4. TowerPro,
+   SG90 Analog Micro Servo — Official Product Specifications.
+
+5. Engineering_Design_Review.md,
+   Project mC, OpenBraille section, July 2026.
+
+6. Project_mC_Decision_Register_v1.2.md,
+   PDR-001, PDR-002 and PDR-015 to PDR-022.
+
+7. Phase3C_OpenBraille_Architecture_Report_Final.md,
+   Project mC, July 2026.</pre>
+                <p>ISO confirms that ISO 17049 covers fundamental Braille requirements and dimensional parameters for signage, equipment and appliances. The presentation must clarify that the semester prototype intentionally uses macro-scaled dimensions rather than claiming compliance. (<a href="https://www.iso.org/standard/58086.html" target="_blank">ISO</a>)</p>
+
+                <h4>✅ Final visual and formatting checklist for Sreehari</h4>
+                <ul>
+                    <li>Confirm all 16 slides remain.</li>
+                    <li>Add <code>Topic: OpenBraille</code>.</li>
+                    <li>Add <code>Dept of CSE(CY)</code>.</li>
+                    <li>Add <code>30/07/26</code>.</li>
+                    <li>Add slide numbers.</li>
+                    <li>Keep Slides 3–8 unchanged.</li>
+                    <li>Maximum four or five main bullets per technical slide.</li>
+                    <li>Use consistent font sizes.</li>
+                    <li>Remove unsupported exact commercial prices.</li>
+                    <li>Ensure Slide 14 is readable.</li>
+                    <li>Use “estimated,” “proposed,” “selected” and “requires validation” where appropriate.</li>
+                    <li>Export once as PPTX and once as PDF for visual checking.</li>
+                    <li>Open the PDF and verify that no text overlaps or falls outside the slide.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Amith Tab Content -->
+        <div class="tab-content" id="amith">
+            <div class="glass-card">
+                <h3>🔬 2. Instructions for Amith — hardware expert and final auditor</h3>
+                <p><strong>Amith should not only check spelling. His responsibility is to understand why every hardware component exists, what evidence supports it, and what remains untested.</strong></p>
+
+                <h4>📖 Hardware documents Amith must read</h4>
+                <p><strong>First priority</strong></p>
+                <ol>
+                    <li><strong><code>Phase3C_OpenBraille_Architecture_Report_Final.md</code></strong><br>Read the entire hardware, mechanical, power, BOM and validation sections.</li>
+                    <li><strong><code>Project_mC_Decision_Register_v1.2.md</code></strong><br>Focus on:</li>
+                </ol>
+                <pre>PDR-015  Servo + cam actuation
+PDR-016  Macro-scaled cell
+PDR-017  ESP32-WROOM-32 DevKit
+PDR-018  Direct GPIO servo-control architecture
+PDR-019  FDM manufacturing pathway
+PDR-020  External 5V/2A supply and 1,000 µF capacitor
+PDR-021  Reset mechanism — technically unvalidated
+PDR-022  Single-dot-first validation strategy</pre>
+                <p>These decisions form the current architecture baseline.</p>
+                <ol start="3">
+                    <li><strong><code>Phase3C_OpenBraille_Memory_Final.md</code></strong><br>Use as his compact hardware summary.</li>
+                    <li><strong><code>Engineering_Design_Review.md</code> — OpenBraille section</strong><br>This explains what the hardware must ultimately prove: affordable refreshable output for at least one cell with basic tactile and repeatability performance.</li>
+                </ol>
+
+                <h4>🔗 Official references Amith must inspect</h4>
+                <p><strong>A. ESP32-WROOM-32 official datasheet</strong><br>Open the official Espressif <strong>ESP32-WROOM-32 Datasheet, Version 3.6</strong>. It is the module-level source. (<a href="https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf" target="_blank">Espressif Systems</a>)</p>
+                <p>Amith should record: exact document title; version; module name; available GPIO/peripheral capability; operating and power limitations relevant to the module.</p>
+                <blockquote>The ESP32-WROOM-32 module datasheet is not automatically the same as the pinout of every generic “ESP32 DevKit” clone.</blockquote>
+
+                <p><strong>B. ESP32-DevKitC V4 User Guide</strong><br>Open the official Espressif <strong>ESP32-DevKitC V4 User Guide</strong>. Use this for board layout, headers, power pins and pin identification. (<a href="https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32/esp32-devkitc/user_guide.html" target="_blank">Espressif Systems</a>)</p>
+                <p>Amith must compare the guide against the exact board the team will buy or already owns. He should record: board marking printed on the PCB; module marking; USB connector type; <code>5V</code>, <code>3V3</code> and <code>GND</code> pins; which GPIO pins are suitable for servo-control outputs; pins that should not be used because of boot, flash or input-only restrictions.</p>
+                <p>Do not freeze final GPIO numbers in the PPT unless the actual board is available and checked.</p>
+
+                <p><strong>C. ESP32 LEDC/PWM official documentation</strong><br>Open the official ESP-IDF <strong>LED Control (LEDC)</strong> documentation. It confirms that ESP32 LEDC channels can generate PWM signals through configured GPIO outputs. (<a href="https://docs.espressif.com/projects/esp-idf/en/release-v5.1/esp32/api-reference/peripherals/ledc.html" target="_blank">Espressif Systems</a>)</p>
+                <p>Amith should verify: six independent output channels are feasible; the firmware architecture can assign channels and timers; the slide should say “PWM control signals,” not claim that GPIO powers a servo.</p>
+
+                <p><strong>D. TowerPro SG90 official page</strong><br>Open the official <strong>TowerPro SG90 Analog</strong> page. The official page lists: 9 g weight; 4.8 V operating voltage; approximately 1.8 kg·cm stall torque at 4.8 V; external-adapter power; plastic/POM gears. (<a href="https://towerpro.com.tw/product/sg90-analog/" target="_blank">Tower Pro</a>)</p>
+                <p>Amith must record what the official page <strong>does not confirm</strong>: no reliable six-servo total-current figure; no confirmation that a 5 V/2 A adapter is sufficient for six simultaneous servos; no confirmation of a passive torsion-spring reset; no confirmation that the exact local-market SG90 clone has identical performance.</p>
+                <blockquote>The official SG90 page supports operating voltage, torque class and external powering. It does not prove the project’s total power budget or reset mechanism.</blockquote>
+
+                <p><strong>E. Confirm the servo is positional, not continuous-rotation</strong><br>TowerPro also sells a separate <strong>SG90 360-degree continuous-rotation servo</strong>. That model behaves as a speed/direction actuator rather than a normal commanded-position servo. (<a href="https://towerpro.com.tw/product/sg90-360-degree-continuous-rotation-servo/" target="_blank">Tower Pro</a>)</p>
+                <p>Amith must ensure the team purchases:</p>
+                <pre>Standard positional SG90 Analog or Digital servo</pre>
+                <p>and not:</p>
+                <pre>SG90 360-degree continuous-rotation servo</pre>
+                <p>A cam mechanism that must hold specific raised and lowered positions should use the positional version.</p>
+
+                <p><strong>F. ISO 17049 official page</strong><br>Open the ISO 17049:2013 official page. It confirms the standard concerns Braille dimensional requirements and practical implementation. (<a href="https://www.iso.org/standard/58086.html" target="_blank">ISO</a>)</p>
+                <p>Amith’s audit rule: the standard may be cited as a dimensional reference; the prototype must not be described as ISO-compliant; the deck should state that it is intentionally macro-scaled.</p>
+
+                <h4>⚙️ Hardware understanding Amith must have</h4>
+                <p><strong>1. Why six servos?</strong><br>A six-dot Braille cell has six individually controllable dots. The proposed architecture assigns one positional servo-cam mechanism to each dot. Audit question: Does the deck clearly show six independently controlled outputs?</p>
+                <p><strong>2. Why a cam?</strong><br>A servo produces rotary motion. The tactile pin needs vertical linear motion. The eccentric cam converts servo rotation into upward/downward pin displacement. Audit questions: Is the rotation-to-linear-motion conversion clear? Does the slide avoid claiming that the final cam geometry is already validated?</p>
+                <p><strong>3. Why ESP32?</strong><br>The project selects ESP32 because it offers sufficient control outputs, timer/PWM capability, low cost and team familiarity. PDR v1.2 freezes ESP32-WROOM-32 DevKit as the architecture choice. Audit question: Does the slide describe the ESP32 as the controller, rather than as a power source?</p>
+                <p><strong>4. Why no external H-bridge?</strong><br>A standard hobby servo already contains its motor-control electronics. The ESP32 sends a control signal; it does not directly drive the servo motor winding. Audit question: Does the slide correctly say “no intermediate motor-driver IC for the selected hobby servos”? Do not generalize this to every actuator type.</p>
+                <p><strong>5. Why a separate power supply?</strong><br>Servo motors produce current spikes, especially during acceleration, mechanical resistance and stall. Powering several servos through the ESP32 board or GPIO would be unsafe and unstable.</p>
+                <pre>ESP32: USB/board supply
+Servos: separate external 5 V rail
+Grounds: connected together</pre>
+                <p>Audit questions: Does the block diagram show separate power paths? Is the common ground shown? Is the rail incorrectly called electrically isolated?</p>
+                <p><strong>6. Why the 1,000 µF capacitor?</strong><br>It is proposed as bulk decoupling to reduce short-duration voltage dips on the servo rail. It does not: create extra continuous power; make an undersized adapter sufficient; guarantee that brownouts cannot happen.</p>
+                <p><strong>7. Why macro-scale?</strong><br>Standard Braille geometry is difficult to fabricate using ordinary FDM printing because small clearances increase friction, misalignment and binding risk. Macro-scaling reduces this risk but does not remove it. Audit question: Does every slide say “reduces risk” rather than “eliminates risk”?</p>
+                <p><strong>8. What is unresolved?</strong><br>Amith must be able to explain that these are still untested: usable tactile force; friction and pin binding; servo-to-servo variation; exact current consumption; adequacy of the 5 V/2 A supply; cam dimensions; durability; passive reset claim; human tactile distinguishability.</p>
+
+                <h4>🔍 Amith’s final PPT audit sequence</h4>
+                <p>After Sreehari sends the final deck:</p>
+                <p><strong>Pass 1 — template</strong><br>Check: 16 slides; fixed institutional content untouched; correct header/footer/date/numbers; Group 8 and all five names.</p>
+                <p><strong>Pass 2 — hardware claims</strong><br>Mark every hardware statement: <span class="inline-highlight">Approved architecture</span> / Selected but untested component / Estimated value / Planned validation / Unsupported claim.</p>
+                <p><strong>Pass 3 — red-flag phrases</strong><br>Search the slides for:</p>
+                <pre>eliminates all risk
+        guarantees
+        fully proven
+        ISO-compliant
+        completed testing
+        successful prototype
+        patented
+        certainly patentable
+        GPIO powers servo
+        isolated power supply
+        5V/2A is sufficient
+        passive reset is confirmed</pre>
+                <p>Replace or remove each occurrence.</p>
+                <p><strong>Pass 4 — reference verification</strong><br>For each external reference, confirm: official organization; exact title; no invented author; no invented date; no unverifiable academic paper.</p>
+                <p><strong>Pass 5 — visual review</strong><br>Check the exported PDF at full-screen size. Slide 14 must be understandable in under ten seconds.</p>
+            </div>
+        </div>
+
+        <!-- Sreeprada Tab Content -->
+        <div class="tab-content" id="sreeprada">
+            <div class="glass-card">
+                <h3>🗣️ 3. Instructions for Sreeprada — simple project understanding</h3>
+                <p><strong>Sreeprada should wait before assigning slides</strong>, because the final allocation depends on Sreehari’s final deck and Amith’s corrections.</p>
+                <p>For now, she only needs a simple overview.</p>
+
+                <h4>📄 Documents for Sreeprada</h4>
+                <p>Give her only:</p>
+                <ol>
+                    <li><code>Engineering_Design_Review.md</code> — OpenBraille Mission, Hypothesis and MDS.</li>
+                    <li><code>Phase3C_OpenBraille_Memory_Final.md</code>.</li>
+                    <li>The final audited PPT, once finished.</li>
+                </ol>
+                <div class="highlight-box warning">
+                    🚫 Do not give her: raw research; Phase 2 patent reports; the full PDR; the full architecture research corpus. That would create unnecessary confusion.
+                </div>
+
+                <h4>💡 Layman explanation for Sreeprada</h4>
+                <div class="highlight-box teal">
+                    <p>Braille characters are made using six possible raised dots. Commercial electronic Braille displays are expensive because every dot needs a tiny, accurate mechanism that can move up and down repeatedly. Our project tries to prove a cheaper method. We use six small positional servo motors. Each servo turns a specially shaped cam, and the cam pushes one tactile pin upward or brings it downward. An ESP32 decides which of the six pins should be raised for each character. The servos receive power from a separate supply because motors need more current than the ESP32 can provide. We are first building one enlarged Braille cell so that it is easier to manufacture and test.</p>
+                </div>
+
+                <h4>🧠 Five facts she must understand</h4>
+                <ol>
+                    <li>It is <strong>one six-dot cell</strong>, not a full Braille display.</li>
+                    <li>The six servos control six tactile pins.</li>
+                    <li>The ESP32 decides which dots should rise.</li>
+                    <li>The servo-cam mechanism is proposed but still needs physical testing.</li>
+                    <li>The goal is to prove a low-cost alternative, not claim a finished commercial product.</li>
+                </ol>
+
+                <p>After the final PPT is frozen, Sreeprada should distribute meaningful project slides among all five members. She should not base the allocation on the current draft because Slide 14 and the project-content wording are still changing.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetId = btn.getAttribute('data-tab');
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === targetId) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+        })();
+    </script>
+</body>
+</html>

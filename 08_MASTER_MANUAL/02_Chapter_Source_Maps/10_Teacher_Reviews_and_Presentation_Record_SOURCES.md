@@ -1,0 +1,66 @@
+# 10. Teacher Reviews and Presentation Record — Source Map
+
+Teacher-facing documents, the official zeroth-review presentation, draft history, team submissions and review context.
+
+Mapped sources: **15**
+
+- `05_TEACHER_AND_REVIEWS/01_Teacher_Documents/TEACHER_DELIVERY_INDEX.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_OR_HISTORICAL`
+  - Reason: Teacher-facing document, official presentation or review record.
+- `05_TEACHER_AND_REVIEWS/02_Zeroth_Review_OpenBraille/01_Official_Submission/OpenBraille_Zeroth_Review_OFFICIAL_2026-07-30.pptx`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_OR_HISTORICAL`
+  - Reason: Teacher-facing document, official presentation or review record.
+- `05_TEACHER_AND_REVIEWS/02_Zeroth_Review_OpenBraille/02_Drafts_and_Working_Files/01_Initial_Template_or_Early_Draft.pptx`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_OR_HISTORICAL`
+  - Reason: Teacher-facing document, official presentation or review record.
+- `05_TEACHER_AND_REVIEWS/02_Zeroth_Review_OpenBraille/02_Drafts_and_Working_Files/02_OpenBraille_Draft_0.1.pptx`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_OR_HISTORICAL`
+  - Reason: Teacher-facing document, official presentation or review record.
+- `05_TEACHER_AND_REVIEWS/02_Zeroth_Review_OpenBraille/02_Drafts_and_Working_Files/03_OpenBraille_Draft_0.2.pptx`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_OR_HISTORICAL`
+  - Reason: Teacher-facing document, official presentation or review record.
+- `05_TEACHER_AND_REVIEWS/02_Zeroth_Review_OpenBraille/02_Drafts_and_Working_Files/04_OpenBraille_Draft_0.2.odp`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_OR_HISTORICAL`
+  - Reason: Teacher-facing document, official presentation or review record.
+- `05_TEACHER_AND_REVIEWS/02_Zeroth_Review_OpenBraille/02_Drafts_and_Working_Files/05_Sreehari_Working_Draft.pptx`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_OR_HISTORICAL`
+  - Reason: Teacher-facing document, official presentation or review record.
+- `05_TEACHER_AND_REVIEWS/02_Zeroth_Review_OpenBraille/02_Drafts_and_Working_Files/06_Group8_Working_Draft.pptx`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_OR_HISTORICAL`
+  - Reason: Teacher-facing document, official presentation or review record.
+- `05_TEACHER_AND_REVIEWS/02_Zeroth_Review_OpenBraille/02_Drafts_and_Working_Files/07_PreSubmission_Finalised_Draft_1.pptx`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_OR_HISTORICAL`
+  - Reason: Teacher-facing document, official presentation or review record.
+- `05_TEACHER_AND_REVIEWS/02_Zeroth_Review_OpenBraille/02_Drafts_and_Working_Files/08_PreSubmission_Finalised_Draft_2.pptx`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_OR_HISTORICAL`
+  - Reason: Teacher-facing document, official presentation or review record.
+- `05_TEACHER_AND_REVIEWS/02_Zeroth_Review_OpenBraille/02_Drafts_and_Working_Files/09_OpenBraille_Block_Diagram.png`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_OR_HISTORICAL`
+  - Reason: Teacher-facing document, official presentation or review record.
+- `05_TEACHER_AND_REVIEWS/02_Zeroth_Review_OpenBraille/02_Drafts_and_Working_Files/10_OpenBraille_Generated_Visual.png`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_OR_HISTORICAL`
+  - Reason: Teacher-facing document, official presentation or review record.
+- `05_TEACHER_AND_REVIEWS/02_Zeroth_Review_OpenBraille/02_Drafts_and_Working_Files/11_Presentation_Instructions_Early.html`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_OR_HISTORICAL`
+  - Reason: Teacher-facing document, official presentation or review record.
+- `05_TEACHER_AND_REVIEWS/02_Zeroth_Review_OpenBraille/02_Drafts_and_Working_Files/12_Presentation_Instructions_2.0.html`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_OR_HISTORICAL`
+  - Reason: Teacher-facing document, official presentation or review record.
+- `05_TEACHER_AND_REVIEWS/TEACHER_AND_REVIEW_INDEX.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_OR_HISTORICAL`
+  - Reason: Teacher-facing document, official presentation or review record.

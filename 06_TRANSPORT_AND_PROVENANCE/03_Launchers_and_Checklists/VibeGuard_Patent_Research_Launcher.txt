@@ -1,0 +1,19 @@
+Read 00_READ_FIRST_VibeGuard_Patent_Research_Instructions.md first and treat it
+as the governing task specification.
+
+Before substantive research, inventory the attached files and confirm:
+
+1. the governing instruction file is readable;
+2. all ten canonical project documents listed in it are present;
+3. Project_mC_Decision_Register_v1.2.md, not v1.1, is present;
+4. the frozen concept is a passive, single-node, edge-computed machine-
+   vibration detector—not active cancellation, haptics, a wearable system,
+   a multi-sensor array, or a cloud platform;
+5. any missing, duplicate, unreadable or ambiguously named input.
+
+If the input set is complete, perform the full independent VibeGuard patent
+research exactly as instructed.
+
+Do not use prior-chat context.
+Do not use another model's VibeGuard research or any OpenBraille synthesis.
+Do not compare VibeGuard against the other Project mC concepts.

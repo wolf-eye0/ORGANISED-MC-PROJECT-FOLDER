@@ -1,0 +1,33 @@
+Read 00_READ_FIRST_VibeGuard_Patent_Research_Instructions.md first and treat it
+as the governing task specification.
+
+This is the upload-limited Gemini/Qwen package.
+
+Before substantive research, inventory the attachments and confirm:
+
+1. exactly 10 attachments are present;
+2. the governing instruction file is readable;
+3. the nine evidence attachments collectively represent all ten canonical
+   project documents;
+4. `07-08_Validated_Downselection_Evidence_Bundle.md` contains the complete,
+   separately marked contents of:
+   - `07_Concept_Evidence_Matrix.md`; and
+   - `08_Uncertainty_and_Test_Register.md`;
+5. documents 07 and 08 are treated as separate logical sources and are not
+   reported as missing merely because they share one transport attachment;
+6. Project_mC_Decision_Register_v1.2.md, not v1.1, is present;
+7. the frozen concept is a passive, single-node, edge-computed machine-
+   vibration detector—not active cancellation, haptics, a wearable system,
+   a multi-sensor array, or a cloud platform;
+8. any missing, duplicate, unreadable, partial or ambiguously named input is
+   identified.
+
+The combined 07–08 file is a transport wrapper only. It is not a synthesis,
+summary or authority replacement.
+
+If the complete logical input set is present, perform the full independent
+VibeGuard patent research exactly as specified in the governing instruction.
+
+Do not use prior-chat context.
+Do not use another model's VibeGuard research or any OpenBraille synthesis.
+Do not compare VibeGuard against the other Project mC concepts.

@@ -1,0 +1,26 @@
+Read `00_READ_FIRST_OpenBraille_PreBuild_Patent_Simulation_Instructions.md`
+first and treat it as the governing task specification.
+
+Before substantive work, inventory all 12 attached files against
+`99_INPUT_MANIFEST.md`.
+
+Confirm:
+
+1. exactly 12 physical attachments are present;
+2. Decision Register v1.2 is present;
+3. the final six-servo OpenBraille architecture, memory and SOP are readable;
+4. both valid OpenBraille synthesis reports are present;
+5. both final adjudications are present and are decision context, not votes;
+6. the OpenBraille filename crossing is documented;
+7. the failed moving-roller/encoder-wheel concept-swap synthesis is absent;
+8. no VibeGuard or TrueMoist technical report is attached;
+9. the manifest is file control only;
+10. no file is missing, duplicated, partial, superseded or concept-swapped.
+
+Then conduct the complete OpenBraille pre-build future patent-case simulation.
+
+Use fresh web research and primary patent and technical sources.
+Do not rely only on the attached reports.
+Do not promise patent grant.
+Do not assume that the hypothetical later mechanism works.
+Do not substitute a moving-roller or another OpenBraille architecture.

@@ -1,0 +1,335 @@
+Create two additional TrueMoist independent patent-research upload packages
+for platforms with lower attachment limits:
+
+1. Gemini package: maximum 10 uploaded files.
+2. Qwen package: maximum 5 uploaded files.
+
+This is a transport-packaging task only.
+
+Do not perform patent research.
+Do not summarize, rewrite, shorten, correct, or omit source content.
+Do not modify, move, rename, or delete originals.
+Do not stage, commit, merge, tag, or push.
+Do not inspect or modify `ZEROTH PRESENTATION/`.
+
+## Repository root
+
+`/home/paradoxpete/Documents/PROJECT`
+
+## Existing authoritative baseline
+
+Use the validated 72-run TrueMoist baseline only.
+
+Use:
+
+- `Project_mC_Decision_Register_v1.2.md`
+- `Phase3C_TrueMoist_Architecture_Report_Final.md`
+- `Phase3C_TrueMoist_Memory_Final.md`
+- `Phase3C_TrueMoist_SOP_Final.md`
+
+Exclude:
+
+- every file under `TrueMoist/by claude/`;
+- `TrueMoist/files.zip`;
+- Decision Register v1.1;
+- old raw Phase 3C model research;
+- convenience duplicates;
+- OpenBraille and VibeGuard material.
+
+## Required source files
+
+Instruction:
+
+`/home/paradoxpete/Documents/PROJECT/00_READ_FIRST_TrueMoist_Patent_Research_Instructions.md`
+
+Canonical documents:
+
+1. `/home/paradoxpete/Documents/PROJECT/PHASE 3/Engineering_Design_Review.md`
+
+2. `/home/paradoxpete/Documents/PROJECT/Project_mC_Decision_Register_v1.2.md`
+
+3. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/Phase3C_Portfolio_Closure_Memo_Approved.md`
+
+4. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/TrueMoist/Phase3C_TrueMoist_Architecture_Report_Final.md`
+
+5. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/TrueMoist/Phase3C_TrueMoist_Memory_Final.md`
+
+6. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/TrueMoist/Phase3C_TrueMoist_SOP_Final.md`
+
+7. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/03_Concept_Evidence_Matrix.md`
+
+8. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/05_Uncertainty_and_Test_Register.md`
+
+9. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/06_Patent_Research_Input_Pack.md`
+
+10. `/home/paradoxpete/Documents/PROJECT/PHASE 2/Phase2_Report by CLaude.md`
+
+Stop if any required source is absent, empty, unreadable, or differs from the
+authority decision already confirmed.
+
+## General merge rules
+
+Merged files are transport compilations, not new technical authorities.
+
+For every merged file:
+
+- preserve each source document's complete text;
+- include every source exactly once;
+- preserve the original source order;
+- do not paraphrase or remove duplicated passages;
+- do not repair spelling, formatting, citations, headings, or contradictions;
+- insert only a clearly marked transport header and source-boundary markers;
+- state the original filename, absolute path, byte size, and SHA-256 before
+  each embedded source;
+- use unmistakable markers:
+
+  `<!-- BEGIN EMBEDDED SOURCE: <filename> -->`
+
+  `<!-- END EMBEDDED SOURCE: <filename> -->`
+
+- ensure the original source text appears verbatim between its BEGIN and END
+  markers;
+- leave at least two blank lines between logical documents;
+- use UTF-8 without BOM;
+- do not wrap embedded documents in code fences.
+
+The transport header must say:
+
+- this is a lossless attachment-limit compilation;
+- it represents multiple logical documents;
+- the logical documents retain their original authority and order;
+- the compilation itself is not technical evidence;
+- models must inventory the embedded logical documents separately.
+
+Verify by programmatic byte/text comparison that every original source body is
+embedded exactly once and unchanged.
+
+## Package A — Gemini 10-file package
+
+Create outside the repository:
+
+`/home/paradoxpete/Documents/PROJECT_UPLOAD_PACKS/TrueMoist_Patent_Research_Input_GEMINI_10`
+
+If it exists, create a timestamped alternative and report the final path.
+
+The directory must contain exactly these 10 files:
+
+1. `00_READ_FIRST_TrueMoist_Patent_Research_Instructions.md`
+2. `01_Engineering_Design_Review.md`
+3. `02_Project_mC_Decision_Register_v1.2.md`
+4. `03_Phase3C_Portfolio_Closure_Memo_Approved.md`
+5. `04_05_TrueMoist_Architecture_and_Memory.md`
+6. `06_Phase3C_TrueMoist_SOP_Final.md`
+7. `07_Concept_Evidence_Matrix.md`
+8. `08_Uncertainty_and_Test_Register.md`
+9. `09_Patent_Research_Input_Pack.md`
+10. `10_Phase2_Report_by_Claude.md`
+
+Copy files 00, 01, 02, 03, 06, 07, 08, 09, and 10 without content changes.
+
+Create `04_05_TrueMoist_Architecture_and_Memory.md` by losslessly embedding,
+in this order:
+
+1. `Phase3C_TrueMoist_Architecture_Report_Final.md`
+2. `Phase3C_TrueMoist_Memory_Final.md`
+
+This gives 10 physical attachments representing 11 logical inputs.
+
+Do not place a manifest, README, ZIP, launcher, checklist, or hidden file
+inside this upload directory.
+
+## Package B — Qwen 5-file package
+
+Create outside the repository:
+
+`/home/paradoxpete/Documents/PROJECT_UPLOAD_PACKS/TrueMoist_Patent_Research_Input_QWEN_5`
+
+If it exists, create a timestamped alternative and report the final path.
+
+The directory must contain exactly these 5 files:
+
+1. `00_READ_FIRST_TrueMoist_Patent_Research_Instructions.md`
+
+2. `01_03_Project_Authority_Bundle.md`
+
+   Embed, in this order:
+   - `Engineering_Design_Review.md`
+   - `Project_mC_Decision_Register_v1.2.md`
+   - `Phase3C_Portfolio_Closure_Memo_Approved.md`
+
+3. `04_06_TrueMoist_Phase3C_Bundle.md`
+
+   Embed, in this order:
+   - `Phase3C_TrueMoist_Architecture_Report_Final.md`
+   - `Phase3C_TrueMoist_Memory_Final.md`
+   - `Phase3C_TrueMoist_SOP_Final.md`
+
+4. `07_09_Validation_and_Patent_Input_Bundle.md`
+
+   Embed, in this order:
+   - `03_Concept_Evidence_Matrix.md`
+   - `05_Uncertainty_and_Test_Register.md`
+   - `06_Patent_Research_Input_Pack.md`
+
+5. `10_Phase2_Historical_Patent_Leads.md`
+
+   Copy the complete content of `Phase2_Report by CLaude.md` without
+   summarization. A transport heading may identify it as historical leads only.
+
+This gives 5 physical attachments representing the same 11 logical inputs.
+
+Do not place a manifest, README, ZIP, launcher, checklist, or hidden file
+inside this upload directory.
+
+## Create platform-specific launchers outside the upload folders
+
+Create:
+
+`/home/paradoxpete/Documents/PROJECT_UPLOAD_PACKS/TrueMoist_Patent_Research_Launcher_GEMINI_10.txt`
+
+with exactly this content:
+
+---
+Read 00_READ_FIRST_TrueMoist_Patent_Research_Instructions.md first and treat it
+as the governing task specification.
+
+This transport package contains exactly 10 physical attachments representing
+11 logical inputs.
+
+Before substantive research, confirm:
+
+1. all 10 physical files are attached and readable;
+2. the governing instruction is readable;
+3. files 01, 02, 03, 06, 07, 08, 09 and 10 each represent one logical source;
+4. `04_05_TrueMoist_Architecture_and_Memory.md` contains two complete,
+   separately marked logical sources:
+   - Phase3C_TrueMoist_Architecture_Report_Final.md;
+   - Phase3C_TrueMoist_Memory_Final.md;
+5. all 10 canonical project documents are therefore logically present;
+6. Decision Register v1.2, not v1.1, is present;
+7. the authoritative design is the validated 72-run TrueMoist architecture;
+8. no logical source is omitted, duplicated, truncated or unreadable.
+
+The merged file is a transport compilation only. Inventory and apply its two
+embedded documents separately according to the authority order in the
+governing instruction.
+
+If the complete logical set is present, perform the full independent
+TrueMoist patent research exactly as instructed.
+
+Do not use prior-chat context, another model's research, OpenBraille or
+VibeGuard material, or cross-concept comparison.
+---
+
+Create:
+
+`/home/paradoxpete/Documents/PROJECT_UPLOAD_PACKS/TrueMoist_Patent_Research_Launcher_QWEN_5.txt`
+
+with exactly this content:
+
+---
+Read 00_READ_FIRST_TrueMoist_Patent_Research_Instructions.md first and treat it
+as the governing task specification.
+
+This attachment-limit transport package contains exactly 5 physical files
+representing 11 logical inputs.
+
+Before substantive research, inventory the logical documents inside the
+bundles:
+
+1. `00_READ_FIRST_TrueMoist_Patent_Research_Instructions.md`
+   - governing instruction;
+
+2. `01_03_Project_Authority_Bundle.md`
+   - Engineering_Design_Review.md;
+   - Project_mC_Decision_Register_v1.2.md;
+   - Phase3C_Portfolio_Closure_Memo_Approved.md;
+
+3. `04_06_TrueMoist_Phase3C_Bundle.md`
+   - Phase3C_TrueMoist_Architecture_Report_Final.md;
+   - Phase3C_TrueMoist_Memory_Final.md;
+   - Phase3C_TrueMoist_SOP_Final.md;
+
+4. `07_09_Validation_and_Patent_Input_Bundle.md`
+   - 03_Concept_Evidence_Matrix.md;
+   - 05_Uncertainty_and_Test_Register.md;
+   - 06_Patent_Research_Input_Pack.md;
+
+5. `10_Phase2_Historical_Patent_Leads.md`
+   - Phase2_Report by CLaude.md, used only as historical patent-search leads.
+
+Confirm that all 5 physical files and all 11 logical inputs are present,
+complete, separately marked and readable.
+
+Apply the original logical authority order, not bundle order or bundle size.
+Do not treat a bundle as one evidence source. Do not average or collapse the
+documents inside it.
+
+Confirm Decision Register v1.2, the validated 72-run architecture, and the
+frozen concept fidelity required by the governing instruction.
+
+If the logical set is complete, perform the full independent TrueMoist patent
+research exactly as instructed.
+
+Do not use prior-chat context, another model's research, OpenBraille or
+VibeGuard material, or cross-concept comparison.
+---
+
+## Validation report outside the upload folders
+
+Create:
+
+`/home/paradoxpete/Documents/PROJECT_UPLOAD_PACKS/TrueMoist_Limited_Package_Validation.md`
+
+Include:
+
+- final absolute paths for both upload directories;
+- exact physical file count for each;
+- mapping from every physical file to its logical sources;
+- all source sizes and SHA-256 hashes;
+- all destination sizes and hashes;
+- direct-copy hash matches;
+- merged-source containment/exactness results;
+- confirmation that all 11 logical inputs appear exactly once in each package;
+- confirmation that Decision Register v1.1 and the `by claude/` 135-run files
+  are absent;
+- confirmation that no OpenBraille/VibeGuard file is present;
+- confirmation that launchers are outside the upload folders;
+- repository status before and after;
+- confirmation that no original was modified.
+
+## Repository safety and final checks
+
+Run before and after:
+
+`git -C /home/paradoxpete/Documents/PROJECT status --short`
+
+`git -C /home/paradoxpete/Documents/PROJECT diff --check`
+
+Confirm:
+
+- Gemini directory contains exactly 10 files;
+- Qwen directory contains exactly 5 files;
+- no hidden files;
+- no ZIP/README/manifest/launcher inside either upload directory;
+- every one of the 10 canonical project documents is represented exactly once
+  in each package;
+- the governing instruction is represented exactly once;
+- the authoritative 72-run files are used;
+- no superseded 135-run or v1.1 material is included;
+- no source file changed;
+- `ZEROTH PRESENTATION/` was untouched.
+
+## Final response
+
+Report:
+
+- Gemini package absolute path and exact count;
+- Qwen package absolute path and exact count;
+- both launcher paths;
+- validation-report path;
+- mapping of merged bundles;
+- whether all 11 logical inputs were preserved exactly once;
+- hash/containment result;
+- repository initial/final status;
+- confirmation that no originals were modified.

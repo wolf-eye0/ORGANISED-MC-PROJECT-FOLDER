@@ -1,0 +1,214 @@
+# 02. Research Methodology and Phase History — Source Map
+
+The Phase 1A through Phase 3C process, scoring systems, gates, research lanes and decision-development method.
+
+Mapped sources: **52**
+
+- `02_PHASE_HISTORY/HISTORICAL_RESEARCH_INDEX.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/PHASE_HISTORY_INDEX.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1A_Opportunity_Discovery/Phase1A_Memory.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1A_Opportunity_Discovery/Phase1A_Summary.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1A_Opportunity_Discovery/Raw_Research/01_ChatGPT_Deep_Research.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_1/Phase_1A_Opportunity_Discovery/Raw_Research/02_Gemini_Deep_Research.docx`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_1/Phase_1A_Opportunity_Discovery/Raw_Research/03_Kimi_Deep_Research.docx`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_1/Phase_1A_Opportunity_Discovery/Raw_Research/04_Qwen_AI_Deep_Research.pdf`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_1/Phase_1B5_Portfolio_Optimization/Phase1B5_Memory.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1B5_Portfolio_Optimization/Phase1B5_Opportunity_Portfolio_Optimization.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1B5_Portfolio_Optimization/Phase1B5_Portfolio_Optimization_By_Claude.pdf`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1B_Opportunity_Analysis/Phase1B_Memory.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1B_Opportunity_Analysis/Phase1B_Opportunity_Analysis.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1B_Opportunity_Analysis/Phase1B_Opportunity_Analysis_By_Claude.pdf`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1C_Concept_Synthesis/Abstracts_and_Proposal_Derivatives/01_Microcontroller_Project_Abstract_Proposal_5_Ideas.pdf`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1C_Concept_Synthesis/Abstracts_and_Proposal_Derivatives/02_Microcontroller_Project_Idea_Abstracts_2.0.pdf`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1C_Concept_Synthesis/Abstracts_and_Proposal_Derivatives/03_Microcontroller_Project_Idea_Abstracts_Initial.pdf`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1C_Concept_Synthesis/Abstracts_and_Proposal_Derivatives/04_Minimalist_Project_Proposal.pdf`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1C_Concept_Synthesis/Abstracts_and_Proposal_Derivatives/05_Project_Proposal_Booklet.pdf`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1C_Concept_Synthesis/Phase1C.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1C_Concept_Synthesis/Phase1C_Concept_Synthesis.pdf`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1C_Concept_Synthesis/Phase1C_Memory.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1C_Concept_Synthesis/Visual_Explanations/01_Visual_Explanation_11_Ideas.html`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_1/Phase_1C_Concept_Synthesis/Visual_Explanations/02_Visual_Explanation_Top_5.html`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_2_Patent_Landscape/Phase2_DeepResearch_Prompt_v2.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_2_Patent_Landscape/Phase2_Memory.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_2_Patent_Landscape/Phase2_Report_From_Claude.pdf`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_2_Patent_Landscape/Phase2_Report_by_Claude.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_2_Patent_Landscape/Phase2_SOP.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_2_Patent_Landscape/Raw_Research/01_ChatGPT_Patent_Research.docx`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_2_Patent_Landscape/Raw_Research/02_Gemini_Phase2_Research.docx`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_2_Patent_Landscape/Raw_Research/03_Kimi_Patent_Research.pdf`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_2_Patent_Landscape/Raw_Research/04_Qwen_Patent_Research_Full.pdf`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_2_Patent_Landscape/Raw_Research/05_Qwen_Phase2_Research_Variant.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_3/Phase3_DeepResearch_Prompt.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_3/Phase3_SOP.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_3/Phase_3A_Engineering_Landscape/Claude_Phase3A_Research_Report.pdf`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_3/Phase_3A_Engineering_Landscape/Phase3A_MEMORY.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_3/Phase_3A_Engineering_Landscape/Raw_Research/01_Gemini_Phase3A_Research.docx`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_3/Phase_3A_Engineering_Landscape/Raw_Research/02_Mistral_Phase3A_Research.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_3/Phase_3A_Engineering_Landscape/Raw_Research/03_Perplexity_Phase3A_Research.pdf`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_3/Phase_3A_Engineering_Landscape/Raw_Research/04_Qwen_Phase3A_Research.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_3/Phase_3B_Feasibility_Analysis/Phase3B_DeepResearch_Prompt.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_3/Phase_3B_Feasibility_Analysis/Phase3B_MEMORY.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_3/Phase_3B_Feasibility_Analysis/Phase3B_Report_by_Claude.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_3/Phase_3B_Feasibility_Analysis/Project_mC_Phase3B_SOP.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_3/Phase_3B_Feasibility_Analysis/Raw_Research/01_Gemini_Phase3B_Research.docx`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_3/Phase_3B_Feasibility_Analysis/Raw_Research/02_Mistral_Phase3B_Research.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_3/Phase_3B_Feasibility_Analysis/Raw_Research/03_Qwen_Phase3B_Research.pdf`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_3/Phase_3B_Feasibility_Analysis/Raw_Research/04_Perplexity_Phase3B_Research.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_SUPPORT`
+  - Reason: Historical research lane used to explain project evolution.
+- `02_PHASE_HISTORY/Phase_3/Phase_3C_Comparative_Evaluation/Original_Phase3C_README.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.
+- `02_PHASE_HISTORY/Phase_3/Phase_3C_Comparative_Evaluation/Phase3C_Portfolio_Closure_Memo_Approved.md`
+  - Authority: `TIER_4`
+  - Treatment: `HISTORICAL_NARRATIVE`
+  - Reason: Phase history, synthesis or decision-development record.

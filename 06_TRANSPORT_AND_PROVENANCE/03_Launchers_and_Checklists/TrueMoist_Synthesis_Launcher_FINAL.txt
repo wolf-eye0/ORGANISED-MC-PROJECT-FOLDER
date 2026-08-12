@@ -1,0 +1,44 @@
+Read `00_READ_FIRST_TrueMoist_Synthesis_Instructions.md` first and treat it as
+the governing task specification.
+
+Before substantive synthesis, inventory all 18 attached files against
+`99_INPUT_MANIFEST.md`. Confirm that the governing instruction, ten canonical
+project documents, six independent research lanes, and file-control manifest
+are present and readable. Treat the manifest as file control only, not
+technical evidence.
+
+Confirm:
+
+1. exactly 18 physical attachments are present;
+2. Decision Register v1.2, not v1.1, is present;
+3. the authoritative architecture is the validated 72-run TrueMoist design;
+4. the frozen concept is a local compensation system for a low-cost analog
+   capacitive soil-moisture probe using measured temperature and a controlled
+   salinity-treatment code—not a live-EC meter, irrigation controller, cloud
+   platform, multi-soil system, custom multi-frequency probe, TinyML showcase,
+   or online-adaptive learner;
+5. the six research lanes are represented once each:
+   - ChatGPT Deep Research;
+   - Gemini Deep Research;
+   - Perplexity Deep Research;
+   - Qwen;
+   - Mistral;
+   - Microsoft Copilot;
+6. File 14 is one Qwen lane compiled from an initial report and follow-up, not
+   two reports or two votes;
+7. any Mistral compilation is one lane and any missing conclusion is not
+   reconstructed;
+8. the superseded initial ChatGPT Deep Research PDF and the supplementary
+   ChatGPT Work Max web audit are absent;
+9. any missing, duplicate, unreadable, partial, concept-swapped, or ambiguously
+   named input is identified.
+
+The six research lanes are evidence sources, not votes. Do not use another
+synthesis output or prior-chat context. Preserve the project authority order
+in the governing instruction.
+
+If the complete logical input set is present, perform the full independent
+TrueMoist patent-evidence synthesis exactly as instructed.
+
+Do not compare TrueMoist against OpenBraille or VibeGuard.
+Do not select the final Project mC winner.

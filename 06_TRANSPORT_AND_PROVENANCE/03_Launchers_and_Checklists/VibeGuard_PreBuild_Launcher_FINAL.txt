@@ -1,0 +1,24 @@
+Read `00_READ_FIRST_VibeGuard_PreBuild_Patent_Simulation_Instructions.md`
+first and treat it as the governing task specification.
+
+Before substantive work, inventory all 12 attached files against
+`99_INPUT_MANIFEST.md`.
+
+Confirm:
+
+1. exactly 12 attachments are present;
+2. Decision Register v1.2 is present;
+3. the authoritative VibeGuard architecture, memory and SOP are readable;
+4. both valid VibeGuard syntheses are present;
+5. both final adjudications are present and are decision context, not votes;
+6. the failed software-security concept-swap synthesis is absent;
+7. no OpenBraille or TrueMoist technical report is attached;
+8. the manifest is file control only;
+9. no file is missing, duplicated, partial, superseded or concept-swapped.
+
+Then conduct the complete VibeGuard pre-build future patent-case simulation.
+
+Use fresh web research and primary patent and technical sources.
+Do not rely only on the attached reports.
+Do not promise patent grant.
+Do not assume that the hypothetical later mechanism works.

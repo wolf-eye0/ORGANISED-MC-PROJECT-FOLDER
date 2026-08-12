@@ -1,0 +1,42 @@
+Read `00_READ_FIRST_Project_mC_Teacher_Document_Instructions.md` first and
+treat it as the governing task specification.
+
+Before substantive work, inventory all 19 attached files against
+`99_INPUT_MANIFEST.md`.
+
+Confirm:
+
+1. exactly 19 physical attachments are present;
+2. the governing instruction and teacher-context files are readable;
+3. Decision Register v1.2 is present;
+4. the final zeroth-review OpenBraille presentation is present;
+5. the common authority/evidence files are readable;
+6. both final cross-concept adjudications are present and are decision context,
+   not votes;
+7. the final VibeGuard architecture, memory, SOP and pre-build simulation are
+   present;
+8. the final OpenBraille architecture, memory, SOP and pre-build simulation are
+   present;
+9. failed concept-swap reports are absent;
+10. no standalone TrueMoist technical report is attached;
+11. the manifest is file control only;
+12. no input is missing, duplicated, partial, superseded or concept-swapped.
+
+Then conduct fresh web research for current official hardware specifications
+and current Indian market prices.
+
+The initial response must create only:
+
+# Project mC Teacher Documents — Master Evidence, Costing and Decision Basis
+
+Follow the exact 20-section master-basis structure in the governing
+instruction.
+
+Do not draft the three final teacher documents yet.
+
+Use current primary specifications and reputable Indian pricing sources.
+Record the price-check date.
+Separate semester BOMs from future research hardware.
+Do not promise patent grant.
+Do not assume PIRG or VPD-C7 works.
+Do not expose unnecessary confidential implementation details.

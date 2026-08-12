@@ -1,0 +1,19 @@
+1. Start a fresh synthesis conversation.
+2. Upload every file in this directory.
+3. Confirm the upload count matches the manifest.
+4. Paste this message:
+
+Read 00_READ_FIRST_OpenBraille_Synthesis_Instructions.md first,
+inventory every attached file against 99_INPUT_MANIFEST.md, and then
+perform the synthesis. Do not use prior chat context or begin until the
+inventory is complete.
+
+5. Save Claude’s output as:
+OpenBraille_Patent_Synthesis_Claude.md
+
+6. Save ChatGPT’s output as:
+OpenBraille_Patent_Synthesis_ChatGPT.md
+
+7. Do not give either synthesis model the other synthesis.
+8. Do not begin VibeGuard research until the two OpenBraille syntheses are
+compared.

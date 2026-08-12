@@ -1,0 +1,301 @@
+Create a clean external bulk-upload package for three blind VibeGuard patent
+syntheses.
+
+This is a file-selection, copying, normalization, manifest-generation, and
+validation task only.
+
+Do not perform patent analysis.
+Do not summarize or edit source documents.
+Do not rename, move, or delete originals.
+Do not modify Git-tracked repository content.
+Do not stage, commit, tag, merge, or push.
+Do not inspect or modify `ZEROTH PRESENTATION/`.
+
+## Repository and research-report locations
+
+Repository root:
+
+`/home/paradoxpete/Documents/PROJECT`
+
+Independent VibeGuard patent-research directory:
+
+`/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/RESEAERCH/VIBEGUARD`
+
+The spelling `RESEAERCH` is intentional because it is the existing directory
+name.
+
+## Required governing instruction file
+
+Before running this task, confirm that this file exists:
+
+`/home/paradoxpete/Documents/PROJECT/00_READ_FIRST_VibeGuard_Synthesis_Instructions.md`
+
+It must contain the complete owner-approved VibeGuard synthesis prompt.
+
+If the file is absent, empty, or unreadable, stop and ask the owner to place
+the supplied file there.
+
+Do not reconstruct or shorten the synthesis instructions from memory.
+
+## Output location
+
+Create an external directory outside the repository:
+
+`/home/paradoxpete/Documents/PROJECT_UPLOAD_PACKS/VibeGuard_Patent_Synthesis_Input`
+
+If that directory already exists:
+
+- do not overwrite it;
+- create a timestamped alternative such as:
+  `VibeGuard_Patent_Synthesis_Input_20260801_1500`.
+
+Record the final absolute output path.
+
+The output directory must contain exactly 18 upload files.
+
+Do not add ZIP files, upload checklists, README files, hidden files, or
+additional notes inside the 18-file upload directory.
+
+## Locate canonical project files
+
+Locate these exact current files:
+
+1. `/home/paradoxpete/Documents/PROJECT/PHASE 3/Engineering_Design_Review.md`
+
+2. `/home/paradoxpete/Documents/PROJECT/Project_mC_Decision_Register_v1.2.md`
+
+3. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/Phase3C_Portfolio_Closure_Memo_Approved.md`
+
+4. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/VibeGuard/Phase3C_VibeGuard_Architecture_Report_Final.md`
+
+5. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/VibeGuard/Phase3C_VibeGuard_Memory_Final.md`
+
+6. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/VibeGuard/Phase3C_VibeGuard_SOP_Final.md`
+
+7. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/03_Concept_Evidence_Matrix.md`
+
+8. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/05_Uncertainty_and_Test_Register.md`
+
+9. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/06_Patent_Research_Input_Pack.md`
+
+10. `/home/paradoxpete/Documents/PROJECT/PHASE 2/Phase2_Report by CLaude.md`
+
+Stop and report if any canonical file is missing.
+
+Do not substitute:
+
+- Project mC Decision Register v1.1;
+- Phase 2 Memory;
+- raw Phase 3B or Phase 3C research;
+- an OpenBraille or TrueMoist document;
+- a convenience copy;
+- an older VibeGuard architecture, memory, or SOP;
+- a prior synthesis output.
+
+## Locate the six independent VibeGuard research reports
+
+Search only inside:
+
+`/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/RESEAERCH/VIBEGUARD`
+
+Identify exactly one current final report for each lane:
+
+- ChatGPT Deep Research;
+- Gemini Deep Research;
+- Perplexity Deep Research;
+- Qwen Deep Research;
+- Mistral;
+- Microsoft Copilot.
+
+Possible filenames may contain spelling mistakes or inconsistent
+capitalization.
+
+Identify reports using both filename and document content.
+
+Do not classify a prompt, plan, progress note, transcript, screenshot, or
+partial export as a complete final report unless the owner explicitly marked
+it as the final lane output.
+
+For each candidate file, record:
+
+- absolute path;
+- filename;
+- extension;
+- size;
+- modification time;
+- SHA-256 hash;
+- detected source model;
+- completeness concerns.
+
+If more than one plausible final report exists for a lane, stop and list all
+candidates. Do not choose silently.
+
+If a report is known to be partial but is the owner-approved final lane
+artifact, include it and record the partial status in the manifest.
+
+Stop if any of the six lanes has no identifiable owner-approved report.
+
+## Copy and normalize destination names
+
+Copy exact bytes without modifying content.
+
+Use these destination names:
+
+`00_READ_FIRST_VibeGuard_Synthesis_Instructions.md`
+
+`01_Engineering_Design_Review.md`
+
+`02_Project_mC_Decision_Register_v1.2.md`
+
+`03_Phase3C_Portfolio_Closure_Memo_Approved.md`
+
+`04_Phase3C_VibeGuard_Architecture_Report_Final.md`
+
+`05_Phase3C_VibeGuard_Memory_Final.md`
+
+`06_Phase3C_VibeGuard_SOP_Final.md`
+
+`07_Concept_Evidence_Matrix.md`
+
+`08_Uncertainty_and_Test_Register.md`
+
+`09_Patent_Research_Input_Pack.md`
+
+`10_Phase2_Report_by_Claude.md`
+
+Preserve the original extension for each independent report:
+
+`11_VibeGuard_Patent_Research_ChatGPT_DR.<ext>`
+
+`12_VibeGuard_Patent_Research_Gemini.<ext>`
+
+`13_VibeGuard_Patent_Research_Perplexity.<ext>`
+
+`14_VibeGuard_Patent_Research_Qwen.<ext>`
+
+`15_VibeGuard_Patent_Research_Mistral.<ext>`
+
+`16_VibeGuard_Patent_Research_Microsoft_Copilot.<ext>`
+
+Generate:
+
+`99_INPUT_MANIFEST.md`
+
+The manifest must be the eighteenth and final file.
+
+## Generate `99_INPUT_MANIFEST.md`
+
+Include:
+
+# VibeGuard Patent Synthesis Input Manifest
+
+- creation date and local time;
+- absolute repository path;
+- absolute research-report directory;
+- absolute output directory;
+- purpose;
+- statement that this is a convenience upload package, not technical
+  authority;
+- statement that original repository documents remain authoritative;
+- current owner timeline override: up to three months;
+- preferred budget ≤₹3,000;
+- absolute budget ceiling ₹5,000;
+- expected upload count: exactly 18 files;
+- actual independent-report count: 6;
+- source models included;
+- statement that the manifest is file control only.
+
+For every copied file record:
+
+- ordered destination name;
+- original absolute path;
+- source category:
+  - governing instructions;
+  - project authority;
+  - validated down-selection evidence;
+  - historical patent lead;
+  - independent patent research;
+  - file-control manifest;
+- source model where applicable;
+- original extension;
+- file size;
+- source SHA-256;
+- copy SHA-256;
+- hash-match result;
+- readability result;
+- completeness or partial-status note.
+
+Include an explicit authority order matching the governing instructions.
+
+Include an explicit concept-fidelity statement:
+
+- passive detection and alerting;
+- one ADXL345;
+- one ESP32-class MCU;
+- local/edge processing;
+- no cloud dependence;
+- no active cancellation;
+- no wearable/haptic substitution;
+- no multi-sensor-array substitution;
+- ADXL345 MVP is for lower-frequency imbalance/misalignment/looseness;
+- IIS3DWB is only a later upgrade.
+
+Include explicit exclusions:
+
+- Decision Register v1.1;
+- Phase 2 Memory;
+- raw Phase 3B/3C research;
+- OpenBraille material;
+- TrueMoist material;
+- prior synthesis outputs;
+- High-Reasoning Audit;
+- Codex Session Handoff;
+- scoring worksheet;
+- ZIP files;
+- upload checklists;
+- convenience copies.
+
+Include the rule that another synthesis output must not be added to this
+package.
+
+## Validation
+
+Run checks confirming:
+
+- the output directory is outside the repository;
+- exactly 18 files exist in the output directory;
+- the governing instruction is present and non-empty;
+- all 10 numbered project/historical files are present;
+- all 6 independent research reports are present;
+- Decision Register v1.2 is present;
+- Decision Register v1.1 is absent;
+- every source/copy SHA-256 pair matches;
+- no source file was modified;
+- no synthesis output is present;
+- no OpenBraille or TrueMoist file is present;
+- no ZIP, checklist, README, or hidden file is present in the upload directory;
+- `ZEROTH PRESENTATION/` was untouched;
+- repository status is unchanged from the starting state.
+
+Run:
+
+`git -C /home/paradoxpete/Documents/PROJECT status --short`
+
+`git -C /home/paradoxpete/Documents/PROJECT diff --check`
+
+If the repository was already dirty before the task, record the initial and
+final status and confirm no new changes were introduced.
+
+## Final response
+
+Report:
+
+- absolute output path;
+- exact total file count;
+- the six research lanes and selected source filenames;
+- any partial or ambiguous report;
+- hash-validation result;
+- repository initial and final status;
+- confirmation that no original was modified;
+- confirmation that the upload directory contains exactly the 18 required
+  synthesis inputs.

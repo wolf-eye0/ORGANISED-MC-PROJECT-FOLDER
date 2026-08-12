@@ -1,0 +1,163 @@
+./
+├── COPY PASTE FOLDER/
+│   ├── Claudes report on the research Phases 3a.pdf
+│   ├── Document_4_TrustLatch_Concept_Dossier.docx
+│   ├── Engineering_Design_Review.md
+│   ├── MC_Project_PHASE_DOC.md
+│   ├── PROJECT_CONCEPT_CONTEXT.md
+│   ├── Phase2_Memory.md
+│   ├── Phase2_Report by CLaude.md
+│   ├── Phase3A_MEMORY.md
+│   ├── Phase3B_MEMORY.md
+│   ├── Phase3B_Report_by_Claude.md
+│   ├── Phase3C_TrueMoist_SOP.md
+│   ├── Project_mC_Decision_Register_v1.0.md
+│   └── README.md
+├── PHASE 1/
+│   ├── PHASE 1.A/
+│   │   ├── RESEARCHS/
+│   │   │   ├── CHATGPT DEEP RESEARCH.md
+│   │   │   ├── GEMINI DEEP RESEARCH.docx
+│   │   │   ├── KIMI DEEP RESEARCH.docx
+│   │   │   └── QWEN AI DEEP RESEARCH.pdf
+│   │   ├── Phase1A_Memory.md
+│   │   └── Phase1A_Summary.md
+│   ├── PHASE 1.B/
+│   │   ├── Phase1B_Memory.md
+│   │   ├── Phase1B_Opportunity_Analysis.md
+│   │   ├── Phase1B_Opportunity_Analysis.zip
+│   │   └── Phase1B_Opportunity_Analysis_By_Claude.pdf
+│   ├── PHASE 1B.5/
+│   │   ├── Phase1B5_Memory.md
+│   │   ├── Phase1B5_Opportunity_Portfolio_Optimization.md
+│   │   └── Phase1B5_Portfolio_Optimization_By_Claude.pdf
+│   └── PHASE 1C/
+│       ├── 5 IDEA ABSTRACT/
+│       │   ├── Microcontroller_Project_Abstract_Proposal_5_Ideas.pdf
+│       │   ├── Microcontroller_Project_Idea_Abstracts 2.0.pdf
+│       │   └── Microcontroller_Project_Idea_Abstracts.pdf
+│       ├── INDEPTH OF EACH FIVE IDEA/
+│       │   ├── Document_1_OpenBraille_Concept_Dossier.docx
+│       │   ├── Document_2_VibeGuard_Concept_Dossier.docx
+│       │   ├── Document_3_TrueMoist_Concept_Dossier.docx
+│       │   └── Document_4_TrustLatch_Concept_Dossier.docx
+│       ├── OTHERS IDEA FORMAT/
+│       │   ├── POOJA PROJECT.pdf
+│       │   ├── Patent Potential of Student Projects.docx
+│       │   ├── USB_Powered_Secure_File_Transfer_Authentication_Abstract.pdf
+│       │   ├── USB_Powered_Smart_Anti_Theft_System_Abstract.pdf
+│       │   └── USB_Powered_Smart_Cabinet_Abstract.pdf
+│       ├── visual explanation of the 5 ideas/
+│       │   ├── 11 ideas.html
+│       │   └── top 5.html
+│       ├── Phase1C.md
+│       ├── Phase1C_Concept_Synthesis.pdf
+│       ├── Phase1C_Memory.md
+│       ├── minimalist_project_proposal.pdf
+│       └── project_proposal_booklet.pdf
+├── PHASE 2/
+│   ├── RESEARCH DOCS/
+│   │   ├── CHATGT Research on Patent.docx
+│   │   ├── Gemini Reearch on phase 2.docx
+│   │   ├── Kimi Patent Research.pdf
+│   │   ├── QWen Research on Patent.pdf
+│   │   └── Qwens Research on Phase 2.md
+│   ├── 2_Sop.md
+│   ├── Phase2_DeepResearch_Prompt_v2.md
+│   ├── Phase2_Memory.md
+│   ├── Phase2_Report From Claude.pdf
+│   ├── Phase2_Report by CLaude.md
+│   └── Phase2_docs.zip
+├── PHASE 3/
+│   ├── PHASE 3A-Engineering Landscape Discovery/
+│   │   ├── Claudes report on the research Phases 3a.pdf
+│   │   ├── Geminis Research On Phase 3A.docx
+│   │   ├── MISTRAL RESEAARCH ON phase 3a.md
+│   │   ├── Perplexity Research on Phase 3A.pdf
+│   │   ├── Phase3A_MEMORY.md
+│   │   ├── Phase3A_report_and_memory.zip
+│   │   └── Qwen Research on Phase 3A.md
+│   ├── PHASE 3B-Engineering Feasibility Analysis/
+│   │   ├── Gemini Research on Phase 3B.docx
+│   │   ├── Mistral researon on Phase 3B.md
+│   │   ├── Phase3B_DeepResearch_Prompt.md
+│   │   ├── Phase3B_MEMORY.md
+│   │   ├── Phase3B_Report_by_Claude.md
+│   │   ├── Phase3B_mem_and_report.zip
+│   │   ├── Project_mC_Phase3B_SOP.md
+│   │   ├── Qwen Rsearch on Phase 3B.pdf
+│   │   └── perplexity_research_on_phase3B.md
+│   ├── PHASE 3C-Comparative Technical Evaluation/
+│   │   ├── OpenBraille/
+│   │   │   ├── prompts/
+│   │   │   │   ├── Phase3C_OpenBraille_Deep_Research_Prompt_Final.md
+│   │   │   │   └── Phase3C_OpenBraille_Synthesis_Prompt_Claude.md
+│   │   │   ├── research/
+│   │   │   │   ├── Phase3C_OpenBraille_Failed_Research_ChatGPT.pdf
+│   │   │   │   ├── Phase3C_OpenBraille_Raw_Research_Gemini.docx
+│   │   │   │   ├── Phase3C_OpenBraille_Raw_Research_Mistral.md
+│   │   │   │   ├── Phase3C_OpenBraille_Raw_Research_Perplexity.docx
+│   │   │   │   └── Phase3C_OpenBraille_Raw_Research_Qwen.md
+│   │   │   ├── Phase3C_OpenBraille_Architecture_Report_Final.md
+│   │   │   ├── Phase3C_OpenBraille_Memory_Final.md
+│   │   │   └── Phase3C_OpenBraille_SOP_Final.md
+│   │   ├── TrueMoist/
+│   │   │   ├── prompts/
+│   │   │   │   ├── Phase3C_TrueMoist_Deep_Research_Prompt_Final.md
+│   │   │   │   └── Phase3C_TrueMoist_Synthesis_Prompt_Final.md
+│   │   │   ├── research/
+│   │   │   │   ├── Phase3C_TrueMoist_Raw_Research_ChatGPT.pdf
+│   │   │   │   ├── Phase3C_TrueMoist_Raw_Research_Gemini.docx
+│   │   │   │   ├── Phase3C_TrueMoist_Raw_Research_Mistral.md
+│   │   │   │   └── Phase3C_TrueMoist_Raw_Research_Perplexity.md
+│   │   │   ├── Phase3C_TrueMoist_Architecture_Report_Final.md
+│   │   │   ├── Phase3C_TrueMoist_Memory_Final.md
+│   │   │   ├── Phase3C_TrueMoist_PDR_Patch_Historical.md
+│   │   │   └── Phase3C_TrueMoist_SOP_Final.md
+│   │   ├── VibeGuard/
+│   │   │   ├── prompts/
+│   │   │   │   ├── Phase3C_VibeGuard_Deep_Research_Prompt_Final.md
+│   │   │   │   ├── Phase3C_VibeGuard_Synthesis_Prompt_Claude.md
+│   │   │   │   └── Phase3C_VibeGuard_Synthesis_Prompt_Claude.mmd
+│   │   │   ├── research/
+│   │   │   │   ├── Phase3C_VibeGuard_Raw_Research_Gemini.docx
+│   │   │   │   ├── Phase3C_VibeGuard_Raw_Research_Mistral.md
+│   │   │   │   ├── Phase3C_VibeGuard_Raw_Research_Perplexity.md
+│   │   │   │   └── Phase3C_VibeGuard_Raw_Research_Qwen.md
+│   │   │   ├── Phase3C_VibeGuard_Architecture_Report_Final.md
+│   │   │   ├── Phase3C_VibeGuard_Memory_Final.md
+│   │   │   └── Phase3C_VibeGuard_SOP_Final.md
+│   │   ├── Phase3C_Portfolio_Closure_Memo_Approved.md
+│   │   └── README.md
+│   ├── Engineering_Design_Review.md
+│   └── Phase3_DeepResearch_Prompt.md
+├── every sop and memory/
+│   ├── MC_Project_PHASE_DOC.md
+│   ├── Phase1A_Memory.md
+│   ├── Phase1A_Summary.md
+│   ├── Phase1B5_Memory.md
+│   ├── Phase1B5_Opportunity_Portfolio_Optimization.md
+│   ├── Phase1B_Memory.md
+│   ├── Phase1B_Opportunity_Analysis.md
+│   ├── Phase1C.md
+│   ├── Phase1C_Memory.md
+│   ├── README.md
+│   └── every_sop_and memory_from phase 1A to 1C and whoel phase overview.zip
+├── main/
+├── .gitignore
+├── AGENTS.md
+├── CLEANUP_DIFF_NAME_STATUS.txt
+├── CLEANUP_VALIDATION_REPORT.md
+├── CONTEXT_AND_ZIP_PACKAGES.md
+├── CURRENT_FOLDER_STRUCTURE.txt
+├── MC_Project_PHASE_DOC.md
+├── PHASE3C_NAMING_CHANGE_LOG.md
+├── PHASE3C_NAMING_PROPOSAL.md
+├── PHASE3C_NAMING_VALIDATION_REPORT.md
+├── PROJECT_CONCEPT_CONTEXT.md
+├── Phase3_SOP.md
+├── Project_mC_Decision_Register_v1.0_HISTORICAL.md
+├── Project_mC_Decision_Register_v1.2.md
+├── README.md
+├── REORGANIZATION_LOG.md
+└── contexts.zip

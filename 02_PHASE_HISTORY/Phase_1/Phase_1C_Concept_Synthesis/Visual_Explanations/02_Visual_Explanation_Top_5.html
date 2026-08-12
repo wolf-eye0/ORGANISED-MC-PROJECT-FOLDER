@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top 5 Concept Selection · Embedded Systems</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f7fb;
+            color: #1a1a2e;
+            padding: 2rem 1rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .hero {
+            background: linear-gradient(145deg, #0f172a, #1e293b);
+            color: white;
+            border-radius: 2rem;
+            padding: 2.5rem 3rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.3);
+        }
+
+        .hero h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            max-width: 720px;
+            font-weight: 300;
+        }
+
+        .hero .meta {
+            margin-top: 1.2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            border-top: 1px solid #334155;
+            padding-top: 1.2rem;
+        }
+
+        /* Legend */
+        .legend {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.2rem 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.8rem 2rem;
+            border: 1px solid #e9edf4;
+        }
+
+        .legend strong {
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 0.9rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            color: #334155;
+        }
+
+        .legend-item .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .dot-green { background: #22c55e; }
+        .dot-yellow { background: #eab308; }
+        .dot-orange { background: #f97316; }
+        .dot-red { background: #ef4444; }
+
+        /* Cards */
+        .concept-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .concept-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem 2.5rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+            border: 1px solid #edf2f7;
+            transition: all 0.2s ease;
+        }
+
+        .concept-card:hover {
+            box-shadow: 0 16px 40px -12px rgba(0,0,0,0.12);
+            border-color: #cbd5e1;
+        }
+
+        .card-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.2rem;
+            gap: 0.8rem;
+        }
+
+        .card-header .title-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .rank-badge {
+            background: #0f172a;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 0.2rem 0.9rem;
+            border-radius: 40px;
+            display: inline-block;
+        }
+
+        .card-header h2 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .card-header .cluster-id {
+            background: #eef2ff;
+            color: #4f46e5;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+        }
+
+        .card-content {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 800px) {
+            .card-content {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 { font-size: 1.8rem; }
+            .hero { padding: 1.8rem; }
+            .concept-card { padding: 1.5rem; }
+        }
+
+        .card-text p {
+            color: #334155;
+            margin-bottom: 0.8rem;
+            font-size: 0.98rem;
+        }
+
+        .card-text p strong {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .card-text .highlight-box {
+            background: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 0.8rem 1.2rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .card-text .highlight-box strong {
+            color: #1e293b;
+        }
+
+        .scores-table {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .scores-table .score-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            gap: 0.3rem;
+            font-size: 0.75rem;
+            padding: 0.3rem 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .scores-table .score-row:last-child {
+            border-bottom: none;
+        }
+
+        .scores-table .score-header {
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .score-cell {
+            text-align: center;
+            padding: 0.2rem;
+        }
+
+        .score-value {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .score-bar {
+            height: 4px;
+            width: 100%;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-top: 2px;
+        }
+
+        .score-bar .fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        /* Why this survived section */
+        .survival-note {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: 0.75rem;
+            padding: 1rem 1.2rem;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: #064e3b;
+        }
+
+        .survival-note strong {
+            color: #065f46;
+        }
+
+        /* Summary Table */
+        .summary-section {
+            margin-top: 3rem;
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem 2.5rem;
+            border: 1px solid #edf2f7;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+        }
+
+        .summary-section h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-table-wrap {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .summary-table th {
+            background: #f1f5f9;
+            padding: 0.8rem 0.5rem;
+            text-align: center;
+            font-weight: 600;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .summary-table td {
+            padding: 0.8rem 0.5rem;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            background: white;
+        }
+
+        .summary-table .concept-name {
+            font-weight: 600;
+            text-align: left;
+            padding-left: 1rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.1rem 0.6rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        .tag-high { background: #dcfce7; color: #166534; }
+        .tag-med { background: #fef9c3; color: #854d0e; }
+        .tag-low { background: #fee2e2; color: #991b1b; }
+
+        .elevator-pitch {
+            margin-top: 2rem;
+            background: #f0f9ff;
+            border-radius: 1rem;
+            padding: 1.5rem 2rem;
+            border: 1px solid #bae6fd;
+        }
+
+        .elevator-pitch h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .elevator-pitch ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem 2rem;
+        }
+
+        .elevator-pitch li {
+            padding: 0.3rem 0;
+            border-bottom: 1px solid #e0f2fe;
+            font-size: 0.95rem;
+        }
+
+        .elevator-pitch li strong {
+            color: #0c4a6e;
+        }
+
+        @media (max-width: 600px) {
+            .elevator-pitch ul {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footnote {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Hero -->
+        <div class="hero">
+            <h1>📡 Top 5 <span>Concept Selection</span></h1>
+            <p>Patent-oriented embedded systems innovation pipeline — the 5 strongest ideas chosen from 32 opportunities, scored on novelty, feasibility, patent potential, and market impact.</p>
+            <div class="meta">
+                <span>✅ 16 survivor clusters → 5 finalists</span>
+                <span>⚡ Built for a 3–4 month semester</span>
+                <span>🎯 Faculty-ready pitch deck</span>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <strong>📊 Score Legend (1–10):</strong>
+            <span class="legend-item"><span class="dot dot-green"></span> 8–10 (Strong)</span>
+            <span class="legend-item"><span class="dot dot-yellow"></span> 6–7 (Good)</span>
+            <span class="legend-item"><span class="dot dot-orange"></span> 4–5 (Moderate)</span>
+            <span class="legend-item"><span class="dot dot-red"></span> 1–3 (Weak)</span>
+        </div>
+
+        <!-- Cards -->
+        <div class="concept-grid">
+
+            <!-- 1. OpenBraille -->
+            <div class="concept-card">
+                <div class="card-header">
+                    <div class="title-group">
+                        <span class="rank-badge">#1</span>
+                        <h2>OpenBraille</h2>
+                        <span class="cluster-id">OC-08</span>
+                    </div>
+                    <span style="font-size:0.85rem; background:#e0f2fe; padding:0.2rem 0.8rem; border-radius:40px;">Assistive Tech</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">
+                        <p><strong>❓ The Problem:</strong> Refreshable Braille displays cost <strong>$500 per cell</strong> because they use expensive piezoelectric crystals. That prices them out of reach for 285M+ visually impaired people worldwide.</p>
+                        <p><strong>💡 The Innovation:</strong> Find a <strong>brand-new, ultra-cheap mechanical way</strong> to push Braille pins up and down (instead of expensive crystals). Just one working cell (6–8 dots) proves the concept.</p>
+                        <p><strong>👥 Who benefits:</strong> Visually impaired individuals, NGOs, national assistive-tech programs (e.g., India's ADIP scheme).</p>
+                        <div class="highlight-box">
+                            <strong>🎯 Why embedded?</strong> This is a <em>hardware-control</em> problem. Precise, rapidly-refreshing pin actuation requires dedicated embedded logic at the physical actuator. No cloud or software can replace that.
+                        </div>
+                        <p><strong>⏱️ Feasibility:</strong> <strong>Medium</strong> — Mechanical iteration takes time. You might need 2–3 design tries to get the actuator right. Budget is <strong>₹4,500 (~$55)</strong>, so every part counts.</p>
+                        <p><strong>⚡ Key risk:</strong> Reliability. The mechanism must survive thousands of refresh cycles without jamming or overheating.</p>
+                        <div class="survival-note">
+                            <strong>🏆 Why it outperformed:</strong> Highest <strong>Patent Potential (9/10)</strong> and highest <strong>Demo Value (9/10)</strong>. The incumbent tech hasn't changed in decades — any working alternative is a goldmine. Plus, the demo is emotionally resonant and dead-simple to understand.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="scores-table">
+                            <div class="score-row score-header">
+                                <span>Novelty</span><span>Patent</span><span>Sem Feas</span><span>Budget</span><span>Embedded</span><span>Research</span><span>Startup</span><span>Demo</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem; font-size:0.9rem; color:#475569; background:#f1f5f9; padding:0.8rem; border-radius:0.75rem;">
+                            <strong>⚙️ Prototype:</strong> Single Braille cell (6 dots) <br>
+                            <strong>💰 Cost:</strong> ~₹4,500 <br>
+                            <strong>📅 Time:</strong> 4 months (full semester)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. VibeGuard -->
+            <div class="concept-card">
+                <div class="card-header">
+                    <div class="title-group">
+                        <span class="rank-badge">#2</span>
+                        <h2>VibeGuard</h2>
+                        <span class="cluster-id">OC-10</span>
+                    </div>
+                    <span style="font-size:0.85rem; background:#dcfce7; padding:0.2rem 0.8rem; border-radius:40px;">Industrial</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">
+                        <p><strong>❓ The Problem:</strong> Small factories can't afford $5,000+ vibration monitors. So machines break unexpectedly, costing them up to <strong>45% downtime</strong> in production.</p>
+                        <p><strong>💡 The Innovation:</strong> A <strong>cheap accelerometer node</strong> that learns the "heartbeat" of a specific machine and filters out the noise from neighboring equipment. It catches bearing faults weeks before they cause a breakdown.</p>
+                        <p><strong>👥 Who benefits:</strong> SME manufacturers, machine shops, food-processing and textile plants.</p>
+                        <div class="highlight-box">
+                            <strong>🎯 Why embedded?</strong> Streaming raw, high-frequency vibration data to the cloud is too expensive and too slow. Continuous <em>on-device</em> spectral analysis is the only economical way to catch faults in real-time.
+                        </div>
+                        <p><strong>⏱️ Feasibility:</strong> <strong>Very High</strong> — Off-the-shelf sensors + standard signal processing. The challenge is writing the isolation algorithm, but you can start testing within 2 weeks.</p>
+                        <p><strong>⚡ Key risk:</strong> Filtering out neighboring machine noise with only one sensor is tricky, but it's a well-bounded problem.</p>
+                        <div class="survival-note">
+                            <strong>🏆 Why it outperformed:</strong> The <strong>cleanest pass</strong> through all evaluation gates. Tied for highest feasibility (9/9) and highest startup potential (9/10). The ROI story is bulletproof — save 45% downtime with a $55 sensor.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="scores-table">
+                            <div class="score-row score-header">
+                                <span>Novelty</span><span>Patent</span><span>Sem Feas</span><span>Budget</span><span>Embedded</span><span>Research</span><span>Startup</span><span>Demo</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem; font-size:0.9rem; color:#475569; background:#f1f5f9; padding:0.8rem; border-radius:0.75rem;">
+                            <strong>⚙️ Prototype:</strong> Single-motor fault detection against background noise<br>
+                            <strong>💰 Cost:</strong> ~₹3,000 <br>
+                            <strong>📅 Time:</strong> 2.5 – 3 months
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. TrueMoist -->
+            <div class="concept-card">
+                <div class="card-header">
+                    <div class="title-group">
+                        <span class="rank-badge">#3</span>
+                        <h2>TrueMoist</h2>
+                        <span class="cluster-id">OC-15</span>
+                    </div>
+                    <span style="font-size:0.85rem; background:#fef3c7; padding:0.2rem 0.8rem; border-radius:40px;">Agriculture</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">
+                        <p><strong>❓ The Problem:</strong> Cheap capacitive soil moisture sensors are the backbone of precision farming, but they <strong>drift wildly</strong> as soil salinity and temperature change. Farmers end up over-watering or under-watering.</p>
+                        <p><strong>💡 The Innovation:</strong> An <strong>on-device AI correction model</strong> that uses simultaneous salinity (EC) and temperature readings to correct the moisture reading in real-time. No manual recalibration needed.</p>
+                        <p><strong>👥 Who benefits:</strong> Smallholder farmers, agricultural cooperatives, drip-irrigation users.</p>
+                        <div class="highlight-box">
+                            <strong>🎯 Why embedded?</strong> Correction must happen <em>at the point of measurement</em> in real-time. Sending drifted data to the cloud doesn't fix the underlying sensor error — it just moves the problem.
+                        </div>
+                        <p><strong>⏱️ Feasibility:</strong> <strong>Very High</strong> — Well-documented sensor stack, cheap components, and the correction algorithm can be developed and tested quickly in lab conditions.</p>
+                        <p><strong>⚡ Key risk:</strong> The correction model might not generalize to all soil types, but you can test 2–3 different salinity levels easily.</p>
+                        <div class="survival-note">
+                            <strong>🏆 Why it outperformed:</strong> The <strong>most cross-validated</strong> concept across all sources. Near-perfect feasibility (9/9) with a genuine technical contribution (the drift-correction algorithm). Enormous smallholder market with a direct water/cost-savings story.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="scores-table">
+                            <div class="score-row score-header">
+                                <span>Novelty</span><span>Patent</span><span>Sem Feas</span><span>Budget</span><span>Embedded</span><span>Research</span><span>Startup</span><span>Demo</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem; font-size:0.9rem; color:#475569; background:#f1f5f9; padding:0.8rem; border-radius:0.75rem;">
+                            <strong>⚙️ Prototype:</strong> Corrected vs. uncorrected moisture readings across salinity changes<br>
+                            <strong>💰 Cost:</strong> ~₹2,500 <br>
+                            <strong>📅 Time:</strong> 2.5 – 3 months
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. TrustLatch -->
+            <div class="concept-card">
+                <div class="card-header">
+                    <div class="title-group">
+                        <span class="rank-badge">#4</span>
+                        <h2>TrustLatch</h2>
+                        <span class="cluster-id">OC-21</span>
+                    </div>
+                    <span style="font-size:0.85rem; background:#e0e7ff; padding:0.2rem 0.8rem; border-radius:40px;">Cybersecurity</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">
+                        <p><strong>❓ The Problem:</strong> Most low-cost IoT devices ship with <strong>zero security</strong> because implementing secure boot and signed firmware updates on tiny microcontrollers is too complex for most developers.</p>
+                        <p><strong>💡 The Innovation:</strong> A <strong>simplified, foolproof reference approach</strong> to secure boot + authenticated OTA updates, specifically designed for cheap Cortex-M0/M3 class chips. It's a "security starter pack" that actually works.</p>
+                        <p><strong>👥 Who benefits:</strong> IoT device manufacturers, embedded developers, enterprises with device fleets, regulators pushing security mandates.</p>
+                        <div class="highlight-box">
+                            <strong>🎯 Why embedded?</strong> A root-of-trust is <em>hardware-anchored</em> by definition. It must be built into the boot chain at the firmware/hardware boundary. Software-only security can be bypassed once the device is compromised.
+                        </div>
+                        <p><strong>⏱️ Feasibility:</strong> <strong>Medium-High</strong> — Hardware is cheap and off-the-shelf, but the software (bootloader, crypto, linker scripts) must be 100% bug-free. A single memory address mistake bricks the device.</p>
+                        <p><strong>⚡ Key risk:</strong> Key provisioning logistics. You need a clean way to inject cryptographic keys during manufacturing.</p>
+                        <div class="survival-note">
+                            <strong>🏆 Why it outperformed:</strong> Ranked <strong>#1 overall</strong> in Phase 1B's composite score. Rare combination of near-universal market need, strong patent potential (8), and genuine feasibility on student-accessible MCUs. Regulatory tailwinds (device-security laws) make this a growing market.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="scores-table">
+                            <div class="score-row score-header">
+                                <span>Novelty</span><span>Patent</span><span>Sem Feas</span><span>Budget</span><span>Embedded</span><span>Research</span><span>Startup</span><span>Demo</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem; font-size:0.9rem; color:#475569; background:#f1f5f9; padding:0.8rem; border-radius:0.75rem;">
+                            <strong>⚙️ Prototype:</strong> Device rejects unsigned firmware, accepts signed OTA updates<br>
+                            <strong>💰 Cost:</strong> ~₹3,000 <br>
+                            <strong>📅 Time:</strong> 3 – 3.5 months
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. ColdTrace -->
+            <div class="concept-card">
+                <div class="card-header">
+                    <div class="title-group">
+                        <span class="rank-badge">#5</span>
+                        <h2>ColdTrace</h2>
+                        <span class="cluster-id">OC-05</span>
+                    </div>
+                    <span style="font-size:0.85rem; background:#e0f2fe; padding:0.2rem 0.8rem; border-radius:40px;">Healthcare</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">
+                        <p><strong>❓ The Problem:</strong> <strong>35% of vaccines</strong> are damaged in transit by temperature excursions and physical shocks. Current single-sensor loggers give false alarms (e.g., when a fridge door opens) or miss real damage entirely.</p>
+                        <p><strong>💡 The Innovation:</strong> Combine <strong>thermal-mass modeling</strong> (to ignore brief door openings) with <strong>mechanical shock sensing</strong> into a single compliance score. It automatically offloads data wirelessly, removing the manual USB download step.</p>
+                        <p><strong>👥 Who benefits:</strong> Vaccine distributors, rural clinics, blood banks, pharmaceutical logistics, WHO/UNICEF programs.</p>
+                        <div class="highlight-box">
+                            <strong>🎯 Why embedded?</strong> Only <em>continuous, local, multi-modal sensing</em> at the exact point of the product can capture compound failure conditions. This cannot be reconstructed from a single remote reading or a cloud service.
+                        </div>
+                        <p><strong>⏱️ Feasibility:</strong> <strong>Medium</strong> — Calibrating the thermal-mass model requires real-world physical experiments (heating/cooling cycles). If you get it wrong, you have to re-run the tests, which costs days.</p>
+                        <p><strong>⚡ Key risk:</strong> Calibrating the model across different container sizes and liquid volumes in a short 2-month window.</p>
+                        <div class="survival-note">
+                            <strong>🏆 Why it outperformed:</strong> Highest <strong>Embedded Necessity (9/10)</strong> among the finalists. The multi-modal sensing genuinely cannot be done in software. A WHO-quantified multi-billion-dollar global loss problem with a clean patent angle (thermal-mass + shock correlation).
+                        </div>
+                    </div>
+                    <div>
+                        <div class="scores-table">
+                            <div class="score-row score-header">
+                                <span>Novelty</span><span>Patent</span><span>Sem Feas</span><span>Budget</span><span>Embedded</span><span>Research</span><span>Startup</span><span>Demo</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">8</span><div class="score-bar"><div class="fill" style="width:80%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">9</span><div class="score-bar"><div class="fill" style="width:90%; background:#22c55e;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">7</span><div class="score-bar"><div class="fill" style="width:70%; background:#eab308;"></div></div></span>
+                                <span class="score-cell"><span class="score-value">6</span><div class="score-bar"><div class="fill" style="width:60%; background:#eab308;"></div></div></span>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem; font-size:0.9rem; color:#475569; background:#f1f5f9; padding:0.8rem; border-radius:0.75rem;">
+                            <strong>⚙️ Prototype:</strong> Single-container demo: suppresses false alarms, detects real excursions<br>
+                            <strong>💰 Cost:</strong> ~₹3,000 <br>
+                            <strong>📅 Time:</strong> 3.5 – 4 months
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Comparison Table -->
+        <div class="summary-section">
+            <h3>📋 Side-by-Side Comparison</h3>
+            <p style="color:#475569; margin-bottom:1rem;">Scores out of 10 — higher is better. <span style="background:#dcfce7; padding:0.1rem 0.5rem; border-radius:40px; font-size:0.8rem;">Green = Strong</span> <span style="background:#fef9c3; padding:0.1rem 0.5rem; border-radius:40px; font-size:0.8rem;">Yellow = Good</span></p>
+            <div class="summary-table-wrap">
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left; padding-left:1rem;">Concept</th>
+                            <th>Novelty</th>
+                            <th>Patent</th>
+                            <th>Sem Feas</th>
+                            <th>Budget</th>
+                            <th>Embedded</th>
+                            <th>Research</th>
+                            <th>Startup</th>
+                            <th>Demo</th>
+                            <th>Avg</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="concept-name">OpenBraille</td>
+                            <td><span class="tag tag-high">8</span></td>
+                            <td><span class="tag tag-high">9</span></td>
+                            <td><span class="tag tag-med">6</span></td>
+                            <td><span class="tag tag-med">6</span></td>
+                            <td><span class="tag tag-high">9</span></td>
+                            <td><span class="tag tag-high">9</span></td>
+                            <td><span class="tag tag-high">8</span></td>
+                            <td><span class="tag tag-high">9</span></td>
+                            <td><strong>7.9</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="concept-name">VibeGuard</td>
+                            <td><span class="tag tag-med">6</span></td>
+                            <td><span class="tag tag-med">6</span></td>
+                            <td><span class="tag tag-high">9</span></td>
+                            <td><span class="tag tag-high">9</span></td>
+                            <td><span class="tag tag-med">7</span></td>
+                            <td><span class="tag tag-high">9</span></td>
+                            <td><span class="tag tag-high">9</span></td>
+                            <td><span class="tag tag-med">7</span></td>
+                            <td><strong>7.7</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="concept-name">TrueMoist</td>
+                            <td><span class="tag tag-med">6</span></td>
+                            <td><span class="tag tag-med">6</span></td>
+                            <td><span class="tag tag-high">9</span></td>
+                            <td><span class="tag tag-high">9</span></td>
+                            <td><span class="tag tag-med">7</span></td>
+                            <td><span class="tag tag-high">8</span></td>
+                            <td><span class="tag tag-high">8</span></td>
+                            <td><span class="tag tag-med">7</span></td>
+                            <td><strong>7.6</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="concept-name">TrustLatch</td>
+                            <td><span class="tag tag-med">6</span></td>
+                            <td><span class="tag tag-high">8</span></td>
+                            <td><span class="tag tag-med">7</span></td>
+                            <td><span class="tag tag-high">8</span></td>
+                            <td><span class="tag tag-med">7</span></td>
+                            <td><span class="tag tag-high">9</span></td>
+                            <td><span class="tag tag-high">8</span></td>
+                            <td><span class="tag tag-med">7</span></td>
+                            <td><strong>7.4</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="concept-name">ColdTrace</td>
+                            <td><span class="tag tag-med">7</span></td>
+                            <td><span class="tag tag-med">7</span></td>
+                            <td><span class="tag tag-med">7</span></td>
+                            <td><span class="tag tag-high">8</span></td>
+                            <td><span class="tag tag-high">9</span></td>
+                            <td><span class="tag tag-high">9</span></td>
+                            <td><span class="tag tag-med">7</span></td>
+                            <td><span class="tag tag-med">6</span></td>
+                            <td><strong>7.4</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Why not SiliconFingerprint? -->
+            <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:1rem; padding:1.2rem 1.5rem; margin:1.5rem 0;">
+                <h4 style="font-weight:700; display:flex; align-items:center; gap:0.5rem;">🔬 Honorable Mention: SiliconFingerprint (Not in Top 5)</h4>
+                <p style="font-size:0.95rem; color:#450a0a;"><strong>Why it didn't make the cut:</strong> It has the <strong>highest originality (9/10)</strong> — it gives every microchip a unique "fingerprint" using silicon imperfections. But it has the <strong>lowest semester feasibility (4/10)</strong>. The fingerprint changes with temperature and voltage, requiring complex stabilization (a PhD-level problem). It needs 5–10 chips to prove uniqueness and specialized lab equipment. This is a <strong>5–6 month research project</strong>, not a safe 3-month semester bet. We recommend keeping it as a backup or thesis extension.</p>
+            </div>
+
+            <!-- Elevator Pitch for Faculty -->
+            <div class="elevator-pitch">
+                <h4>🎤 Faculty Elevator Pitch (Short & Sharp)</h4>
+                <ul>
+                    <li><strong>OpenBraille:</strong> Cheaper Braille — massive social impact, best patent story.</li>
+                    <li><strong>VibeGuard:</strong> Predict machine failure — safest bet, 45% downtime reduction.</li>
+                    <li><strong>TrueMoist:</strong> Smart farming — saves water, works in any soil.</li>
+                    <li><strong>TrustLatch:</strong> IoT security made easy — #1 ranked, regulatory tailwind.</li>
+                    <li><strong>ColdTrace:</strong> Vaccine lifesaver — solves 35% wastage, true embedded problem.</li>
+                </ul>
+                <p style="margin-top:0.8rem; font-size:0.9rem; color:#0c4a6e; background:#dbeafe; padding:0.5rem 1rem; border-radius:40px; display:inline-block;">⭐ We chose these for their balance of feasibility, patentability, and real-world impact.</p>
+            </div>
+
+            <p style="margin-top:1.5rem; font-size:0.85rem; color:#64748b;">Source: Phase 1C Concept Synthesis — based on cross-verified survivor clusters (16/32).</p>
+        </div>
+
+        <div class="footnote">
+            Built from the Patent-Oriented Embedded Systems Innovation Pipeline · Top 5 selected via holistic scoring (Novelty, Patent, Feasibility, Embedded Necessity, Demo Value).
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+---
+Read 00_READ_FIRST_TrueMoist_Patent_Research_Instructions.md first and treat it
+as the governing task specification.
+
+This transport package contains exactly 10 physical attachments representing
+11 logical inputs.
+
+Before substantive research, confirm:
+
+1. all 10 physical files are attached and readable;
+2. the governing instruction is readable;
+3. files 01, 02, 03, 06, 07, 08, 09 and 10 each represent one logical source;
+4. `04_05_TrueMoist_Architecture_and_Memory.md` contains two complete,
+   separately marked logical sources:
+   - Phase3C_TrueMoist_Architecture_Report_Final.md;
+   - Phase3C_TrueMoist_Memory_Final.md;
+5. all 10 canonical project documents are therefore logically present;
+6. Decision Register v1.2, not v1.1, is present;
+7. the authoritative design is the validated 72-run TrueMoist architecture;
+8. no logical source is omitted, duplicated, truncated or unreadable.
+
+The merged file is a transport compilation only. Inventory and apply its two
+embedded documents separately according to the authority order in the
+governing instruction.
+
+If the complete logical set is present, perform the full independent
+TrueMoist patent research exactly as instructed.
+
+Do not use prior-chat context, another model's research, OpenBraille or
+VibeGuard material, or cross-concept comparison.
+---

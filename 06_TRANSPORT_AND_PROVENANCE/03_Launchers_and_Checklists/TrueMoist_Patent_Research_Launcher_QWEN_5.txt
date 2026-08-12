@@ -1,0 +1,47 @@
+---
+Read 00_READ_FIRST_TrueMoist_Patent_Research_Instructions.md first and treat it
+as the governing task specification.
+
+This attachment-limit transport package contains exactly 5 physical files
+representing 11 logical inputs.
+
+Before substantive research, inventory the logical documents inside the
+bundles:
+
+1. `00_READ_FIRST_TrueMoist_Patent_Research_Instructions.md`
+   - governing instruction;
+
+2. `01_03_Project_Authority_Bundle.md`
+   - Engineering_Design_Review.md;
+   - Project_mC_Decision_Register_v1.2.md;
+   - Phase3C_Portfolio_Closure_Memo_Approved.md;
+
+3. `04_06_TrueMoist_Phase3C_Bundle.md`
+   - Phase3C_TrueMoist_Architecture_Report_Final.md;
+   - Phase3C_TrueMoist_Memory_Final.md;
+   - Phase3C_TrueMoist_SOP_Final.md;
+
+4. `07_09_Validation_and_Patent_Input_Bundle.md`
+   - 03_Concept_Evidence_Matrix.md;
+   - 05_Uncertainty_and_Test_Register.md;
+   - 06_Patent_Research_Input_Pack.md;
+
+5. `10_Phase2_Historical_Patent_Leads.md`
+   - Phase2_Report by CLaude.md, used only as historical patent-search leads.
+
+Confirm that all 5 physical files and all 11 logical inputs are present,
+complete, separately marked and readable.
+
+Apply the original logical authority order, not bundle order or bundle size.
+Do not treat a bundle as one evidence source. Do not average or collapse the
+documents inside it.
+
+Confirm Decision Register v1.2, the validated 72-run architecture, and the
+frozen concept fidelity required by the governing instruction.
+
+If the logical set is complete, perform the full independent TrueMoist patent
+research exactly as instructed.
+
+Do not use prior-chat context, another model's research, OpenBraille or
+VibeGuard material, or cross-concept comparison.
+---

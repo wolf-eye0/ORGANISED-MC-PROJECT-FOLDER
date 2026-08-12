@@ -1,0 +1,297 @@
+Create and validate the final TrueMoist patent-synthesis upload package.
+
+This is a file-control and transport task only.
+
+Do not perform patent research or synthesis.
+Do not summarize, rewrite, correct, or omit research content.
+Do not modify, move, rename, delete, stage, commit, or push source files.
+Do not inspect or modify `ZEROTH PRESENTATION/`.
+
+## Repository root
+
+`/home/paradoxpete/Documents/PROJECT`
+
+## Governing synthesis instruction
+
+Required source:
+
+`/home/paradoxpete/Documents/PROJECT/00_READ_FIRST_TrueMoist_Synthesis_Instructions.md`
+
+Stop if it is missing or unreadable.
+
+## Search locations
+
+Search all of these recursively:
+
+- `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/RESEAERCH`
+- `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/RESEARCH`
+- `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/TrueMoist`
+- `/home/paradoxpete/Documents/PROJECT`
+
+Prefer a TrueMoist-specific research subdirectory if one exists. Do not choose
+a file solely from its filename; inspect enough content to confirm model,
+concept, completeness, and whether it is initial, continuation, duplicate, or
+final.
+
+## Canonical project sources
+
+Use exactly:
+
+1. `/home/paradoxpete/Documents/PROJECT/PHASE 3/Engineering_Design_Review.md`
+2. `/home/paradoxpete/Documents/PROJECT/Project_mC_Decision_Register_v1.2.md`
+3. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/Phase3C_Portfolio_Closure_Memo_Approved.md`
+4. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/TrueMoist/Phase3C_TrueMoist_Architecture_Report_Final.md`
+5. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/TrueMoist/Phase3C_TrueMoist_Memory_Final.md`
+6. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/TrueMoist/Phase3C_TrueMoist_SOP_Final.md`
+7. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/03_Concept_Evidence_Matrix.md`
+8. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/05_Uncertainty_and_Test_Register.md`
+9. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/06_Patent_Research_Input_Pack.md`
+10. `/home/paradoxpete/Documents/PROJECT/PHASE 2/Phase2_Report by CLaude.md`
+
+Exclude Decision Register v1.1, every file under `TrueMoist/by claude/`,
+`TrueMoist/files.zip`, raw Phase 3C architecture research, convenience copies,
+and prior OpenBraille/VibeGuard research.
+
+## Research-lane selection rules
+
+The final package must contain exactly one physical file for each of six
+independent lanes.
+
+### ChatGPT Deep Research
+
+Select only the finalized Markdown report corresponding to:
+
+`reserach on f.patent by chatgpt deep research finalised .md`
+
+or a clearly identical renamed copy.
+
+Explicitly exclude:
+
+`research on f.patent by chatgpt high deeprserach.pdf`
+
+because it is an initial/superseded report.
+
+Destination:
+
+`11_TrueMoist_Patent_Research_ChatGPT_DR.md`
+
+### Gemini Deep Research
+
+Identify the most complete final TrueMoist patent-research output.
+
+If Gemini has an initial report plus a continuation that adds substantive
+non-duplicative content, create one lossless compilation representing one
+Gemini lane. Do not count continuations as separate reports.
+
+Destination:
+
+`12_TrueMoist_Patent_Research_Gemini.<original-or-md-extension>`
+
+If compiled, prefer Markdown and add source-boundary markers.
+
+### Perplexity Deep Research
+
+Identify the most complete final TrueMoist patent-research output.
+
+If Perplexity has an initial report plus continuation, compile losslessly only
+when both are needed to preserve substantive content. Mark any truncation or
+missing final verdict in the manifest.
+
+Destination:
+
+`13_TrueMoist_Patent_Research_Perplexity.<original-or-md-extension>`
+
+### Qwen
+
+Create one lossless compilation containing, in this order:
+
+1. `research on f.patent by qwen #0.md`
+2. `reserach.md`
+
+First verify from content and available context that both are TrueMoist Qwen
+outputs from the same lane. If provenance cannot be established, stop and
+report the ambiguity.
+
+Destination:
+
+`14_TrueMoist_Patent_Research_Qwen_COMPILATION.md`
+
+The compilation header must state:
+
+- this is one Qwen lane, not two reports or votes;
+- Part 1 is the initial substantive research;
+- Part 2 is the follow-up/final structured response;
+- Part 2 does not automatically validate unsupported claims in Part 1;
+- synthesis must independently verify `HIGH/CLEAR` FTO, Track-B confidence,
+  Mahalanobis validity-envelope novelty, eligibility, dual-probe health, and
+  event-triggered recalibration claims.
+
+### Mistral
+
+Identify all TrueMoist Mistral patent-research outputs.
+
+If they are fragments or continuations, create one lossless compilation in
+chronological/logical order. State whether it is complete or partial and
+whether a final verdict exists. It is one lane only.
+
+Destination:
+
+`15_TrueMoist_Patent_Research_Mistral_PARTIAL_COMPILATION.md`
+
+or, if genuinely complete:
+
+`15_TrueMoist_Patent_Research_Mistral.md`
+
+### Microsoft Copilot
+
+Select the most complete final TrueMoist patent-research output. Compile only
+if a continuation contains substantive non-duplicative material.
+
+Destination:
+
+`16_TrueMoist_Patent_Research_Microsoft_Copilot.<original-or-md-extension>`
+
+## Explicit supplementary exclusion
+
+Find and preserve separately, but do not copy into the 18-file upload folder:
+
+`research on f.patent by chatgpt work max.md`
+
+Copy it outside the upload folder to:
+
+`/home/paradoxpete/Documents/PROJECT_UPLOAD_PACKS/TrueMoist_Supplementary_ChatGPT_Work_Max_Web_Audit.md`
+
+This file is for post-synthesis adjudication only.
+
+## Lossless compilation rules
+
+For every compiled research lane:
+
+- preserve complete source text exactly once;
+- do not summarize, paraphrase, repair, or delete duplicated passages;
+- use UTF-8 without BOM;
+- insert only a transport header and source-boundary markers;
+- before each embedded source state filename, absolute path, byte size, and
+  SHA-256;
+- use:
+
+  `<!-- BEGIN EMBEDDED SOURCE: <filename> -->`
+
+  `<!-- END EMBEDDED SOURCE: <filename> -->`
+
+- programmatically verify each embedded body is exact and appears once.
+
+## Output directory
+
+Create outside the repository:
+
+`/home/paradoxpete/Documents/PROJECT_UPLOAD_PACKS/TrueMoist_Patent_Synthesis_Input`
+
+If it exists, create a timestamped `_FINAL_YYYYMMDD_HHMMSS` alternative.
+
+The directory must contain exactly 18 files and no hidden files, README, ZIP,
+launcher, checklist, validation report, or supplementary audit.
+
+Destination names:
+
+00_READ_FIRST_TrueMoist_Synthesis_Instructions.md
+01_Engineering_Design_Review.md
+02_Project_mC_Decision_Register_v1.2.md
+03_Phase3C_Portfolio_Closure_Memo_Approved.md
+04_Phase3C_TrueMoist_Architecture_Report_Final.md
+05_Phase3C_TrueMoist_Memory_Final.md
+06_Phase3C_TrueMoist_SOP_Final.md
+07_Concept_Evidence_Matrix.md
+08_Uncertainty_and_Test_Register.md
+09_Patent_Research_Input_Pack.md
+10_Phase2_Report_by_Claude.md
+11_TrueMoist_Patent_Research_ChatGPT_DR.md
+12_TrueMoist_Patent_Research_Gemini.*
+13_TrueMoist_Patent_Research_Perplexity.*
+14_TrueMoist_Patent_Research_Qwen_COMPILATION.md
+15_TrueMoist_Patent_Research_Mistral*
+16_TrueMoist_Patent_Research_Microsoft_Copilot.*
+99_INPUT_MANIFEST.md
+
+Preserve original extensions for direct-copy DOCX/PDF research reports.
+Compiled reports must be Markdown.
+
+## Manifest
+
+Create `99_INPUT_MANIFEST.md` as file control only.
+
+Include:
+
+- final filename;
+- category: governing, canonical, research, or manifest;
+- model/lane where applicable;
+- source absolute path(s);
+- source filename(s);
+- source and destination size;
+- source and destination SHA-256;
+- direct copy or compilation;
+- completeness: complete, partial, or unknown;
+- whether a final verdict exists;
+- concept-fidelity result;
+- original logical authority order for project files;
+- explicit exclusions;
+- Qwen one-lane warning;
+- Mistral one-lane/partial warning;
+- statement that the Work Max web audit is outside the package.
+
+Do not treat the manifest as technical evidence.
+
+## Launcher outside the upload directory
+
+Copy the separately provided launcher to:
+
+`/home/paradoxpete/Documents/PROJECT_UPLOAD_PACKS/TrueMoist_Synthesis_Launcher_FINAL.txt`
+
+Source should be:
+
+`/home/paradoxpete/Documents/PROJECT/TrueMoist_Synthesis_Launcher.txt`
+
+Stop and report if it is missing.
+
+## Validation
+
+Run before and after:
+
+`git -C /home/paradoxpete/Documents/PROJECT status --short`
+`git -C /home/paradoxpete/Documents/PROJECT diff --check`
+
+Confirm:
+
+- exactly 18 upload files;
+- exactly one governing instruction;
+- exactly ten canonical project documents;
+- exactly six research lanes;
+- exactly one manifest;
+- all direct-copy hashes match;
+- all compilation bodies are exact and appear once;
+- ChatGPT initial PDF is absent;
+- Work Max web audit is absent from upload folder and preserved separately;
+- Qwen appears once;
+- Mistral appears once;
+- Decision Register v1.1 and 135-run `by claude/` material are absent;
+- OpenBraille/VibeGuard material is absent;
+- no original was modified;
+- initial and final repository status are identical;
+- `ZEROTH PRESENTATION/` was untouched.
+
+## Final response
+
+Report:
+
+- final upload directory;
+- exact count;
+- manifest path;
+- launcher path;
+- supplementary Work Max audit path;
+- selected source for each research lane;
+- all continuations/fragments compiled;
+- all excluded/superseded candidates;
+- completeness and concept-fidelity findings;
+- hash/containment validation;
+- repository initial/final status;
+- confirmation that no original was modified.

@@ -1,0 +1,86 @@
+# 14. Source Integrity, Audit and Reproducibility — Source Map
+
+Hash verification, source freeze, coverage accounting, repository indices and reproducibility rules.
+
+Mapped sources: **20**
+
+- `08_MASTER_MANUAL/01_Source_Index/MASTER_MANUAL_SOURCE_POLICY.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_SOURCE_CONTROL`
+  - Reason: Source-freeze or Master Manual source-policy record.
+- `08_MASTER_MANUAL/01_Source_Index/SOURCE_FREEZE_NOTICE.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_SOURCE_CONTROL`
+  - Reason: Source-freeze or Master Manual source-policy record.
+- `00_START_HERE/01_STAGE1_GOVERNANCE_COPY_LOG.tsv`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/01_STAGE1_GOVERNANCE_VALIDATION.md`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/02_STAGE2_PHASE_HISTORY_COPY_LOG.tsv`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/02_STAGE2_PHASE_HISTORY_VALIDATION.md`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/03_STAGE3A_CONCEPT_ARCHITECTURE_COPY_LOG.tsv`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/03_STAGE3A_CONCEPT_ARCHITECTURE_VALIDATION.md`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/04_STAGE3B_PATENT_EVIDENCE_COPY_LOG.tsv`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/04_STAGE3B_PATENT_EVIDENCE_VALIDATION.md`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/05_STAGE4A_COMPARATIVE_DECISION_COPY_LOG.tsv`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/05_STAGE4A_COMPARATIVE_DECISION_VALIDATION.md`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/06_STAGE4B_TEACHER_AND_REVIEW_COPY_LOG.tsv`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/06_STAGE4B_TEACHER_AND_REVIEW_VALIDATION.md`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/07_STAGE5_TRANSPORT_PROVENANCE_COPY_LOG.tsv`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/07_STAGE5_TRANSPORT_PROVENANCE_VALIDATION.md`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/08_STAGE6A_HISTORICAL_RESEARCH_COPY_LOG.tsv`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/08_STAGE6A_HISTORICAL_RESEARCH_VALIDATION.md`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/09_STAGE8_FINAL_ARCHIVAL_SWEEP_LOG.tsv`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.
+- `00_START_HERE/09_STAGE8_FINAL_ARCHIVAL_SWEEP_VALIDATION.md`
+  - Authority: `TIER_5`
+  - Treatment: `AUDIT_APPENDIX`
+  - Reason: Organization-stage validation or copy-control record.

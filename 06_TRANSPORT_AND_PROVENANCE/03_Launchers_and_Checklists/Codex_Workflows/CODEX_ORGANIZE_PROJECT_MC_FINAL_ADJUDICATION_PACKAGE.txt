@@ -1,0 +1,190 @@
+Create and validate the final blind Project mC cross-concept adjudication package.
+
+This is a file-control and transport task only.
+
+Do not perform the adjudication.
+Do not summarize, rewrite, correct, or omit source content.
+Do not modify, move, rename, delete, stage, commit, or push source files.
+Do not inspect or modify `ZEROTH PRESENTATION/`.
+
+## Repository root
+
+`/home/paradoxpete/Documents/PROJECT`
+
+## Required setup sources
+
+`/home/paradoxpete/Documents/PROJECT/00_READ_FIRST_Project_mC_Final_Adjudication_Instructions.md`
+
+`/home/paradoxpete/Documents/PROJECT/Project_mC_Final_Adjudication_Launcher.txt`
+
+Stop if either is missing or unreadable.
+
+## Selected governance sources
+
+1. `/home/paradoxpete/Documents/PROJECT/Project_mC_Decision_Register_v1.2.md`
+
+2. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/Phase3C_Portfolio_Closure_Memo_Approved.md`
+
+3. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/03_Concept_Evidence_Matrix.md`
+
+4. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/05_Uncertainty_and_Test_Register.md`
+
+Use the repository copies, not convenience copies from upload folders.
+
+## Selected valid synthesis sources
+
+### OpenBraille
+
+`/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINALISED DECISION/OPENBRAILLE/OpenBraille_Patent_Synthesis_ChatGPT_Work_Max.md`
+
+`/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINALISED DECISION/OPENBRAILLE/OpenBraille_Patent_Synthesis_ChatGPT_Standard_High_no_deeprsearch.md`
+
+The second file is intentionally selected as the valid secondary synthesis despite its original mode filename. Its content is concept-faithful and complete.
+
+### VibeGuard
+
+`/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINALISED DECISION/VIBEGUARD/Vibeguard_Patent_Synthesis_ChatGPT_Work_Max.md`
+
+`/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINALISED DECISION/VIBEGUARD/VibeGuard_Current_Patent_Evidence_Synthesis_High.md`
+
+### TrueMoist
+
+`/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINALISED DECISION/TRUEMOIST/TrueMoist_Patent-Evidence_Synthesis_Chatgpt_Max.md`
+
+`/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINALISED DECISION/TRUEMOIST/TrueMoist_Patent-Evidence_Synthesis_Chatgpt_High_Deepresearch.md`
+
+Stop and report if any selected path is missing, empty, unreadable, or its content no longer matches the identified concept/mode.
+
+## Explicitly excluded synthesis files
+
+Do not copy into the package:
+
+`/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINALISED DECISION/OPENBRAILLE/OpenBraille_Patent_Synthesis_ChatGPT_Deep_Research.md`
+
+`/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINALISED DECISION/VIBEGUARD/Vibeguard_Patent_Synthesis_ChatGPT_Deep_Research_High.md`
+
+`/home/paradoxpete/Documents/PROJECT_UPLOAD_PACKS/TrueMoist_Supplementary_ChatGPT_Work_Max_Web_Audit.md`
+
+Preserve the supplementary audit where it is. Do not copy it, merge it, quote it, or place it inside the blind package.
+
+## Output directory
+
+Create outside the repository:
+
+`/home/paradoxpete/Documents/PROJECT_UPLOAD_PACKS/Project_mC_Final_Cross_Concept_Adjudication_Input`
+
+If that exists, create:
+
+`Project_mC_Final_Cross_Concept_Adjudication_Input_FINAL_YYYYMMDD_HHMMSS`
+
+The upload directory must contain exactly 12 files:
+
+00_READ_FIRST_Project_mC_Final_Adjudication_Instructions.md
+01_Project_mC_Decision_Register_v1.2.md
+02_Phase3C_Portfolio_Closure_Memo_Approved.md
+03_Concept_Evidence_Matrix.md
+04_Uncertainty_and_Test_Register.md
+05_OpenBraille_Synthesis_Work_Max.md
+06_OpenBraille_Synthesis_Valid_Secondary.md
+07_VibeGuard_Synthesis_Work_Max.md
+08_VibeGuard_Synthesis_Standard_High.md
+09_TrueMoist_Synthesis_Max.md
+10_TrueMoist_Synthesis_High_Deep_Research.md
+99_EXCLUSION_AND_PROVENANCE_REGISTER.md
+
+No README, ZIP, launcher, validation report, supplementary audit, hidden file, or excluded report may be inside the upload directory.
+
+Copy all selected source files byte-for-byte except the newly generated provenance register.
+
+## Exclusion-and-provenance register
+
+Create `99_EXCLUSION_AND_PROVENANCE_REGISTER.md`.
+
+State prominently:
+
+- it is file control and reliability context, not technical evidence;
+- the package contains six selected valid synthesis reports;
+- no report is counted as a vote;
+- the OpenBraille filenames were crossed;
+- the selected OpenBraille secondary source was originally named `OpenBraille_Patent_Synthesis_ChatGPT_Standard_High_no_deeprsearch.md`;
+- the original file named `OpenBraille_Patent_Synthesis_ChatGPT_Deep_Research.md` is excluded because it swaps to a moving-roller/encoder-wheel architecture;
+- the VibeGuard Deep Research High report is excluded because it swaps to a software-security scanning project;
+- the supplementary TrueMoist Work Max audit remains outside the blind package for later adversarial checking.
+
+For every selected and excluded synthesis record include:
+
+- concept;
+- original filename;
+- absolute source path;
+- controlled destination name or `EXCLUDED`;
+- model/mode;
+- byte size;
+- SHA-256;
+- completeness;
+- concept-fidelity result;
+- verdict/Track where available;
+- selection or exclusion reason.
+
+For each governance file include source path, byte size, SHA-256, and authority role.
+
+Also state:
+
+- Decision Register v1.2 is present;
+- Decision Register v1.1 is absent;
+- no OpenBraille/VibeGuard failed report is attached;
+- the TrueMoist supplementary audit is not attached;
+- no convenience duplicate was selected.
+
+## Launcher outside the upload directory
+
+Copy:
+
+`/home/paradoxpete/Documents/PROJECT/Project_mC_Final_Adjudication_Launcher.txt`
+
+to:
+
+`/home/paradoxpete/Documents/PROJECT_UPLOAD_PACKS/Project_mC_Final_Adjudication_Launcher_FINAL.txt`
+
+The launcher must not be in the 12-file upload folder.
+
+## Validation
+
+Run before and after:
+
+`git -C /home/paradoxpete/Documents/PROJECT status --short`
+
+`git -C /home/paradoxpete/Documents/PROJECT diff --check`
+
+Confirm:
+
+- exactly 12 physical upload files;
+- one governing instruction;
+- four governance/evidence files;
+- six selected valid syntheses;
+- one provenance register;
+- all selected direct-copy hashes match source hashes;
+- the OpenBraille valid secondary file is copied under the controlled name;
+- both failed concept swaps are absent;
+- the TrueMoist supplementary audit is absent;
+- no Decision Register v1.1;
+- no hidden files;
+- no README/ZIP/launcher/validation report inside the upload folder;
+- no original was modified;
+- initial and final repository status are identical;
+- `ZEROTH PRESENTATION/` was untouched.
+
+## Final response
+
+Report:
+
+- final upload directory;
+- exact count;
+- launcher path;
+- provenance-register path;
+- selected source and controlled destination for every file;
+- OpenBraille filename-crossing resolution;
+- excluded reports and reasons;
+- supplementary TrueMoist audit exclusion;
+- SHA-256 copy validation;
+- repository initial/final status;
+- confirmation that no original was modified.

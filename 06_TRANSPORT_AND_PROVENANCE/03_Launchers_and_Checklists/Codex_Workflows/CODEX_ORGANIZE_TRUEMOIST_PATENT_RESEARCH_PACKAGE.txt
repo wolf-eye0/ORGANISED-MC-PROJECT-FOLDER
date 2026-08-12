@@ -1,0 +1,58 @@
+Create a clean external upload package for six blind independent TrueMoist
+patent-research runs.
+
+Do not perform research or edit, move, rename, delete, stage or commit source
+files.
+
+Repository root:
+`/home/paradoxpete/Documents/PROJECT`
+
+Required instruction:
+`/home/paradoxpete/Documents/PROJECT/00_READ_FIRST_TrueMoist_Patent_Research_Instructions.md`
+
+Output:
+`/home/paradoxpete/Documents/PROJECT_UPLOAD_PACKS/TrueMoist_Patent_Research_Input`
+Use a timestamped alternative if it exists.
+
+The upload directory must contain exactly 11 files and no manifest, ZIP,
+README, checklist or hidden file.
+
+Copy these exact sources:
+
+1. `/home/paradoxpete/Documents/PROJECT/PHASE 3/Engineering_Design_Review.md`
+2. `/home/paradoxpete/Documents/PROJECT/Project_mC_Decision_Register_v1.2.md`
+3. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/Phase3C_Portfolio_Closure_Memo_Approved.md`
+4. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/TrueMoist/Phase3C_TrueMoist_Architecture_Report_Final.md`
+5. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/TrueMoist/Phase3C_TrueMoist_Memory_Final.md`
+6. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/TrueMoist/Phase3C_TrueMoist_SOP_Final.md`
+7. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/03_Concept_Evidence_Matrix.md`
+8. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/05_Uncertainty_and_Test_Register.md`
+9. `/home/paradoxpete/Documents/PROJECT/PHASE 3/PHASE 3C-Comparative Technical Evaluation/FINAL_DOWNSELECTION/06_Patent_Research_Input_Pack.md`
+10. `/home/paradoxpete/Documents/PROJECT/PHASE 2/Phase2_Report by CLaude.md`
+
+Normalize destination names to:
+
+00_READ_FIRST_TrueMoist_Patent_Research_Instructions.md
+01_Engineering_Design_Review.md
+02_Project_mC_Decision_Register_v1.2.md
+03_Phase3C_Portfolio_Closure_Memo_Approved.md
+04_Phase3C_TrueMoist_Architecture_Report_Final.md
+05_Phase3C_TrueMoist_Memory_Final.md
+06_Phase3C_TrueMoist_SOP_Final.md
+07_Concept_Evidence_Matrix.md
+08_Uncertainty_and_Test_Register.md
+09_Patent_Research_Input_Pack.md
+10_Phase2_Report_by_Claude.md
+
+Exclude Decision Register v1.1, Phase 2 Memory, raw Phase 3B/3C research, old
+TrueMoist prompts/research, files.zip, convenience copies, OpenBraille,
+VibeGuard, audits and scoring worksheets.
+
+Validate exact count, readability and source/copy SHA-256 equality. Confirm no
+source changed and repository initial/final status is identical. Run:
+
+`git -C /home/paradoxpete/Documents/PROJECT status --short`
+`git -C /home/paradoxpete/Documents/PROJECT diff --check`
+
+Report the final absolute path, 11 filenames, hash result, any ambiguity, and
+confirmation that no original was modified.

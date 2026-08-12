@@ -1,0 +1,110 @@
+# 01. Project Mandate, Requirements and Governance — Source Map
+
+Teacher requirements, budget and platform constraints, project authority order, decision registers and repository control.
+
+Mapped sources: **26**
+
+- `01_GOVERNANCE_AND_CONTROL/01_Project_Requirements/Teacher_Project_Requirements_and_Change_Context.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/02_Decision_Registers/HISTORICAL_Project_mC_Decision_Register_v1.0.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/02_Decision_Registers/Project_mC_Decision_Register_v1.2.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/03_Project_Context_and_Phase_Map/MC_Project_PHASE_DOC.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/03_Project_Context_and_Phase_Map/PROJECT_CONCEPT_CONTEXT.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/AGENTS.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Legacy_Audits_and_Snapshots/CLEANUP_DIFF_NAME_STATUS.txt`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Legacy_Audits_and_Snapshots/CLEANUP_VALIDATION_REPORT.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Legacy_Audits_and_Snapshots/CONTEXT_AND_ZIP_PACKAGES.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Legacy_Audits_and_Snapshots/CURRENT_FOLDER_STRUCTURE.txt`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Legacy_REORGANIZATION_LOG.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Legacy_Repository_Audit/01_CURRENT_STRUCTURE_ANALYSIS.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Legacy_Repository_Audit/02_FILE_MANIFEST.csv`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Legacy_Repository_Audit/02_FILE_MANIFEST.pdf`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Legacy_Repository_Audit/03_DUPLICATE_REPORT.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Legacy_Repository_Audit/04_AUTHORITY_AMBIGUITIES.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Legacy_Repository_Audit/05_NAMING_AND_PLACEMENT_ISSUES.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Legacy_Repository_Audit/06_SECURITY_AND_UNKNOWN_FILES.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Legacy_Repository_Audit/07_MINIMAL_CLEANUP_PROPOSAL.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Naming_History/PHASE3C_NAMING_CHANGE_LOG.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Naming_History/PHASE3C_NAMING_PROPOSAL.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Naming_History/PHASE3C_NAMING_VALIDATION_REPORT.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Original_Project_gitignore.txt`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/Original_Repository_README.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/04_Repository_Control/PHASE3C_NAMING_FINALIZATION_LOG.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.
+- `01_GOVERNANCE_AND_CONTROL/AUTHORITY_MAP.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Controlling governance or repository authority.

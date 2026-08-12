@@ -1,0 +1,28 @@
+Read `00_READ_FIRST_VibeGuard_Synthesis_Instructions.md` first and treat it as
+the governing task specification.
+
+Before substantive synthesis, inventory all 18 attached files against
+`99_INPUT_MANIFEST.md`. Confirm that the governing instruction, ten canonical
+project documents, six independent research lanes, and file-control manifest
+are present and readable. Treat the manifest as file control only, not
+technical evidence.
+
+The six independent research lanes are evidence sources, not votes. Do not
+use prior-chat context or another synthesis output. Preserve the project
+authority order in the governing instruction.
+
+Important Mistral warning:
+
+File 15 is a transport compilation of three incomplete fragments from one
+Mistral research lane. It is one partial evidence source, not three reports or
+three votes. It has no complete final VibeGuard verdict. Do not infer or
+reconstruct missing conclusions. Audit, downgrade or exclude unsupported
+sections, especially patentability, novelty, infringement, Mahalanobis and
+FTO assertions.
+
+If the complete logical input set is present, begin the substantive synthesis
+and perform the full independent VibeGuard patent-evidence audit exactly as
+specified in the governing instruction.
+
+Do not compare VibeGuard against OpenBraille or TrueMoist.
+Do not select the final Project mC winner.

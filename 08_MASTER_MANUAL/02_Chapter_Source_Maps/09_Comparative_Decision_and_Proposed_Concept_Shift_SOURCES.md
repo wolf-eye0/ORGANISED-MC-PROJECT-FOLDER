@@ -1,0 +1,78 @@
+# 09. Comparative Decision and Proposed Concept Shift — Source Map
+
+Common evidence, hard gates, uncertainty register, adjudications, team challenges and the OpenBraille-to-VibeGuard change request.
+
+Mapped sources: **18**
+
+- `04_COMPARATIVE_DECISION/01_Common_Evidence_and_Gates/00_Engineering_Design_Review.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/01_Common_Evidence_and_Gates/01_Comparison_Protocol.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/01_Common_Evidence_and_Gates/02_Authoritative_Source_Manifest.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/01_Common_Evidence_and_Gates/03_Concept_Evidence_Matrix.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/01_Common_Evidence_and_Gates/04_Hard_Gate_Precheck.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/01_Common_Evidence_and_Gates/05_Uncertainty_and_Test_Register.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/01_Common_Evidence_and_Gates/06_Patent_Research_Input_Pack.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/01_Common_Evidence_and_Gates/07_Scoring_Worksheet.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/01_Common_Evidence_and_Gates/08_High_Reasoning_Audit.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/01_Common_Evidence_and_Gates/09_Final_Downselection_README.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/02_Final_Adjudications/01_Project_mC_Final_Adjudication_Work_Max.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/02_Final_Adjudications/02_Project_mC_Final_Adjudication_Deep_Research_High.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/03_Change_Request/Project_mC_Request_to_Change_from_OpenBraille_to_VibeGuard.docx`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/03_Change_Request/Project_mC_Request_to_Change_from_OpenBraille_to_VibeGuard.pdf`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/04_Team_Audits_and_Objections/01_Team_Submission_6222246419165853974.pdf`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/04_Team_Audits_and_Objections/02_Team_Submission_6282084529079524834.pdf`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/04_Team_Audits_and_Objections/03_Team_Submission_IDK.pdf`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.
+- `04_COMPARATIVE_DECISION/COMPARATIVE_DECISION_INDEX.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Comparative evidence, adjudication, change request or challenge.

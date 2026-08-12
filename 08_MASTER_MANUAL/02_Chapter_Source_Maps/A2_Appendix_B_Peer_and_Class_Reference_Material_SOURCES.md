@@ -1,0 +1,78 @@
+# A2. Appendix B — Peer and Class Reference Material — Source Map
+
+Other groups' presentations and reference documents, clearly separated from Project mC authority.
+
+Mapped sources: **18**
+
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Presentations/10_Fake WiFi access point detection system using ESP32 .pptx`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Presentations/11_ENVIRONMENTAL TAMPER DETECTION FOR SERVER RACK.pptx`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Presentations/12_STM32 Smart Attendance Register Using RFID.pptx`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Presentations/13_Secure Confidential Document Storage Box with__Tamper Detection using Arduino Uno.pptx`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Presentations/1_Secure Electronic Voting Machine with Voter Authentication, Encrypted Vote Storage, and Tamper Detection.pptx`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Presentations/2_Biometric Continuous Authentication System.pptx`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Presentations/3_Distributed IoT Security System for Covert Tracker Detection .pptx`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Presentations/4_Smart Examination Hall Mobile Activity Detection and Alert System using STM32.pptx`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Presentations/5_Juice Jacking USB using ESP32.pptx`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Presentations/6_Zeroth review - Presentation-2 (1).pptx`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Presentations/7_ USB ATTACK DETECTION AND AUTO ISOLATION SYSTEM .pptx`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Presentations/9_Air Gapped Hardware token for compromise resilent  multi factor authentication.pptx`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Presentations/GROUP 4 .pptx`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Reference_Documents/POOJA PROJECT.pdf`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Reference_Documents/Patent Potential of Student Projects.docx`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Reference_Documents/USB_Powered_Secure_File_Transfer_Authentication_Abstract.pdf`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Reference_Documents/USB_Powered_Smart_Anti_Theft_System_Abstract.pdf`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.
+- `05_TEACHER_AND_REVIEWS/03_Other_Groups/Reference_Documents/USB_Powered_Smart_Cabinet_Abstract.pdf`
+  - Authority: `REFERENCE_ONLY`
+  - Treatment: `REFERENCE_ONLY`
+  - Reason: Peer or class material; not Project mC authority.

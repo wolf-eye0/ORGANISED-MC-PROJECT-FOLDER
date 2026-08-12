@@ -1,0 +1,134 @@
+# 13. Superseded, Failed, Partial and Archived Routes — Source Map
+
+Earlier architectures, failed concept swaps, partial research, legacy ZIPs and records that must not re-enter current authority.
+
+Mapped sources: **32**
+
+- `09_ARCHIVE/01_Superseded/Convenience_Folder_Variants/COPY PASTE FOLDER/MC_Project_PHASE_DOC.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/01_Superseded/Convenience_Folder_Variants/COPY PASTE FOLDER/Project_mC_Decision_Register_v1.0.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/01_Superseded/Convenience_Folder_Variants/COPY PASTE FOLDER/README.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/01_Superseded/Convenience_Folder_Variants/every sop and memory/MC_Project_PHASE_DOC.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/01_Superseded/Convenience_Folder_Variants/every sop and memory/README.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/01_Superseded/TrueMoist/Earlier_Claude_Architecture/Phase3C_TrueMoist_Architecture_Report_by_Claude.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/01_Superseded/TrueMoist/Earlier_Claude_Architecture/Phase3C_TrueMoist_MEMORY.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/01_Superseded/TrueMoist/Earlier_Claude_Architecture/Project_mC_Decision_Register_v1_1.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/01_Superseded/TrueMoist/Phase3C_TrueMoist_PDR_Patch_Historical.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/03_Failed_or_Partial_Research/OpenBraille/FAILED_CONCEPT_SWAP_OpenBraille_Deep_Research_Synthesis.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/03_Failed_or_Partial_Research/OpenBraille/Phase3C_Failed_Raw_Research/Phase3C_OpenBraille_Failed_Research_ChatGPT.pdf`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/03_Failed_or_Partial_Research/README.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/03_Failed_or_Partial_Research/TrueMoist/Legacy_Fragments_and_Variants/research on f.patent by chatgpt high deeprserach.pdf`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/03_Failed_or_Partial_Research/TrueMoist/Legacy_Fragments_and_Variants/research on f.patent by qwen #0.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/03_Failed_or_Partial_Research/TrueMoist/Legacy_Fragments_and_Variants/reserach.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/03_Failed_or_Partial_Research/TrueMoist/SUPPLEMENTARY_EXCLUDED_TrueMoist_Work_Max_Web_Audit.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/03_Failed_or_Partial_Research/VibeGuard/FAILED_CONCEPT_SWAP_VibeGuard_Deep_Research_Synthesis.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/03_Failed_or_Partial_Research/VibeGuard/Legacy_Fragments_and_Variants/research on f. patent by chatgpt.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/03_Failed_or_Partial_Research/VibeGuard/Legacy_Fragments_and_Variants/research on f.patent by mistral 2.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/03_Failed_or_Partial_Research/VibeGuard/Legacy_Fragments_and_Variants/research on f.patent by mistral 3.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/03_Failed_or_Partial_Research/VibeGuard/Legacy_Fragments_and_Variants/research on f.patent by mistral.pdf`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/03_Failed_or_Partial_Research/VibeGuard/Legacy_Fragments_and_Variants/research on f.patent by qwen.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/03_Failed_or_Partial_Research/VibeGuard/Legacy_Fragments_and_Variants/research_on_f.patent_by_qwen2.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/04_Legacy_Zips/PHASE 1/PHASE 1.B/Phase1B_Opportunity_Analysis.zip`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/04_Legacy_Zips/PHASE 2/Phase2_docs.zip`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/04_Legacy_Zips/PHASE 3/PHASE 3A-Engineering Landscape Discovery/Phase3A_report_and_memory.zip`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/04_Legacy_Zips/PHASE 3/PHASE 3B-Engineering Feasibility Analysis/Phase3B_mem_and_report.zip`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/04_Legacy_Zips/PHASE 3/PHASE 3C-Comparative Technical Evaluation/TrueMoist/files.zip`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/04_Legacy_Zips/contexts.zip`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/04_Legacy_Zips/every sop and memory/every_sop_and memory_from phase 1A to 1C and whoel phase overview.zip`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/05_Unrelated_Quarantine/INTENTIONAL_EXCLUSIONS.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.
+- `09_ARCHIVE/ARCHIVE_INDEX.md`
+  - Authority: `TIER_5`
+  - Treatment: `ARCHIVE_ONLY`
+  - Reason: Superseded, failed, partial, legacy or intentionally excluded record.

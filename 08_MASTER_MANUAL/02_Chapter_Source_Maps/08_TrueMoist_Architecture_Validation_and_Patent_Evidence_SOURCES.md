@@ -1,0 +1,62 @@
+# 08. TrueMoist Architecture, Validation and Patent Evidence — Source Map
+
+The validated 72-run compensation design, frozen architecture, research evidence, synthesis results and retained value.
+
+Mapped sources: **14**
+
+- `03_CONCEPT_PORTFOLIO/TrueMoist/01_Final_Architecture/Phase3C_TrueMoist_Architecture_Report_Final.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Authoritative TrueMoist architecture, memory or SOP.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/01_Final_Architecture/Phase3C_TrueMoist_Memory_Final.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Authoritative TrueMoist architecture, memory or SOP.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/01_Final_Architecture/Phase3C_TrueMoist_SOP_Final.md`
+  - Authority: `TIER_1`
+  - Treatment: `CORE_NARRATIVE`
+  - Reason: Authoritative TrueMoist architecture, memory or SOP.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/03_Patent_Synthesis/01_TrueMoist_Patent_Evidence_Synthesis_Max.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Valid TrueMoist patent-evidence synthesis.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/03_Patent_Synthesis/02_TrueMoist_Patent_Evidence_Synthesis_High_Deep_Research.md`
+  - Authority: `TIER_2`
+  - Treatment: `CORE_DECISION_EVIDENCE`
+  - Reason: Valid TrueMoist patent-evidence synthesis.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/05_Roadmaps_and_Reference_Dossiers/HISTORICAL_Phase1C_TrueMoist_Concept_Dossier.docx`
+  - Authority: `TIER_2`
+  - Treatment: `SUPPORTING_EVIDENCE`
+  - Reason: TrueMoist concept reference or roadmap.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/PATENT_EVIDENCE_INDEX.md`
+  - Authority: `TIER_2`
+  - Treatment: `SUPPORTING_EVIDENCE`
+  - Reason: TrueMoist portfolio control or index.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/README.md`
+  - Authority: `TIER_2`
+  - Treatment: `SUPPORTING_EVIDENCE`
+  - Reason: TrueMoist portfolio control or index.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/02_Raw_Research/01_TrueMoist_Patent_Research_ChatGPT_Deep_Research.md`
+  - Authority: `TIER_3`
+  - Treatment: `SUPPORTING_EVIDENCE`
+  - Reason: Controlled independent TrueMoist patent-research lane.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/02_Raw_Research/02_TrueMoist_Patent_Research_Gemini.docx`
+  - Authority: `TIER_3`
+  - Treatment: `SUPPORTING_EVIDENCE`
+  - Reason: Controlled independent TrueMoist patent-research lane.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/02_Raw_Research/03_TrueMoist_Patent_Research_Perplexity_PARTIAL.md`
+  - Authority: `TIER_3`
+  - Treatment: `SUPPORTING_EVIDENCE`
+  - Reason: Controlled independent TrueMoist patent-research lane.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/02_Raw_Research/04_TrueMoist_Patent_Research_Qwen_COMPILATION.md`
+  - Authority: `TIER_3`
+  - Treatment: `SUPPORTING_EVIDENCE`
+  - Reason: Controlled independent TrueMoist patent-research lane.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/02_Raw_Research/05_TrueMoist_Patent_Research_Mistral.md`
+  - Authority: `TIER_3`
+  - Treatment: `SUPPORTING_EVIDENCE`
+  - Reason: Controlled independent TrueMoist patent-research lane.
+- `03_CONCEPT_PORTFOLIO/TrueMoist/02_Raw_Research/06_TrueMoist_Patent_Research_Microsoft_Copilot.docx`
+  - Authority: `TIER_3`
+  - Treatment: `SUPPORTING_EVIDENCE`
+  - Reason: Controlled independent TrueMoist patent-research lane.
