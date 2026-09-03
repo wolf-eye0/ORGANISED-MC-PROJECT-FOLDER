@@ -15,3 +15,14 @@ binary = "adxl345-vibe.chip.wasm"
 name = "chip-n20-motor"
 binary = "n20-motor.chip.wasm"
 
+[[chip]]
+name = "n20-motor"
+binary = "n20-motor.chip.wasm"
+
+[[chip]]
+name = "chip-pwr-supply-12v"
+binary = "pwr-supply-12v.chip.wasm"
+
+[[chip]]
+name = "pwr-supply-12v"
+binary = "pwr-supply-12v.chip.wasm"

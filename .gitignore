@@ -9,3 +9,6 @@
 *.log
 .agents/
 .DS_Store
+.agents/
+TEST_INFRA.md
+TEST_READY.md

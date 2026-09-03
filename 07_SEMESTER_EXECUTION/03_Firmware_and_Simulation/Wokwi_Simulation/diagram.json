@@ -15,35 +15,21 @@
       "id": "sensor",
       "top": 10,
       "left": 230,
-      "attrs": { "fault_level": "0" }
+      "attrs": { "faultLevel": "0" }
     },
     {
       "type": "chip-n20-motor",
       "id": "motor1",
       "top": 10,
-      "left": 430,
+      "left": 440,
       "attrs": {}
     },
     {
-      "type": "wokwi-slide-switch",
-      "id": "pwr_switch",
-      "top": 160,
-      "left": 430,
-      "attrs": { "label": "12V Main Power" }
-    },
-    {
-      "type": "wokwi-led",
-      "id": "led_12v",
-      "top": 240,
-      "left": 470,
-      "attrs": { "color": "yellow", "label": "12V DC Live" }
-    },
-    {
-      "type": "wokwi-resistor",
-      "id": "r_12v",
-      "top": 290,
-      "left": 460,
-      "attrs": { "resistance": "1000" }
+      "type": "chip-pwr-supply-12v",
+      "id": "pwr1",
+      "top": 170,
+      "left": 440,
+      "attrs": {}
     },
     {
       "type": "wokwi-breadboard-half",
@@ -51,13 +37,6 @@
       "top": 280,
       "left": 20,
       "attrs": {}
-    },
-    {
-      "type": "wokwi-rgb-led",
-      "id": "status_rgb",
-      "top": 380,
-      "left": 130,
-      "attrs": { "common": "cathode" }
     },
     {
       "type": "wokwi-resistor",
@@ -79,22 +58,26 @@
       "top": 370,
       "left": 110,
       "attrs": { "resistance": "220" }
+    },
+    {
+      "type": "wokwi-rgb-led",
+      "id": "status_rgb",
+      "top": 380,
+      "left": 130,
+      "attrs": { "common": "cathode" }
     }
   ],
   "connections": [
     [ "esp:3V3", "sensor:VCC", "red", [ "h20", "v-20", "h130" ] ],
     [ "esp:GND.1", "sensor:GND", "black", [ "h30", "v-10", "h110" ] ],
     [ "esp:5", "sensor:CS", "yellow", [ "h20", "v10", "h100" ] ],
-    [ "esp:18", "sensor:SCK", "orange", [ "h30", "v20", "h80" ] ],
-    [ "esp:19", "sensor:MISO", "green", [ "h40", "v30", "h60" ] ],
-    [ "esp:23", "sensor:MOSI", "blue", [ "h50", "v40", "h40" ] ],
-    [ "esp:4", "motor1:TACH", "purple", [ "h60", "v-30", "h240" ] ],
-    [ "pwr_switch:2", "motor1:12V", "red", [ "v-30", "h-20" ] ],
-    [ "pwr_switch:2", "led_12v:A", "red", [ "v40", "h20" ] ],
-    [ "pwr_switch:1", "esp:5V", "red", [ "h-60", "v-130", "h-220" ] ],
-    [ "led_12v:C", "r_12v:1", "black", [ "v10" ] ],
-    [ "r_12v:2", "motor1:GND", "black", [ "h20", "v-220" ] ],
-    [ "motor1:GND", "esp:GND.1", "black", [ "h-100", "v-10" ] ],
+    [ "esp:18", "sensor:SCL", "orange", [ "h30", "v20", "h80" ] ],
+    [ "esp:19", "sensor:SDO", "green", [ "h40", "v30", "h60" ] ],
+    [ "esp:23", "sensor:SDA", "blue", [ "h50", "v40", "h40" ] ],
+    [ "esp:4", "motor1:TACH_OUT", "purple", [ "h60", "v-30", "h240" ] ],
+    [ "pwr1:12V_OUT", "motor1:12V_IN", "red", [ "v-30", "h-20" ] ],
+    [ "pwr1:GND", "motor1:GND", "black", [ "v-30", "h20" ] ],
+    [ "pwr1:GND", "esp:GND.1", "black", [ "h-60", "v-90", "h-200" ] ],
     [ "esp:25", "r_red:1", "red", [ "h-20", "v240", "h120" ] ],
     [ "r_red:2", "status_rgb:R", "red", [ "v0" ] ],
     [ "esp:26", "r_green:1", "green", [ "h-30", "v260", "h120" ] ],

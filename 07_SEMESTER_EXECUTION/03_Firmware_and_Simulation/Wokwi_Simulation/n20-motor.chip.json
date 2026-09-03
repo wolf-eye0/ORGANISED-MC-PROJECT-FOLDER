@@ -2,10 +2,9 @@
   "name": "chip-n20-motor",
   "author": "Group 8 - VibeGuard",
   "pins": [
-    "12V",
+    "12V_IN",
     "GND",
-    "TACH",
-    "FAULT"
+    "TACH_OUT"
   ],
   "controls": [
     {
@@ -21,10 +20,14 @@
       "id": "imbalance",
       "label": "Eccentric Mass (g)",
       "type": "range",
-      "min": 0,
-      "max": 5,
+      "min": 0.0,
+      "max": 5.0,
       "step": 0.1,
       "value": 3.5
     }
-  ]
+  ],
+  "display": {
+    "width": 160,
+    "height": 100
+  }
 }
