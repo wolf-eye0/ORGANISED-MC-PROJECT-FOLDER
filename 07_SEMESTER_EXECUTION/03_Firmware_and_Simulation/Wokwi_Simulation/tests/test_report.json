@@ -1,44 +1,44 @@
 {
-  "timestamp": "2026-09-03T09:14:28.909Z",
+  "timestamp": "2026-09-03T09:42:28.014Z",
   "totalTests": 64,
   "totalPassed": 64,
   "totalFailed": 0,
   "passRate": "100.0%",
-  "totalDurationMs": 248,
+  "totalDurationMs": 247,
   "results": [
     {
       "id": "T1.01",
       "name": "T1.01_adxl345_wasm_exports_chipInit",
       "status": "PASSED",
-      "durationMs": 6,
+      "durationMs": 2,
       "tier": 1
     },
     {
       "id": "T1.02",
       "name": "T1.02_adxl345_wasm_exports_wokwi_api_version",
       "status": "PASSED",
-      "durationMs": 10,
+      "durationMs": 14,
       "tier": 1
     },
     {
       "id": "T1.03",
       "name": "T1.03_n20_motor_wasm_exports_chipInit",
       "status": "PASSED",
-      "durationMs": 3,
+      "durationMs": 2,
       "tier": 1
     },
     {
       "id": "T1.04",
       "name": "T1.04_n20_motor_wasm_exports_wokwi_api_version",
       "status": "PASSED",
-      "durationMs": 8,
+      "durationMs": 14,
       "tier": 1
     },
     {
       "id": "T1.05",
       "name": "T1.05_adxl345_manifest_json_schema_compliance",
       "status": "PASSED",
-      "durationMs": 1,
+      "durationMs": 2,
       "tier": 1
     },
     {
@@ -59,7 +59,7 @@
       "id": "T1.08",
       "name": "T1.08_adxl345_manifest_gy291_8pin_layout",
       "status": "PASSED",
-      "durationMs": 1,
+      "durationMs": 3,
       "tier": 1
     },
     {
@@ -73,14 +73,14 @@
       "id": "T1.10",
       "name": "T1.10_n20_motor_manifest_rpm_control",
       "status": "PASSED",
-      "durationMs": 1,
+      "durationMs": 0,
       "tier": 1
     },
     {
       "id": "T1.11",
       "name": "T1.11_n20_motor_manifest_imbalance_control",
       "status": "PASSED",
-      "durationMs": 0,
+      "durationMs": 1,
       "tier": 1
     },
     {
@@ -94,21 +94,21 @@
       "id": "T1.13",
       "name": "T1.13_adxl345_c_api_pin_init",
       "status": "PASSED",
-      "durationMs": 2,
+      "durationMs": 4,
       "tier": 1
     },
     {
       "id": "T1.14",
       "name": "T1.14_adxl345_c_api_spi_init_mode",
       "status": "PASSED",
-      "durationMs": 3,
+      "durationMs": 6,
       "tier": 1
     },
     {
       "id": "T1.15",
       "name": "T1.15_adxl345_c_api_pin_watch_cs",
       "status": "PASSED",
-      "durationMs": 2,
+      "durationMs": 3,
       "tier": 1
     },
     {
@@ -122,14 +122,14 @@
       "id": "T1.17",
       "name": "T1.17_n20_motor_c_api_timer_init",
       "status": "PASSED",
-      "durationMs": 2,
+      "durationMs": 4,
       "tier": 1
     },
     {
       "id": "T1.18",
       "name": "T1.18_n20_motor_c_api_attr_rpm_default",
       "status": "PASSED",
-      "durationMs": 2,
+      "durationMs": 3,
       "tier": 1
     },
     {
@@ -143,21 +143,21 @@
       "id": "T1.20",
       "name": "T1.20_wokwi_toml_syntax_and_chip_mapping",
       "status": "PASSED",
-      "durationMs": 0,
+      "durationMs": 1,
       "tier": 1
     },
     {
       "id": "T1.21",
       "name": "T1.21_wokwi_toml_binary_files_exist",
       "status": "PASSED",
-      "durationMs": 1,
+      "durationMs": 2,
       "tier": 1
     },
     {
       "id": "T1.22",
       "name": "T1.22_manifest_controls_camelcase_and_types",
       "status": "PASSED",
-      "durationMs": 1,
+      "durationMs": 0,
       "tier": 1
     },
     {
@@ -171,7 +171,7 @@
       "id": "T2.02",
       "name": "T2.02_adxl345_spi_mode3_clock_polarity_phase",
       "status": "PASSED",
-      "durationMs": 2,
+      "durationMs": 3,
       "tier": 2
     },
     {
@@ -185,42 +185,42 @@
       "id": "T2.04",
       "name": "T2.04_adxl345_spi_write_power_ctl_register",
       "status": "PASSED",
-      "durationMs": 3,
+      "durationMs": 6,
       "tier": 2
     },
     {
       "id": "T2.05",
       "name": "T2.05_adxl345_spi_write_data_format_register",
       "status": "PASSED",
-      "durationMs": 4,
+      "durationMs": 3,
       "tier": 2
     },
     {
       "id": "T2.06",
       "name": "T2.06_adxl345_spi_write_bw_rate_register",
       "status": "PASSED",
-      "durationMs": 5,
+      "durationMs": 3,
       "tier": 2
     },
     {
       "id": "T2.07",
       "name": "T2.07_adxl345_burst_read_header_0xF2",
       "status": "PASSED",
-      "durationMs": 5,
+      "durationMs": 3,
       "tier": 2
     },
     {
       "id": "T2.08",
       "name": "T2.08_adxl345_burst_read_returns_6_bytes",
       "status": "PASSED",
-      "durationMs": 4,
+      "durationMs": 3,
       "tier": 2
     },
     {
       "id": "T2.09",
       "name": "T2.09_adxl345_z_axis_reflects_1g_gravity",
       "status": "PASSED",
-      "durationMs": 3,
+      "durationMs": 2,
       "tier": 2
     },
     {
@@ -234,63 +234,63 @@
       "id": "T2.11",
       "name": "T2.11_n20_tachometer_unpowered_recheck_interval",
       "status": "PASSED",
-      "durationMs": 4,
+      "durationMs": 8,
       "tier": 2
     },
     {
       "id": "T2.12",
       "name": "T2.12_n20_tachometer_nominal_600rpm_frequency",
       "status": "PASSED",
-      "durationMs": 4,
+      "durationMs": 8,
       "tier": 2
     },
     {
       "id": "T2.13",
       "name": "T2.13_n20_tachometer_boundary_300rpm_frequency",
       "status": "PASSED",
-      "durationMs": 8,
+      "durationMs": 9,
       "tier": 2
     },
     {
       "id": "T2.14",
       "name": "T2.14_n20_tachometer_boundary_1200rpm_frequency",
       "status": "PASSED",
-      "durationMs": 18,
+      "durationMs": 11,
       "tier": 2
     },
     {
       "id": "T2.15",
       "name": "T2.15_n20_tachometer_clamping_underflow",
       "status": "PASSED",
-      "durationMs": 10,
+      "durationMs": 9,
       "tier": 2
     },
     {
       "id": "T2.16",
       "name": "T2.16_imbalance_mass_sweep_0g_baseline",
       "status": "PASSED",
-      "durationMs": 12,
+      "durationMs": 6,
       "tier": 2
     },
     {
       "id": "T2.17",
       "name": "T2.17_imbalance_mass_sweep_3_5g_nominal",
       "status": "PASSED",
-      "durationMs": 11,
+      "durationMs": 5,
       "tier": 2
     },
     {
       "id": "T2.18",
       "name": "T2.18_imbalance_mass_sweep_5_0g_maximum",
       "status": "PASSED",
-      "durationMs": 7,
+      "durationMs": 6,
       "tier": 2
     },
     {
       "id": "T3.01",
       "name": "T3.01_diagram_json_schema_validation",
       "status": "PASSED",
-      "durationMs": 2,
+      "durationMs": 4,
       "tier": 3
     },
     {
@@ -311,14 +311,14 @@
       "id": "T3.04",
       "name": "T3.04_diagram_contains_n20_motor",
       "status": "PASSED",
-      "durationMs": 0,
+      "durationMs": 1,
       "tier": 3
     },
     {
       "id": "T3.05",
       "name": "T3.05_diagram_contains_rgb_status_led",
       "status": "PASSED",
-      "durationMs": 1,
+      "durationMs": 0,
       "tier": 3
     },
     {
@@ -332,14 +332,14 @@
       "id": "T3.07",
       "name": "T3.07_spi_netlist_sck_gpio18",
       "status": "PASSED",
-      "durationMs": 1,
+      "durationMs": 0,
       "tier": 3
     },
     {
       "id": "T3.08",
       "name": "T3.08_spi_netlist_miso_gpio19",
       "status": "PASSED",
-      "durationMs": 0,
+      "durationMs": 1,
       "tier": 3
     },
     {
@@ -353,7 +353,7 @@
       "id": "T3.10",
       "name": "T3.10_spi_netlist_vcc_3v3_power",
       "status": "PASSED",
-      "durationMs": 1,
+      "durationMs": 0,
       "tier": 3
     },
     {
@@ -367,14 +367,14 @@
       "id": "T3.12",
       "name": "T3.12_tachometer_netlist_gpio4",
       "status": "PASSED",
-      "durationMs": 0,
+      "durationMs": 1,
       "tier": 3
     },
     {
       "id": "T3.13",
       "name": "T3.13_rgb_led_red_netlist_gpio25_220ohm",
       "status": "PASSED",
-      "durationMs": 1,
+      "durationMs": 0,
       "tier": 3
     },
     {
@@ -388,35 +388,35 @@
       "id": "T3.15",
       "name": "T3.15_rgb_led_blue_netlist_gpio27_220ohm",
       "status": "PASSED",
-      "durationMs": 0,
+      "durationMs": 1,
       "tier": 3
     },
     {
       "id": "T3.16",
       "name": "T3.16_12v_domain_isolation_audit",
       "status": "PASSED",
-      "durationMs": 1,
+      "durationMs": 0,
       "tier": 3
     },
     {
       "id": "T4.01",
       "name": "T4.01_e2e_kinematic_and_tachometer_synchronization",
       "status": "PASSED",
-      "durationMs": 18,
+      "durationMs": 22,
       "tier": 4
     },
     {
       "id": "T4.02",
       "name": "T4.02_telemetry_green_zone_normal_vibration",
       "status": "PASSED",
-      "durationMs": 9,
+      "durationMs": 10,
       "tier": 4
     },
     {
       "id": "T4.03",
       "name": "T4.03_telemetry_amber_zone_warning_vibration",
       "status": "PASSED",
-      "durationMs": 5,
+      "durationMs": 3,
       "tier": 4
     },
     {
@@ -444,7 +444,7 @@
       "id": "T4.07",
       "name": "T4.07_simulation_toolchain_dependencies_validation",
       "status": "PASSED",
-      "durationMs": 24,
+      "durationMs": 19,
       "tier": 4
     },
     {

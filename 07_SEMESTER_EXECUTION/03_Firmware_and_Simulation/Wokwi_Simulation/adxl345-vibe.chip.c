@@ -103,8 +103,7 @@ typedef struct {
     uint32_t sample_count;
 } chip_state_t;
 
-/* Static linear memory allocation for framebuffer canvas (64,000 bytes) */
-static uint32_t fb_pixels[FB_TOTAL_PIXELS];
+/* Framebuffer pixel buffer allocated dynamically in render_gy291_board */
 
 /* ========================================================================= */
 /* 2D Graphic Primitives & Bitmap Font Renderers                             */
@@ -307,6 +306,9 @@ static void render_gy291_board(chip_state_t *chip) {
     int w = FB_WIDTH;
     int h = FB_HEIGHT;
 
+    uint32_t *fb_pixels = (uint32_t *)malloc(FB_TOTAL_PIXELS * sizeof(uint32_t));
+    if (!fb_pixels) return;
+
     /* 1. Glossy Royal Blue Soldermask Background */
     draw_rect_fill(fb_pixels, w, h, 0, 0, w, h, COLOR_PCB_BLUE);
 
@@ -481,7 +483,8 @@ static void render_gy291_board(chip_state_t *chip) {
     }
 
     /* Transfer rendered pixel buffer to Wokwi Host Framebuffer */
-    buffer_write(chip->fb, 0, (uint8_t *)fb_pixels, sizeof(fb_pixels));
+    buffer_write(chip->fb, 0, (uint8_t *)fb_pixels, FB_TOTAL_PIXELS * sizeof(uint32_t));
+    free(fb_pixels);
 }
 
 /* ========================================================================= */

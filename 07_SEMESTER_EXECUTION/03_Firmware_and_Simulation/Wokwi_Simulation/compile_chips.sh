@@ -26,6 +26,7 @@ CFLAGS=(
   -Wl,--import-memory
   -Wl,--export-table
   -Wl,--no-entry
+  -Wl,-z,stack-size=8192
   -Wextra
   -O3
   -I"${SCRIPT_DIR}"
