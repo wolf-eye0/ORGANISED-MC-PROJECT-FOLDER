@@ -1,0 +1,30 @@
+{
+  "name": "chip-n20-motor",
+  "author": "Group 8 - VibeGuard",
+  "pins": [
+    "12V",
+    "GND",
+    "TACH",
+    "FAULT"
+  ],
+  "controls": [
+    {
+      "id": "rpm",
+      "label": "Motor Speed (RPM)",
+      "type": "range",
+      "min": 300,
+      "max": 1200,
+      "step": 10,
+      "value": 600
+    },
+    {
+      "id": "imbalance",
+      "label": "Eccentric Mass (g)",
+      "type": "range",
+      "min": 0,
+      "max": 5,
+      "step": 0.1,
+      "value": 3.5
+    }
+  ]
+}

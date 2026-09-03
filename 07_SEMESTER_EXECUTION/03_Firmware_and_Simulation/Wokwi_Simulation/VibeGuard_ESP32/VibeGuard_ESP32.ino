@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "schema_types.h"
 #include <SPI.h>
 #include <vector>
 #include <cmath>
@@ -16,6 +17,13 @@
 #define PIN_LED_RED            25
 #define PIN_LED_GREEN          26
 #define PIN_LED_BLUE           27
+#define PIN_MOTOR_TACH         4
+
+volatile uint32_t g_tach_pulse_count = 0;
+void IRAM_ATTR on_tach_pulse() {
+    g_tach_pulse_count++;
+}
+
 
 // ADXL345 Register Map
 #define ADXL345_REG_DEVID      0x00
@@ -37,33 +45,7 @@
 #define RMS_WARNING_THRESHOLD  0.35f
 #define RMS_ANOMALY_THRESHOLD  0.70f
 
-// ============================================================================
-// 2. ENUMS & DATA STRUCTURES
-// ============================================================================
-enum class SystemState : uint8_t {
-    StartSelfCheck = 0,
-    Calibrating    = 1,
-    Normal         = 2,
-    Abnormal       = 3,
-    FaultInvalid   = 4
-};
-
-struct PersistenceParams {
-    int k_required;
-    int m_window;
-    int k_clear_required;
-    bool require_consecutive;
-};
-
-struct WindowHistory {
-    std::vector<bool> is_above_threshold;
-};
-
-struct AccelGData {
-    float x;
-    float y;
-    float z;
-};
+// Types imported from schema_types.h
 
 // ============================================================================
 // 3. ADXL345 4-WIRE HARDWARE SPI DRIVER
@@ -390,7 +372,11 @@ void setup() {
     pinMode(PIN_LED_RED,   OUTPUT);
     pinMode(PIN_LED_GREEN, OUTPUT);
     pinMode(PIN_LED_BLUE,  OUTPUT);
+    pinMode(PIN_MOTOR_TACH, INPUT_PULLDOWN);
+    attachInterrupt(digitalPinToInterrupt(PIN_MOTOR_TACH), on_tach_pulse, RISING);
     setRGB(false, false, true); // Solid Blue during boot
+    Serial.println("[INIT] N20 Motor Tachometer Input Active on GPIO 4");
+
 
     Serial.print("[INIT] Connecting to ADXL345 (4-Wire SPI CS=5, SCK=18, MISO=19, MOSI=23)... ");
     bool ok = accel.begin();
@@ -445,14 +431,31 @@ void loop() {
     current_state = update_state(current_state, true, true, enter_abn, clear_abn, false);
     updateIndicator(current_state, v_rms);
 
-    Serial.printf(">VRMS:%.3f,PeakFreq:%.1f,PeakMag:%.3f,State:%d\n",
-                  v_rms, peak_freq, peak_mag, static_cast<int>(current_state));
+    static uint32_t last_tach_calc_ms = 0;
+    static float measured_rpm = 600.0f;
+    uint32_t now_ms = millis();
+    if (now_ms - last_tach_calc_ms >= 500) {
+        noInterrupts();
+        uint32_t pulses = g_tach_pulse_count;
+        g_tach_pulse_count = 0;
+        interrupts();
+        if (now_ms > last_tach_calc_ms) {
+            measured_rpm = ((float)pulses * 60000.0f) / (float)(now_ms - last_tach_calc_ms);
+        }
+        last_tach_calc_ms = now_ms;
+    }
 
-    Serial.print("[TELEMETRY] Vector RMS: ");
+    Serial.printf(">VRMS:%.3f,PeakFreq:%.1f,PeakMag:%.3f,RPM:%.0f,State:%d\n",
+                  v_rms, peak_freq, peak_mag, measured_rpm, static_cast<int>(current_state));
+
+    Serial.print("[TELEMETRY] Motor: ");
+    Serial.print(measured_rpm, 0);
+    Serial.print(" RPM | Vector RMS: ");
     Serial.print(v_rms, 3);
     Serial.print(" g | Dominant Freq: ");
     Serial.print(peak_freq, 1);
     Serial.print(" Hz | Status: [");
     Serial.print(stateToString(current_state));
     Serial.println("]");
+
 }
