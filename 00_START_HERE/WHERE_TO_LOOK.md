@@ -42,7 +42,7 @@ Use the [Semester Execution Playbook](../07_SEMESTER_EXECUTION/01_Selected_Proje
 
 Use the [Procurement, Component Acceptance and Lab Setup Checklist](../07_SEMESTER_EXECUTION/02_BOM_and_Procurement/CURRENT/VibeGuard_Procurement_Component_Acceptance_and_Lab_Setup_Checklist.md).
 
-**THIS is the current primary purchasing/BOM authority for Phase 4.** Seller stock, delivery, price, electrical documentation and exact module identity must still be rechecked on the order date. A price snapshot is not permanent approval.
+**THIS is the current primary purchasing/BOM authority for Phase 4.** For the complete market study, vendor investigation (Robu.in / Robocraze) and Kerala delivery logistics, refer to [`VibeGuard_Hardware_Procurement_Plan.docx`](../07_SEMESTER_EXECUTION/02_BOM_and_Procurement/CURRENT/VibeGuard_Hardware_Procurement_Plan.docx). Seller stock, delivery, price, electrical documentation and exact module identity must still be rechecked on the order date. A price snapshot is not permanent approval.
 
 ## I need to record a lab session or experiment
 

@@ -30,6 +30,11 @@ All four execution documents are revision 1.1.
 
 These four documents are the current Phase 4 execution baseline. They are subordinate to current governance and the final technical architecture authority.
 
+## Supporting procurement investigation
+
+- `07_SEMESTER_EXECUTION/02_BOM_and_Procurement/CURRENT/VibeGuard_Hardware_Procurement_Plan.docx`  
+  Comprehensive market investigation, vendor-consolidation strategy (Robu.in and Robocraze), delivery logistics for Kerala, and technical component verification report supporting the procurement baseline.
+
 Revision 1.1 synchronizes the team development model: Sreeprada's secondary track is supervised firmware/data/coding learning with Sreehari; Archa's secondary track is hardware familiarization with Amith. Their independent primary roles remain unchanged.
 
 The controlled Master Manual v1.0 remains a historical controlled release and is not the day-to-day Phase 4 execution manual.

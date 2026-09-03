@@ -1,0 +1,71 @@
+{
+  "hann_window": {
+    "w_0": 0,
+    "w_1": 0.000151783,
+    "w_center_127": 0.999962,
+    "w_center_128": 0.999962,
+    "w_last": 0,
+    "coherent_gain": 0.498047,
+    "rms_gain": 0.611175,
+    "symmetric": true
+  },
+  "dc_removal": {
+    "values": [-2, -1, 0, 1, 2],
+    "mean_after": 0
+  },
+  "rms": {
+    "rms_x": 0.700671,
+    "rms_y": 0.713484,
+    "rms_z_raw": 1.01868,
+    "rms_z_ac": 0.141884,
+    "vector_rms_raw": 1.42748,
+    "vector_rms_ac": 1.01002,
+    "theoretical_rms_sine_1g": 0.707107
+  },
+  "fft_tests": [
+    {
+      "target_freq": 5,
+      "detected_freq": 6.25,
+      "detected_mag": 0.452093,
+      "delta_f": 3.125
+    },
+    {
+      "target_freq": 10,
+      "detected_freq": 9.375,
+      "detected_mag": 0.485568,
+      "delta_f": 3.125
+    },
+    {
+      "target_freq": 15.625,
+      "detected_freq": 15.625,
+      "detected_mag": 0.498027,
+      "delta_f": 3.125
+    },
+    {
+      "target_freq": 20,
+      "detected_freq": 18.75,
+      "detected_mag": 0.449048,
+      "delta_f": 3.125
+    },
+    {
+      "target_freq": 50,
+      "detected_freq": 50,
+      "detected_mag": 0.498045,
+      "delta_f": 3.125
+    },
+    {
+      "target_freq": 100,
+      "detected_freq": 100,
+      "detected_mag": 0.498046,
+      "delta_f": 3.125
+    }
+  ],
+  "persistence_tests": {
+    "seq_2_of_5": false,
+    "seq_3_of_5_non_consec": true,
+    "seq_3_of_5_consec_mode": false,
+    "seq_3_consecutive": true,
+    "clear_2_of_3_clean": false,
+    "clear_3_of_3_clean": true
+  }
+}

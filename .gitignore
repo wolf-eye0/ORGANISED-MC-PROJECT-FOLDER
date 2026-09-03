@@ -1,0 +1,11 @@
+# Portable compiler toolchain, IDE binaries, and build artifacts
+07_SEMESTER_EXECUTION/03_Firmware_and_Simulation/VSCode_Wokwi_Environment/
+**/build/
+**/.cache/
+*.metadata.json
+
+# Lock files and system caches
+.~lock.*
+*.log
+.agents/
+.DS_Store
