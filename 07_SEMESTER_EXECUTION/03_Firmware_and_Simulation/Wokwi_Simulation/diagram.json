@@ -65,6 +65,13 @@
       "top": 380,
       "left": 130,
       "attrs": { "common": "cathode" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz1",
+      "top": 360,
+      "left": 310,
+      "attrs": { "volume": "0.5" }
     }
   ],
   "connections": [
@@ -84,7 +91,9 @@
     [ "r_green:2", "status_rgb:G", "green", [ "v0" ] ],
     [ "esp:27", "r_blue:1", "blue", [ "h-40", "v280", "h120" ] ],
     [ "r_blue:2", "status_rgb:B", "blue", [ "v0" ] ],
-    [ "status_rgb:COM", "esp:GND.2", "black", [ "v30", "h-150", "v-200" ] ]
+    [ "status_rgb:COM", "esp:GND.2", "black", [ "v30", "h-150", "v-200" ] ],
+    [ "esp:14", "bz1:2", "purple", [ "h-10", "v250", "h320" ] ],
+    [ "bz1:1", "esp:GND.2", "black", [ "v20", "h-330", "v-170" ] ]
   ],
   "dependencies": {}
 }

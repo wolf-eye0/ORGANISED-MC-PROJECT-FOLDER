@@ -1,3 +1,12 @@
+static void simple_itoa(int val, char *buf) {
+  if (val == 0) { buf[0] = '0'; buf[1] = 0; return; }
+  char temp[16];
+  int i = 0, j = 0;
+  if (val < 0) { buf[j++] = '-'; val = -val; }
+  while (val > 0) { temp[i++] = (char)('0' + (val % 10)); val /= 10; }
+  while (i > 0) { buf[j++] = temp[--i]; }
+  buf[j] = 0;
+}
 #include "wokwi-api.h"
 #include <stdint.h>
 #include <stdbool.h>
@@ -8,8 +17,8 @@ void *malloc(size_t size);
 void *calloc(size_t nmemb, size_t size);
 void free(void *ptr);
 void *memset(void *s, int c, size_t n);
-int snprintf(char *str, size_t size, const char *format, ...);
-int printf(const char *format, ...);
+
+
 float sinf(float x);
 float cosf(float x);
 float atan2f(float y, float x);
@@ -235,7 +244,15 @@ static void render_motor_display(n20_motor_t *chip) {
   if (imb_val > 5.0f) imb_val = 5.0f;
 
   char rpm_buf[20];
-  snprintf(rpm_buf, sizeof(rpm_buf), "%d RPM", (int)roundf(rpm_val));
+  char num_buf[16];
+  simple_itoa((int)roundf(rpm_val), num_buf);
+  int r_idx = 0;
+  for (int k = 0; num_buf[k]; k++) rpm_buf[r_idx++] = num_buf[k];
+  rpm_buf[r_idx++] = ' ';
+  rpm_buf[r_idx++] = 'R';
+  rpm_buf[r_idx++] = 'P';
+  rpm_buf[r_idx++] = 'M';
+  rpm_buf[r_idx] = 0;
   draw_string(chip, 108, 3, rpm_buf, COLOR_RGB(251, 191, 36));
 
   // Footer Status Indicator
@@ -250,7 +267,17 @@ static void render_motor_display(n20_motor_t *chip) {
   char imb_buf[20];
   int imb_int = (int)imb_val;
   int imb_dec = (int)((imb_val - (float)imb_int) * 10.0f + 0.5f);
-  snprintf(imb_buf, sizeof(imb_buf), "M=%d.%1dg", imb_int, imb_dec);
+  char i_int[8], i_dec[8];
+  simple_itoa(imb_int, i_int);
+  simple_itoa(imb_dec, i_dec);
+  int m_idx = 0;
+  imb_buf[m_idx++] = 'M';
+  imb_buf[m_idx++] = '=';
+  for (int k = 0; i_int[k]; k++) imb_buf[m_idx++] = i_int[k];
+  imb_buf[m_idx++] = '.';
+  for (int k = 0; i_dec[k]; k++) imb_buf[m_idx++] = i_dec[k];
+  imb_buf[m_idx++] = 'g';
+  imb_buf[m_idx] = 0;
   draw_string(chip, 110, 90, imb_buf, COLOR_RGB(203, 213, 225));
 
   // =========================================================================
@@ -623,5 +650,4 @@ void chip_init(void) {
   // Start initial timer
   timer_start(chip->pulse_timer, 50000, false);
 
-  printf("[N20-MOTOR] Authentic 12V DC Gear Motor Initialized (600 RPM, 3.5g Eccentric Hub, 160x100 Display)\n");
-}
+  }

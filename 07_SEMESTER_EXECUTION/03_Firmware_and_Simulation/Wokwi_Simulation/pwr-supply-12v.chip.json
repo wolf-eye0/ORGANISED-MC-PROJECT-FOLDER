@@ -1,5 +1,5 @@
 {
-  "name": "chip-pwr-supply-12v",
+  "name": "pwr-supply-12v",
   "author": "Group 8 - VibeGuard",
   "pins": [
     "12V_OUT",

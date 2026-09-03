@@ -18,6 +18,8 @@
 #define PIN_LED_GREEN          26
 #define PIN_LED_BLUE           27
 #define PIN_MOTOR_TACH         4
+#define PIN_BUZZER             14
+
 
 volatile uint32_t g_tach_pulse_count = 0;
 void IRAM_ATTR on_tach_pulse() {
@@ -321,8 +323,10 @@ void updateIndicator(SystemState state, float v_rms) {
     case SystemState::StartSelfCheck:
     case SystemState::Calibrating:
         setRGB(false, false, true); // Solid Blue
+        noTone(PIN_BUZZER);
         break;
     case SystemState::Normal:
+        noTone(PIN_BUZZER);
         if (v_rms > RMS_WARNING_THRESHOLD) {
             setRGB(true, true, false); // Amber / Yellow
         } else {
@@ -331,12 +335,15 @@ void updateIndicator(SystemState state, float v_rms) {
         break;
     case SystemState::Abnormal:
         setRGB(true, false, false); // Solid Red Alarm
+        tone(PIN_BUZZER, 2400);     // 2.4 kHz acoustic alert tone
         break;
     case SystemState::FaultInvalid:
         setRGB(true, false, (millis() / 250) % 2 == 0); // Pulsing Purple
+        noTone(PIN_BUZZER);
         break;
     }
 }
+
 
 // Fallback synthetic generator (used only if SPI hardware is disconnected)
 void generate_simulated_vibration(AccelGData& g, float fault_level) {
@@ -372,10 +379,13 @@ void setup() {
     pinMode(PIN_LED_RED,   OUTPUT);
     pinMode(PIN_LED_GREEN, OUTPUT);
     pinMode(PIN_LED_BLUE,  OUTPUT);
+    pinMode(PIN_BUZZER,    OUTPUT);
     pinMode(PIN_MOTOR_TACH, INPUT_PULLDOWN);
     attachInterrupt(digitalPinToInterrupt(PIN_MOTOR_TACH), on_tach_pulse, RISING);
     setRGB(false, false, true); // Solid Blue during boot
     Serial.println("[INIT] N20 Motor Tachometer Input Active on GPIO 4");
+    Serial.println("[INIT] Acoustic Alarm Sounder Active on GPIO 14");
+
 
 
     Serial.print("[INIT] Connecting to ADXL345 (4-Wire SPI CS=5, SCK=18, MISO=19, MOSI=23)... ");

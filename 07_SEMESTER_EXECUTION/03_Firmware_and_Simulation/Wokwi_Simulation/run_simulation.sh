@@ -11,4 +11,5 @@ echo "=================================================="
 "$ENV_DIR/VSCode-linux-x64/bin/code" \
   --extensions-dir "$ENV_DIR/extensions" \
   --user-data-dir "$ENV_DIR/user-data" \
-  "$SCRIPT_DIR/diagram.json" "$SCRIPT_DIR"
+  "$SCRIPT_DIR" "$SCRIPT_DIR/diagram.json"
+

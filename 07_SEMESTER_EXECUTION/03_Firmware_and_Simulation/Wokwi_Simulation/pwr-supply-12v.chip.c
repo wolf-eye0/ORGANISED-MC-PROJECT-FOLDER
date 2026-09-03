@@ -2,7 +2,7 @@
 
 typedef unsigned long size_t;
 void *calloc(size_t nmemb, size_t size);
-int printf(const char *format, ...);
+
 
 #define FB_WIDTH  140
 #define FB_HEIGHT 90
@@ -538,6 +538,4 @@ void chip_init(void) {
   chip->poll_timer = timer_init(&timer_cfg);
   timer_start(chip->poll_timer, 20000, false);
 
-  printf("[PWR-SUPPLY-12V] Authentic 12V DC Power Supply & Barrel Jack Initialized (%s)\n",
-         chip->power_state ? "ON / 12V ACTIVE" : "OFF / 0V ISOLATED");
-}
+  }

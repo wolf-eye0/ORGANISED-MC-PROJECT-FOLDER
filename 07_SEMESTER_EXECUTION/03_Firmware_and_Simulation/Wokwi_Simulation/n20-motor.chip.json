@@ -1,5 +1,5 @@
 {
-  "name": "chip-n20-motor",
+  "name": "n20-motor",
   "author": "Group 8 - VibeGuard",
   "pins": [
     "12V_IN",
