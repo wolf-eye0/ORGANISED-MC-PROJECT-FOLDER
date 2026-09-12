@@ -48,3 +48,12 @@
    * *Answer*: At 800 samples/sec $\times$ 3 axes $\times$ 2 bytes = 4.8 KB/s of continuous raw binary data. Transmitting raw waveforms over Wi-Fi incurs packet drops, latency, and power overhead. Running DC removal, Vector RMS, and Hann-windowed FFT on the ESP32 dual-core Xtensa extracts diagnostic insights locally in under 1.25 ms.
 3. **What Is the Mathematical Unbalance Model?**
    * *Answer*: Mechanical unbalance produces a synchronous 1X rotating centrifugal force $F = m \cdot r \cdot \omega^2$. For our 600 RPM N20 motor, $\omega = 2\pi(10.0\text{ rad/s})$, creating a distinct 10.0 Hz sinusoidal vibration signature in the orthogonal X-Y accelerometer plane.
+
+---
+
+## 5. Phase 4 Engineering Revision Addendum: Pinout Harmonization & Hardware Audit
+Following the official First Review presentation submission, the Phase 4 hardware compatibility audit (`VG-AUDIT-HW-7SEMI-001`) finalized the physical wiring and peripheral safety baseline:
+1. **SPI Chip Select (CS) Remapping:** Slide 17 originally illustrated the default VSPI CS pin on GPIO5. To eliminate bootloader SDIO strapping conflicts (GPIO5 is an active boot strapping pin that controls SDIO timing and can cause boot failure or log corruption if pulled low by peripherals during reset), CS was formally remapped to non-strapping pin **GPIO21** across all production firmware (`adxl345_spi.h`), Wokwi simulation (`diagram.json`), and the 3D Digital Twin.
+2. **RGB Status Indicator Channel Standardization:** To align with common-cathode LED pin order and software state logic, LED channels are standardized to **Green: GPIO25 (Normal State)**, **Blue: GPIO26 (Calibrating / Boot)**, and **Red: GPIO27 (Abnormal Alarm)**.
+3. **Drop-in MCU Alternative Certification:** The **7Semi ESP32-DEVKIT-E** development board (carrying an ESP32-WROOM-32E module, Silicon Labs CP2102 USB-to-UART bridge, and AMS1117-3.3 LDO) was certified as a 100% pin-compatible drop-in alternative to the Espressif DevKitC-32E, subject to mandatory 100 µF low-ESR bulk + 100 nF ceramic bypass capacitor installation across the 3.3V/GND rail and dual-breadboard bridged mounting.
+

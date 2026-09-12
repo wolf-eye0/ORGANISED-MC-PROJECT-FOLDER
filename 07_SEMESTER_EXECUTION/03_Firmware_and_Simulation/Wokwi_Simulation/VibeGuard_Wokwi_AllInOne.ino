@@ -8,14 +8,14 @@
 // ============================================================================
 // 1. HARDWARE PIN DEFINITIONS (BOM-FROZEN PINOUT)
 // ============================================================================
-#define ADXL345_PIN_CS         5
+#define ADXL345_PIN_CS         21
 #define ADXL345_PIN_SCK        18
 #define ADXL345_PIN_MISO       19
 #define ADXL345_PIN_MOSI       23
 
-#define PIN_LED_RED            25
-#define PIN_LED_GREEN          26
-#define PIN_LED_BLUE           27
+#define PIN_LED_GREEN          25
+#define PIN_LED_BLUE           26
+#define PIN_LED_RED            27
 
 // ADXL345 Register Map
 #define ADXL345_REG_DEVID      0x00

@@ -3,8 +3,8 @@
 
 #include <cstdint>
 
-// Standard ESP32 VSPI Default Pinout
-#define ADXL345_PIN_CS    5
+// VibeGuard SPI Pinout (VSPI with CS remapped to GPIO21 to avoid strapping-pin GPIO5)
+#define ADXL345_PIN_CS    21
 #define ADXL345_PIN_SCK   18
 #define ADXL345_PIN_MISO  19
 #define ADXL345_PIN_MOSI  23

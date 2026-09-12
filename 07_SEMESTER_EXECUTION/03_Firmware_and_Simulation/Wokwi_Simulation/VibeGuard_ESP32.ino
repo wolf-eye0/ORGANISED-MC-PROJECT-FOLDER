@@ -5,11 +5,11 @@
 #include "adxl345_spi.h"
 
 // ==========================================
-// Hardware Pin Definitions
+// Hardware Pin Definitions (Frozen Baseline)
 // ==========================================
-#define PIN_LED_RED    25
-#define PIN_LED_GREEN  26
-#define PIN_LED_BLUE   27
+#define PIN_LED_GREEN  25
+#define PIN_LED_BLUE   26
+#define PIN_LED_RED    27
 
 // ==========================================
 // DSP & Sampling Configuration

@@ -174,9 +174,9 @@ Before programming, create these pending records:
 
 1. Inventory reusable lab items first. Give each reusable item a component/equipment ID and condition note; never assume it is available.
 2. Reopen each preferred and backup URL on order day. Record seller, exact title/MPN, SKU, quantity, unit price including/excluding GST, stock text, delivery estimate, shipping, URL and timestamp.
-3. Resolve variants before carting: preferred MCU must be exact Espressif `ESP32-DEVKITC-32E`; the ADXL listing must expose SPI pins; motor must be 12 V, approximately 600 RPM, compact and capable of positive shaft coupling; adapter must be enclosed 12 V DC.
+3. Resolve variants before carting: preferred MCU is the certified 7Semi ESP32-DEVKIT-E (or Espressif `ESP32-DEVKITC-32E` per `VG-AUDIT-HW-7SEMI-001`); the ADXL listing must expose SPI pins; motor must be 12 V, approximately 600 RPM, compact and capable of positive shaft coupling; adapter must be enclosed 12 V DC (12V 2A).
 4. Price core items plus wiring/protection/base/guard/fasteners and shipping. If projected total exceeds ₹5,000, stop and seek owner/team approval rather than deleting safety items.
-5. Order long-lead/critical items first: MCU and sensor; then motor/supply; then safety/mechanical and passives. Consolidate sellers only if exact parts and return terms remain acceptable.
+5. Order long-lead/critical items across the four reconciled sourcing channels: Robocraze Order 1 (Confirmed #TJFKQXJUQ: ADXL345 module, 600 RPM 12V N20 motor with cable, 12V 2A power adapter, Micro-USB data cable, RGB LED 10-pack, N20 mounting bracket; ₹868.00); Robu.in Order 2 (Confirmed: KCD1 rocker switch, 5×20mm fuse holders x2, 1A time-delay fuses x8, 330 Ω resistors x52; ₹350.98); Robocraze Order 3 (Planned: 7Semi ESP32-DEVKIT-E, DC barrel jack screw adapter; ~₹755.00); and College Lab Requisition (Cart C zero-cost: MB102 breadboard, 15 DuPont jumpers, 100 µF bulk capacitor, 100 nF ceramic capacitor, 1N4007 flyback diode, 220 Ω resistors). Consolidate sellers only if exact parts and return terms remain acceptable.
 6. Save cart capture before purchase and invoice/order confirmation after an authorized team member actually orders. Do not mark `PURCHASED` from a product page alone.
 7. Track dispatch/delivery and return deadline. Plan one spare ADXL345 only if budget and first-unit acceptance justify it; low-cost LED/resistor/fastener spares are preferred.
 
@@ -227,7 +227,7 @@ Before programming, create these pending records:
 
 **People:** Sreehari owns firmware/toolchain decisions and mentors Sreeprada; Nihad reviews; Amith backs up interfaces; Sreeprada shadows Arduino IDE, reviewed upload, identity and serial capture and may progressively execute approved steps; Archa documents evidence.
 
-**Prerequisites/inputs:** Accepted/conditionally accepted exact ESP32 board, data-capable USB cable, official DevKitC guide, two computers if possible.
+**Prerequisites/inputs:** Accepted/conditionally accepted exact ESP32 board (Espressif `ESP32-DEVKITC-32E` or certified `7Semi ESP32-DEVKIT-E` drop-in equivalent per `VG-AUDIT-HW-7SEMI-001`), data-capable USB cable, official DevKitC guide, two computers if possible.
 
 **Exact actions:**
 
@@ -259,7 +259,7 @@ Before programming, create these pending records:
 
 **Prerequisites/inputs:** Stage 3 pass; accepted ADXL module; exact board accepted; short wires/breadboard; proposed `PIN-001`; official ADXL345 data sheet.
 
-**Exact wiring for preferred DevKitC-32E (pending pin-map gate):** 3V3→VCC, GND→GND, GPIO18→SCLK, GPIO23→SDI/MOSI, GPIO19←SDO/MISO, GPIO21→CS, optional GPIO4←INT1. Each RGB channel later uses its own measured/selected resistor. If the exact board differs, stop and create a new map from official documentation.
+**Exact wiring for preferred DevKitC-32E (and certified 7Semi DEVKIT-E per `VG-AUDIT-HW-7SEMI-001`, pending pin-map gate):** 3V3→VCC, GND→GND, GPIO18→SCLK, GPIO23→SDI/MOSI, GPIO19←SDO/MISO, GPIO21→CS (intentionally avoiding strapping pin GPIO5), optional GPIO4←INT1. Each RGB channel later uses its own measured/selected resistor (Green: GPIO25, Blue: GPIO26, Red: GPIO27). For 7Semi board, mandatory 100 µF bulk + 100 nF ceramic bypass capacitors must be installed across 3V3/GND per audit specification, with dual-breadboard bridged mounting. If the exact board differs, stop and create a new map from official documentation.
 
 **Exact actions:**
 
@@ -296,7 +296,7 @@ Before programming, create these pending records:
 **Exact actions:**
 
 1. Draw and dimension `RIG-001`: base material/mass/dimensions, foot/clamp arrangement, motor position/fasteners, guard envelope, switch/disconnect, power connector and cable paths.
-2. Build the motor circuit separately from logic: enclosed 12 V adapter → accessible disconnect/switch → fuse → motor. Confirm polarity. Do not connect to ESP32 power.
+2. Build the motor circuit separately from logic: enclosed 12 V 2A adapter (Robocraze Order 1) → DC barrel jack screw adapter (Robocraze Order 3) → accessible KCD1 rocker switch (Robu.in Order 2) → 5×20 mm fuse holder with 1A time-delay cartridge fuse (Robu.in Order 2) → N20 gear motor (Robocraze Order 1) with 1N4007 flyback clamp diode (`D-DIODE-1N4007`, College Lab Cart C) soldered directly across motor terminals in reverse bias (cathode to +12V). Confirm polarity. Ensure strict galvanic isolation between 12V motor ground and ESP32 logic ground (continuity must measure open circuit $\infty\ \Omega$). Do not connect to ESP32 power.
 3. Clamp/bolt motor and base. Pull-test wiring/strain relief with power removed. Verify shaft rotates without guard contact.
 4. Design a rigid accelerometer bracket with defined orientation and fasteners or a documented rigid adhesive method. The sensor must not sit on a solderless breadboard during vibration runs. Record mount dimensions, surface preparation and cure time.
 5. Build the abnormal fixture using positive mechanical retention (set-screw/clamp/keyed hub plus captive bolt/nyloc or equivalent). Assign mass and fastener component IDs. Tape, hot glue, binder clips, loose washers and press-fit-only attachments are rejected.

@@ -111,29 +111,37 @@ The initial acquisition setting is an **ENGINEERING RECOMMENDATION**: full-resol
 
 ### ESP32 development board
 
-The preferred exact board is the Espressif `ESP32-DEVKITC-32E` containing an ESP32-WROOM-32E module. The official DevKitC V4 documentation identifies its Micro-USB port as both power and USB-to-UART communication and warns that Micro-USB, 5 V/GND-header and 3.3 V/GND-header power options are mutually exclusive. Only one board-power method may be used. [[Espressif ESP32-DevKitC V4 user guide](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32/esp32-devkitc/user_guide.html), accessed 2026-08-09]
+The finalized hardware baseline is the **7Semi ESP32-DEVKIT-E** development board (carrying an Espressif ESP32-WROOM-32E module, Silicon Labs CP2102 USB-to-UART bridge, AMS1117-3.3 linear regulator, and 38-pin DevKitC V4 physical header layout), certified under `VG-AUDIT-HW-7SEMI-001`. The Espressif `ESP32-DEVKITC-32E` remains an approved 100% pin-compatible alternative. To prevent transient voltage sag below the 2.70V Brownout Detector (BOD) threshold (`rst:0x10`) during Wi-Fi bursts and intensive computation, a **100 µF low-ESR bulk electrolytic capacitor in parallel with a 100 nF ceramic bypass capacitor** is installed directly across the 3.3V and GND rails (Header Pins J1-1 and J1-14). Due to the 22.86 mm (0.9-inch) header row pitch, a dual-breadboard joined configuration is used in lab setup to guarantee clear tie-point access on both header sides.
 
-The semester pin map is frozen only after the exact received SKU is accepted. For the preferred DevKitC-32E, the proposed map avoids ESP32 strapping pins for chip select:
+Crucially, the certified 7Semi ESP32-DEVKIT-E carrier introduces **zero changes to the frozen 8-signal pinout (GPIO18, 23, 19, 21, 4, 25, 26, 27) and zero changes to the modular C++ DSP firmware codebase**:
 
-| Signal | Proposed DevKitC-32E pin | Note |
-|---|---:|---|
-| ADXL345 SCLK | GPIO18 | VSPI clock-capable pin |
-| ADXL345 MOSI/SDI | GPIO23 | Controller-to-sensor data |
-| ADXL345 MISO/SDO | GPIO19 | Sensor-to-controller data |
-| ADXL345 CS | GPIO21 | Deliberately avoids GPIO5 strapping-pin dependency |
-| ADXL345 INT1/DATA_READY | GPIO4 | Input; pilot first without interrupt if needed |
-| RGB green | GPIO25 through resistor | Normal |
-| RGB blue | GPIO26 through resistor | Calibrating |
-| RGB red | GPIO27 through resistor | Abnormal |
-| Grounds | Common logic ground | Sensor and RGB logic only |
+| Signal | Frozen Pin | DevKitC V4 / 7Semi Pin | Electrical Function & Description | Firmware Implementation |
+|---|---:|---|---|---|
+| ADXL345 SCLK | GPIO18 | Header J3, Pin 9 | VSPI hardware clock out (2 MHz SPI) | Native hardware SPI clock |
+| ADXL345 MOSI/SDI | GPIO23 | Header J3, Pin 2 | Master Out / Sensor In (Configuration write bursts) | Native hardware SPI MOSI |
+| ADXL345 MISO/SDO | GPIO19 | Header J3, Pin 8 | Master In / Sensor Out (800 Hz burst read 0xF2) | Native hardware SPI MISO |
+| ADXL345 CS | GPIO21 | Header J3, Pin 6 | Active-LOW Chip Select (Deliberately avoids strapping pin GPIO5) | `#define ADXL345_PIN_CS 21` |
+| ADXL345 INT1 | GPIO4 | Header J3, Pin 13 | Optional hardware DATA_READY / Synthetic tachometer in sim | ISR / Polling input |
+| RGB green | GPIO25 | Header J1, Pin 9 | Normal State output via 220/330 Ω resistor | `#define PIN_LED_GREEN 25` |
+| RGB blue | GPIO26 | Header J1, Pin 10 | Calibrating State output via 220/330 Ω resistor | `#define PIN_LED_BLUE 26` |
+| RGB red | GPIO27 | Header J1, Pin 11 | Abnormal State output via 220/330 Ω resistor | `#define PIN_LED_RED 27` |
+| Sensor Power (+3.3V) | 3V3 Rail | Header J1, Pin 1 | Dedicated 3.3V regulated power to ADXL345 VCC | Shared 3.3V Logic Rail |
+| Grounds | GND | Header J1, Pin 14 / J3-1 | Common digital logic ground | Sensor & RGB cathode only |
 
-This table is **PROPOSED FOR APPROVAL**, not proof of completed wiring. If an ESP32-S3 board is authorized, do not reuse these numbers: create a new wiring record from that exact board's official header documentation and a new firmware target.
+This pinout is **FROZEN AND CERTIFIED** across all hardware and simulation layers. All boot strapping pins (GPIO0, 2, 5, 12, 15) and internal SPI flash lines (GPIO6–GPIO11) remain unencumbered, guaranteeing zero boot contention or flash corruption.
 
 ### Motor, supply, base and abnormal fixture
 
-The rig is a test plant, not part of the ESP32 power circuit. The motor uses its own switched and fused 12 V supply. The ESP32 remains USB-powered. The motor must never be powered from the ESP32, its 3.3 V rail or a computer USB port.
+The rig is a test plant, not part of the ESP32 power circuit. The motor uses its own switched and fused 12 V supply. The ESP32 remains USB-powered. The motor must never be powered from the ESP32, its 3.3 V rail or a computer USB port. Strict galvanic isolation is maintained between the 12V motor supply ground and ESP32 logic ground (multimeter continuity must measure open circuit $\infty\ \Omega$).
 
-The preferred current part is a compact 12 V, 600 RPM N20 metal gear motor with a 3 mm D shaft. Retailer speed and mechanical claims are vendor claims; actual no-load current, startup behavior, speed consistency and temperature are **TO BE MEASURED**. A 12 V/1 A plug-in adapter is a starting source, subject to polarity, loaded-voltage and temperature acceptance.
+The motor rig drive train comprises:
+- **Motor:** 12 V, 600 RPM N20 metal gear motor with 3 mm D-shaft and pre-soldered leads (Robocraze Order 1, Confirmed #TJFKQXJUQ).
+- **Mounting:** Heavy metal N20 U-bracket with M2 machine fasteners (Robocraze Order 1).
+- **Power supply:** Enclosed plug-in 12 V DC 2 A regulated power adapter with 5.5×2.1 mm center-positive barrel connector (Robocraze Order 1).
+- **Disconnect switch:** KCD1 12V–24V SPST 2-pin ON-OFF rocker switch (Robu.in Order 2).
+- **Protection fuse:** 5×20 mm inline screw-type covered fuse holder with a 1 A 250 V time-delay (slow-blow) cartridge fuse (Robu.in Order 2), sized to absorb inductive startup inrush.
+- **Inductive clamp diode:** A **1N4007 silicon rectifier diode (`D-DIODE-1N4007`)** soldered directly across the N20 motor terminal tags in reverse-biased polarity (cathode stripe to +12V, anode to GND) for back-EMF flyback suppression during PWM or switch interruption.
+- **DC Jack connector:** 5.5×2.1 mm female DC barrel jack to screw-terminal adapter (Robocraze Order 3).
 
 The abnormal fixture must be repeatable and captive: for example, a clamping/set-screw 3 mm hub or keyed disc carrying an off-axis bolt, washers and a nyloc nut or equivalent positive retention, fully enclosed by a clear guard. Exact mass, radius and fastening method are **TO BE FROZEN AFTER A LOW-ENERGY PILOT**. Tape, hot glue, a binder clip, an unsecured washer, press-fit-only mass or a loose object is prohibited.
 
@@ -478,6 +486,16 @@ Specifications and prices below were checked on 9 August 2026; recheck immediate
 - [Robu: alternate 12 V 600 RPM N20 motor, ₹229 including GST, listed in stock](https://robu.in/product/n20-12v-600-rpm-micro-metal-gear-motor/)
 - [Robocraze: 12 V/1 A adapter, ₹115 including GST, 72 listed](https://robocraze.com/products/12v-1a-power-adapter)
 - [Robocraze: common-cathode RGB LED pack, ₹30 including GST, 4 listed](https://robocraze.com/products/rgb-led-common-cathode-pack-of-10)
+- [7Semi: ESP32-DEVKIT-E development board (ESP32-WROOM-32E, CP2102, 38-pin DevKitC V4), ~₹686 including GST, staged under Robocraze Order 3](https://robocraze.com/)
+- **Reconciled Multi-Channel Procurement Baseline (September 2026):** Sourcing executed across four concrete channels:
+  - **Total Cash Disbursement:** ₹2,124.00 initial project advance.
+  - **Robocraze Order 1 (Confirmed #TJFKQXJUQ):** ₹868.00 (₹743.00 items + ₹125.00 express delivery), 100% fund-settled.
+  - **Robu.in Order 2 (Confirmed):** ₹350.98 (₹201.98 items + ₹149.00 Bluedart Air priority shipping; ₹277.00 funded from project disbursement, ₹73.98 / ~₹74.00 paid out-of-pocket).
+  - **Physical Cash Returned to Lead:** ₹1,106.00 returned to project lead custody (Nihad P C) for controlled Order 3 release.
+  - **Robocraze Order 3 (Planned / To Order):** ~₹755.00 (~₹705.00 items + ~₹50.00 standard shipping) to be funded from returned cash.
+  - **College Lab Requisition (Cart C):** ₹0.00 (Zero-cost institutional laboratory stock).
+  - **Remaining Project Reserve:** ~₹350.00 (~₹351.00 cash in hand; ₹224.00 net reserve after all reimbursements).
+  - **Budget Ceiling Compliance:** Total project expenditure is ₹1,973.98 (disbursed fund commitment: ₹1,900.00), leaving +₹1,026.02 headroom below the ₹3,000.00 preferred target and +₹3,026.02 headroom below the ₹5,000.00 semester ceiling.
 
 ## 23. Unresolved team questions
 

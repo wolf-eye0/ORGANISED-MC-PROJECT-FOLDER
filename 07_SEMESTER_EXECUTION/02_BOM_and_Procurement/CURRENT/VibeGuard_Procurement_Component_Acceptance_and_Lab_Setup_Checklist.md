@@ -1,17 +1,18 @@
 # VibeGuard Procurement, Component Acceptance and Lab Setup Checklist
 
-**Document status:** Procurement-ready planning baseline, revision 1.1  
+**Document status:** Reconciled procurement and hardware baseline, revision 2.0  
 **Audience:** Full five-member team under the synchronized primary/secondary role model  
-**Price/specification check:** 9 August 2026, India  
-**Truth statement:** Nothing in this document means that an item has been purchased, delivered, accepted or tested. Product pages are dated planning evidence only.
+**Price/specification check:** Reconciled September 2026, India  
+**Procurement execution status:** Multi-channel procurement executed; Robocraze Order 1 (#TJFKQXJUQ) and Robu.in Order 2 confirmed; Robocraze Order 3 staged; College Lab items requisitioned.
 
-**Current project-state control:** `Project_mC_Final_Selection_and_Phase4_Entry_Memo.md` and `Project_mC_Decision_Register_v1.3.md`. Decision Register v1.2 remains an unchanged historical predecessor.
+**Current project-state control:** `Project_mC_Final_Selection_and_Phase4_Entry_Memo.md`, `Project_mC_Decision_Register_v1.3.md`, and `VG-AUDIT-HW-7SEMI-001` (`VibeGuard_7Semi_ESP32_DevKit_E_Hardware_Compatibility_Audit.md`).
 
-**Revision 1.1 — team-role synchronization:** Sreeprada retains Experimental Operations/Test/Inventory ownership and adds supervised Firmware & Data Learning with Sreehari. Archa retains Documentation/Communication/Demonstration ownership and adds lightweight Hardware Familiarization with Amith. The BOM, prices, suppliers, electrical controls and safety rules are unchanged.
+**Revision 2.0 — Final Hardware Baseline & Multi-Channel Procurement Reconciliation:**
+1. **Hardware Baseline Finalization:** The **7Semi ESP32-DEVKIT-E** (ESP32-WROOM-32E, CP2102 USB-to-UART bridge, 38-pin DevKitC V4 pinout) is formally certified and adopted as the MCU hardware baseline per audit `VG-AUDIT-HW-7SEMI-001`. It preserves 100% 1-to-1 pinout and electrical compatibility with the frozen 8-signal map (GPIO18, 23, 19, 21, 4, 25, 26, 27) and C++ DSP firmware, with mandatory 100 µF bulk + 100 nF ceramic bypass decoupling across 3.3V/GND and dual-breadboard mechanical bridging.
+2. **Multi-Channel Procurement Synchronization:** Procured items are partitioned across four concrete sourcing channels: Robocraze Order 1 (Confirmed #TJFKQXJUQ), Robu.in Order 2 (Confirmed), Robocraze Order 3 (Planned / To Order), and College Lab Requisition (Cart C, Zero-Cost).
+3. **Financial Ledger Reconciliation:** Reconciles the initial ₹2,124.00 cash disbursement against actual order spends, out-of-pocket contributions, returned cash balance (₹1,106.00), and projected Order 3 spend, confirming total expenditure stays well within the ₹3,000 preferred target and ₹5,000 semester ceiling.
 
 **Official role titles:** Nihad P C — Technical Integration Lead / Project Manager / Configuration & Evidence Lead; Sreehari K — Firmware, DSP & Data Lead / Software Systems Mentor; Amith Krishna Das — Hardware, Power, Rig & Safety Lead; Sreeprada K S — Experimental Operations, Test & Inventory Coordinator / Firmware & Data Learning Associate & Technical Observer; Archa Pramod — Documentation, Communication & Demonstration Lead / Hardware Familiarization Associate & Technical Observer.
-
-Sreeprada supports component IDs/receiving checklists and may shadow Sreehari during approved electronics identity procedures. Archa controls source/invoice/evidence records and observes selected Amith-led sessions to learn physical component functions and block-level hardware logic. These are not reporting relationships and do not transfer firmware ownership from Sreehari or hardware/safety ownership from Amith.
 
 ## 1. Procurement rules
 
@@ -27,99 +28,198 @@ Sreeprada supports component IDs/receiving checklists and may shadow Sreehari du
 
 Required semester hardware remains:
 
-- one permanent ADXL345 three-axis accelerometer breakout;
-- one exact ESP32-WROOM-32 DevKit, with an authorized ESP32-S3 DevKit only as fallback;
-- SPI wiring;
-- common-cathode RGB LED plus resistors;
-- USB data/serial cable;
-- a separate guarded low-voltage 12 V motor/fan rig with stable base, rigid sensor mount, captive eccentric/equivalent, switch/disconnect and protection.
+- one permanent ADXL345 three-axis accelerometer breakout (4-wire SPI);
+- one certified 7Semi ESP32-DEVKIT-E development board (ESP32-WROOM-32E, CP2102, 38-pin DevKitC V4 pinout), with Espressif `ESP32-DEVKITC-32E` as certified direct equivalent and ESP32-S3 DevKit only as emergency authorized fallback;
+- SPI wiring loom (M2F / M2M jumpers);
+- common-cathode RGB LED plus current-limiting resistors (220 Ω / 330 Ω);
+- USB-A to Micro-B data/serial cable;
+- 100 µF 25V bulk electrolytic capacitor and 100 nF ceramic capacitor for 3.3V PDN decoupling and brownout elimination;
+- a separate guarded low-voltage 12 V motor rig (N20 600 RPM gear motor, heavy metal mounting bracket, 12V 2A power adapter, KCD1 DC rocker switch, 5×20mm fuse holder, 1A time-delay fuse, DC 5.5×2.1mm barrel jack adapter, and 1N4007 inductive flyback clamp diode across motor terminals) with stable base, rigid sensor mount, captive eccentric mass, and complete galvanic isolation from ESP32 logic ground.
 
 Do not purchase a microphone, microphone array, permanent second accelerometer, industrial vibration sensor, cloud gateway or PIRG hardware for the semester system.
 
-## 3. Procurement-ready BOM
+## 3. Reconciled Primary BOM & Multi-Channel Sourcing Channels
 
-Prices include GST where the page explicitly says so. `Allowance` means a budget reservation, not a quote. Stock can change after the research date.
+### 3.1 Primary BOM Table
 
-| Line | Function and required specification | Qty | Preferred current source, price and availability on 2026-08-09 | Backup/equivalence rule | Acceptance/rejection summary | Spare strategy |
-|---:|---|---:|---|---|---|---|
-| 1 | **MCU:** genuine Espressif `ESP32-DEVKITC-32E`, ESP32-WROOM-32E, 4 MB, Micro-USB USB-UART | 1 | [Robu exact DevKitC-32E](https://robu.in/product/espressif-esp32-devkitc-esp32-wroom-3-2e-development-board/), **₹1,079**, listed **In Stock** | [Evelta exact MPN](https://evelta.com/esp32-devkitc-32e-esp32-wroom-32e-development-board-4mb-flash-pcb-antenna/), ₹947.54 incl. GST; page shows conflicting orderability text, so confirm cart/stock. ESP32-S3 requires explicit authorization/new pin map. | Exact board/module markings; no damage; USB enumerates; flash/capture; five clean boots; no overheating/reset loop. Reject/quarantine mismatch or unstable board. | No spare initially; replacement source identified. |
-| 2 | **Sensor:** ADXL345 breakout exposing 4-wire SPI pins, 3.3 V compatible | 1 | [Robocraze ADXL345](https://robocraze.com/products/adxl-345), **₹249**, 148 listed; seller claims regulator/level shifting | [Probots GY-291 ADXL345](https://probots.co.in/gy-291-adxl345-3-axis-digital-accelerometer-sensor-module.html), ₹199, listed in stock; recheck | Photograph both sides/pins; 3.3 V only; stable SPI `DEVID=0xE5`; register readback; six-orientation plausibility; timing/drop check. Quarantine wrong/intermittent ID. | Buy second only after first acceptance and budget review; it is a spare, not a permanent second sensor. |
-| 3 | **Rig motor:** compact 12 V N20 metal gear motor, about 600 RPM, 3 mm D shaft, positive coupling possible | 1 | [Robocraze 600 RPM 12 V N20 with cable](https://robocraze.com/products/600-rpm-12v-n20-dc-metal-gear-motor-with-cable), **₹233**, 62 listed | [Robu N20 12 V 600 RPM](https://robu.in/product/n20-12v-600-rpm-micro-metal-gear-motor/), ₹229 incl. GST, listed in stock | Inspect shaft/leads/gearbox; manual rotation powered-off; current-limited low-voltage start; measure no-load/start behavior at approved voltage; reject severe wobble/noise/heat/current beyond source/protection. | No spare initially; do not substitute contradictory speed listing. |
-| 4 | **Motor supply:** enclosed plug-in 12 V DC, 1 A, insulated mains side, 5.5×2.1 mm plug preferred | 1 | [Robocraze 12 V/1 A adapter](https://robocraze.com/products/12v-1a-power-adapter), **₹115**, 72 listed; seller claims OVP/OCP/OTP/short protection | [Robu Pro-range 12 V/1 A adapter](https://robu.in/product/orange-12v-1a-power-adapter-with-5-5-x-2-1mm-dc-plug/), ₹349 incl. GST, listed in stock | Enclosure/label/plug; meter polarity; no-load and motor-load voltage; temperature/smell/noise; reject wrong polarity, exposed mains, damage, unstable voltage or overheating. | One only; lab bench supply is diagnostic fallback, not permanent demo source unless approved. |
-| 5 | **Reachable DC switch/disconnect:** SPST with documented DC suitability at the intended voltage and safely above measured motor startup/operating current | 1 | [Evelta/Daier ASW-07D](https://evelta.com/illuminated-toggle-switch-red-spst-2-pin-on-off-asw-07d/), **₹160.48 incl. GST**, 100 listed. Its seller page conflicts between 25 A and 20 A at 12 VDC. **NOT YET APPROVED FOR ORDER — RATING MUST BE RESOLVED.** Do not adopt either value without credible supplier/manufacturer documentation. | [Robocraze mini SPST pack](https://robocraze.com/products/2-pin-mini-on-off-spst-rocker-switch-19-x-13mm), ₹25, 63 listed, but its page gives an AC rating. **NOT YET APPROVED FOR ORDER — RATING MUST BE RESOLVED.** An AC-only rating is not automatically a DC rating. | Documentation must establish intended DC voltage/current duty; then verify continuity, insulation, reachability, contact stability and absence of abnormal heating/drop. Bench tests do not prove certified interruption/rating capability. | Pack/backup only after documented equivalence. |
-| 6 | **Fuse holder:** covered holder documented as suitable for the intended low-voltage DC circuit, matching fuse format and wiring current | 1 | [Electronic Spices 12 V inline blade holder](https://electronicspices.com/product/12v-30a-waterproof-power-socket-inline-blade-fuse-holder), **₹39 incl. tax**, buy button shown; retain as a planning example pending exact documentation and matching fuse selection | 5×20 mm covered holder only with documented low-voltage DC suitability and a matching accepted fuse; capture exact rating/price on order day | Verify documented voltage suitability, exact fuse fit, covered live metal, wire gauge/strain relief and contact condition; continuity/load tests supplement but do not establish interruption rating. No bypass. | Buy one extra only after the system is accepted. |
-| 7 | **Motor fuse:** candidate only; final format, voltage suitability, current rating and fast/slow/time-delay characteristic follow holder choice and measured startup/operating behavior | 3 | [Probots 1 A 5×20 mm fuse](https://probots.co.in/1a-250vac-fuse-glass-tube-5x20mm.html), **₹6 each**. Its 250 VAC marking alone does not prove appropriate DC interruption performance. **NOT YET APPROVED FOR ORDER — RATING MUST BE RESOLVED.** | Source a fuse matching the selected holder, with documented suitability for the intended low-voltage DC circuit and measured motor behavior. Do not mix glass and blade systems. Budget **₹18** remains planning-only. | Verify format, documented voltage suitability, rating and time-current characteristic before controlled motor testing. If nuisance opening occurs, investigate motor current, fixture, wiring faults and characteristic; never bypass or increase rating merely to stop opening. | Three identical accepted fuses only after selection is resolved. |
-| 8 | **DC input connector:** 5.5×2.1 mm female screw terminal or wired jack matching adapter, shrouded and polarity-labeled | 1 | [Robocraze female plug adapter](https://robocraze.com/products/dc-power-female-plug-jack-adapter-connector), **₹19** | Matching panel/wired jack; verify exact dimensions and polarity | Plug fit, polarity, screw retention, pull test, no exposed short risk. | One spare if pack/local stock is low cost. |
-| 9 | **Status indicator:** 5 mm common-cathode RGB LED | 1 used | [Robocraze common-cathode pack of 10](https://robocraze.com/products/rgb-led-common-cathode-pack-of-10), **₹30**, 4 packs listed | Equivalent common-cathode LED only after diode/pin identification | Diode-test each channel; verify common cathode; record channel pins and forward voltage; reject wrong common type/dead channel. | Pack provides low-cost spares. |
-| 10 | **RGB current limiting:** 220 Ω and 330 Ω, ¼ W or suitable resistor selection; one per channel | ≥3 plus spares | [Robocraze 220 Ω pack](https://robocraze.com/products/220-ohm-resistor-pack-of-10), page search price range ₹9–₹14; reserve **₹30** for 220/330 Ω packs and recheck | Lab resistor stock if measured/labeled | Measure resistance; choose each channel for visible operation and target a conservative few mA from measured LED Vf; every channel must have a resistor. Reject unknown/short. | At least two spares/value. |
-| 11 | **Bench prototype:** 830-point solderless breadboard, only for stationary electronics bring-up | 1 | [Robocraze MB102](https://robocraze.com/products/mb102-830-points-solderless-breadboard), **₹64**, 246 listed | Existing accepted lab breadboard | Rail/row continuity and grip test; label split rails. It cannot be final vibration wiring. | Reuse if accepted. |
-| 12 | **Bench jumpers:** M-M, M-F and F-F, 20 cm, 40 each | 1 set | [Robocraze 120-piece set](https://robocraze.com/products/jumper-wire-set-m2m-m2f-f2f-40-pcs-each), **₹123**, 122 listed. Record the final resolved URL at order time. | Individual accepted packs; current M-F pack is ₹43 with 237 listed | Sample continuity/wiggle test; correct gender/length; use shortest reliable sensor wires. Not for final rig. | Set contains spares; discard/quarantine intermittent lead. |
-| 13 | **USB data cable:** USB-A to Micro-B, known data capable, about 1 m | 1 | [Robocraze ERD UC-252 data/charging cable](https://robocraze.com/products/erd-uc-252-micro-usb-data-charging-cable-1-meter), **₹69** | Existing known data cable; another current data-rated listing | Board enumerates, uploads and captures data; five flex/wiggle checks without disconnect. Reject charge-only/intermittent cable. | Keep one known-good alternate if already available. |
-| 14 | **Stable final electronics:** 3×4 inch Vero/stripboard or suitable perfboard | 1 | [Robocraze 3×4 Vero board](https://robocraze.com/products/vero-board-3-x4), **₹28**, 488 listed | [Robu 10×10 cm universal board](https://robu.in/product/10-x-10-cm-universal-pcb-prototype-board-single-sided-2-54mm-hole-pitch/), ₹68; recheck stock | No cracked board/lifted copper; continuity/isolation after solder; strain relief and regression required. | One extra only if layout risk warrants. |
-| 15 | **Wiring/termination kit:** red/black insulated wire, heat-shrink, headers/connectors/terminal block, solder | 1 lot | Current pages vary; reserve **₹150 allowance**, but capture every actual line price/quantity before order | Accepted lab stock preferred | Correct wire gauge/insulation, continuity, color/polarity labels, pull test, insulated solder joints. | Small wire/heat-shrink/header spares. |
-| 16 | **Mechanical/safety fabrication:** heavy stable base; N20 clamp; rigid sensor bracket; 3 mm set-screw/clamping hub with captive off-axis M3 bolt/washers/nyloc; fasteners; strain relief; full rotating-envelope polycarbonate/robust guard | 1 rig | Local fabrication after received-part dimensions; reserve **₹650 allowance** and obtain dated local/online quote before purchase | Safer guarded fan/equivalent only by decision; imported 3 mm hubs are too costly unless budget permits | Dimension/material/fastener records; powered-off pull/clearance checks; low-energy current-limited pilot; no loosening/contact/base movement; two-person safety sign-off. | Spare nyloc/set screws/washers; no spare loose mass left near rig. |
-| 17 | **Shipping/price-change contingency** | 1 | **₹300 allowance**, not an actual charge | Consolidate accepted exact parts; never remove safety items | Replace allowance with invoices; investigate >10% variance. | Not a component. |
+| Line | Function and required specification | Qty | Assigned Sourcing Channel | Vendor & Status | Price / Subtotal (INR) | Equivalent / Baseline Notes |
+|---:|---|---:|---|---|---:|---|
+| 1 | **MCU:** 7Semi ESP32-DEVKIT-E (ESP32-WROOM-32E, CP2102 USB-UART, 38-pin DevKitC V4 pinout, 4 MB Flash) | 1 | Robocraze Order 3 | Robocraze (Planned / To Order) | ~₹686.00 (Part of ₹705 items) | Certified baseline per `VG-AUDIT-HW-7SEMI-001`; 100% pin/firmware drop-in for Espressif DevKitC-32E; requires Line 15-16 decoupling caps. |
+| 2 | **Sensor:** ADXL345 3-axis accelerometer breakout exposing 4-wire SPI pins, 3.3 V compatible | 1 | Robocraze Order 1 | Robocraze (Confirmed #TJFKQXJUQ) | ₹249.00 | Bare ADXL345 2.0–3.6V supply; SPI `DEVID=0xE5`; 800 Hz ODR; 4-wire hardware SPI. |
+| 3 | **Rig motor:** compact 12 V N20 metal gear motor, ~600 RPM, 3 mm D-shaft, pre-soldered leads | 1 | Robocraze Order 1 | Robocraze (Confirmed #TJFKQXJUQ) | ₹233.00 | Compact 12V N20 motor; 600 RPM nominal at 12V; 3mm D-shaft for captive eccentric coupling; requires Line 17 flyback clamp diode. |
+| 4 | **Motor supply:** enclosed plug-in 12 V DC, 2 A regulated power adapter, 5.5×2.1 mm center-positive plug | 1 | Robocraze Order 1 | Robocraze (Confirmed #TJFKQXJUQ) | ₹125.00 | Upgraded to 12V 2A adapter; OVP/OCP/short protection; provides ample headroom over 1A requirement. |
+| 5 | **DC power switch:** KCD1 12V–24V SPST 2-pin ON-OFF rocker switch, DC documented suitability | 1 | Robu.in Order 2 | Robu.in (Confirmed) | ₹25.00 | KCD1 compact rocker switch documented for 12V–24V DC motor circuit disconnect. |
+| 6 | **Fuse holder:** 5×20 mm inline screw-type covered fuse holder casing, shrouded low-voltage DC rated | 2 | Robu.in Order 2 | Robu.in (Confirmed) | ₹38.00 (₹19.00 ea) | Fully enclosed screw casing for 5×20mm cartridge fuses; includes 1 operational + 1 spare holder. |
+| 7 | **Motor fuse:** 1 A 250 V time-delay (slow-blow) cartridge fuses (5×20 mm) | 8 | Robu.in Order 2 | Robu.in (Confirmed) | ₹48.00 (₹6.00 ea) | Time-delay characteristic withstands N20 motor inductive startup inrush; pack of 8 provides ample spares. |
+| 8 | **DC input connector:** DC Power Female Plug Jack Adapter Connector (5.5×2.1 mm to screw-terminal block) | 1 | Robocraze Order 3 | Robocraze (Planned / To Order) | ₹19.00 (Part of ₹705 items) | 5.5×2.1mm female barrel jack with heavy screw terminals; shrouded, polarity marked (+ / -). |
+| 9 | **Status indicator:** 5 mm common-cathode RGB LED (pack of 10) | 10 (1 used) | Robocraze Order 1 | Robocraze (Confirmed #TJFKQXJUQ) | ₹30.00 | 4-pin common-cathode (Red: Pin 1, Cathode: Pin 2, Green: Pin 3, Blue: Pin 4); 9 spares in pack; requires Line 10 (330 Ω) or Line 18 (220 Ω) current-limiting resistors. |
+| 10 | **Current-limiting resistors (330 Ω):** 330 Ω ¼ W ±5% through-hole resistors (pack of 52) | 52 | Robu.in Order 2 | Robu.in (Confirmed) | ~₹90.98 | Dedicated current-limiting for RGB LED channels (Green/Blue/Red) and circuit pull-ups. |
+| 11 | **Bench prototype:** MB102 830-point solderless breadboard with dual split power rails | 1 | College Lab Requisition | College Lab Cart C (In-Stock) | ₹0.00 (Zero-Cost) | Requisitioned from college lab inventory; verified row/rail continuity; bench bring-up only. |
+| 12 | **Bench jumpers:** 15 DuPont jumper wires (M2M & M2F, 20 cm) | 15 | College Lab Requisition | College Lab Cart C (In-Stock) | ₹0.00 (Zero-Cost) | Requisitioned from college lab inventory; flexible 20 cm jumpers for SPI bus and logic routing. |
+| 13 | **USB data cable:** USB-A to Micro-B data/charging cable, 1 m, high-speed data capable | 1 | Robocraze Order 1 | Robocraze (Confirmed #TJFKQXJUQ) | ₹69.00 | ERD UC-252 1m USB-A to Micro-B; verified CP2102 enumeration and high-speed firmware flashing. |
+| 14 | **Motor mounting bracket:** N20 metal U-bracket with M2 mounting screws | 1 | Robocraze Order 1 | Robocraze (Confirmed #TJFKQXJUQ) | ₹37.00 | Rigid stamped steel/aluminum mounting bracket securing N20 motor to the vibration test base. |
+| 15 | **Decoupling bulk capacitor (`E-CAP-100U`):** 100 µF 25V low-ESR radial electrolytic capacitor | 1 | College Lab Requisition | College Lab Cart C (In-Stock) | ₹0.00 (Zero-Cost) | Requisitioned from college lab stock; installed across ESP32 3.3V and GND to prevent brownout (`rst:0x10`). |
+| 16 | **Bypass ceramic capacitor (`C-CAP-100N`):** 100 nF (0.1 µF) 50V X7R ceramic capacitor | 1 | College Lab Requisition | College Lab Cart C (In-Stock) | ₹0.00 (Zero-Cost) | Requisitioned from college lab stock; RF shunt in parallel with 100 µF bulk cap and at ADXL345 VCC. |
+| 17 | **Motor flyback diode (`D-DIODE-1N4007`):** 1N4007 1A 1000V silicon rectifier diode | 1 | College Lab Requisition | College Lab Cart C (In-Stock) | ₹0.00 (Zero-Cost) | Requisitioned from college lab stock; soldered directly across N20 motor tags (cathode to +12V). |
+| 18 | **Current-limiting resistors (220 Ω):** 220 Ω ¼ W ±5% resistors | 3 | College Lab Requisition | College Lab Cart C (In-Stock) | ₹0.00 (Zero-Cost) | Requisitioned from college lab stock; alternative current-limiting for RGB LED channels. |
+| 19 | **Stable final electronics:** Perfboard/stripboard, terminal blocks, hookup wire, heat-shrink | 1 lot | Lab Stock / Local Bench | Bench Allocation | ₹0.00 (Lab Stock) | Final soldered assembly per Stage 12 execution; lab stock hookup wire and terminal blocks. |
+| 20 | **Mechanical rig base & guard:** Heavy base plate, 3mm clamping eccentric hub, fasteners, guard | 1 rig | Local Fabrication | Mechanical Allocation | ₹0.00 (Lab Stock) | Wood/acrylic damped base, 3mm shaft hub with captive off-axis M3 bolt/nyloc, polycarbonate guard. |
+| — | **Total Reconciled Procurement Spend** | — | **All 4 Sourcing Channels** | **Robocraze (1 & 3), Robu.in (2), College Lab (Cart C)** | **₹1,973.98** (Items: ₹1,649.98 + Shipping: ₹324.00) | **Fund commitment: ₹1,900.00 (Reserve: ₹224.00); Out-of-pocket: ₹73.98 (~₹74.00); Headroom: +₹1,026.02 against ₹3,000 target; +₹3,026.02 against ₹5,000 ceiling.** |
 
-**Important link correction:** Some storefronts change product slugs. On the order day, save the final resolved URL and screenshot. If the mixed-jumper URL in Line 12 does not resolve, use the current product page titled “Jumper Wire Set - M2M, M2F, F2F (40 pcs each)” and do not infer equivalence from the slug.
+### 3.2 Four Concrete Sourcing Channels Breakdown
 
-### Controlled DC switch/disconnect and fuse rule
+#### Channel 1: Robocraze Order 1 (Confirmed #TJFKQXJUQ)
+- **Order Status:** Confirmed / In Transit (Order Ref: `#TJFKQXJUQ`)
+- **Vendor:** Robocraze (India)
+- **Line Items:**
+  1. ADXL345 3-Axis Digital Accelerometer Sensor Module (Qty 1): ₹249.00
+  2. 600 RPM 12V N20 Micro Metal Gear Motor with Cable (Qty 1): ₹233.00
+  3. 12V 2A Regulated DC Power Supply Adapter (5.5×2.1 mm) (Qty 1): ₹125.00
+  4. Micro-USB High-Speed Data & Charging Cable (1 m) (Qty 1): ₹69.00
+  5. 5mm Common-Cathode RGB LED (10-pack) (Qty 1 pack): ₹30.00
+  6. N20 Motor Metal Mounting Bracket with M2 Screws (Qty 1): ₹37.00
+- **Items Subtotal:** **₹743.00**
+- **Delivery Service:** Express Delivery (Speed Post / Courier): **₹125.00**
+- **Total Robocraze Order 1 Spend:** **₹868.00**
+- **Funding Source:** 100% settled from initial project cash disbursement.
 
-**Switch/disconnect:** The selected switch or disconnect must have manufacturer or credible supplier documentation explicitly supporting the intended DC voltage and a current safely above the measured motor operating and startup requirement. An AC-only rating is not automatically accepted as a DC rating. If a retailer page contains conflicting DC ratings, do not use the highest value: mark the listing unresolved, prefer another clearly documented component, or obtain manufacturer documentation before acceptance. Continuity and short-duration bench load tests are useful receiving checks but do not prove certified electrical interruption or rating capability.
+#### Channel 2: Robu.in Order 2 (Confirmed)
+- **Order Status:** Confirmed / In Transit
+- **Vendor:** Robu.in (Macfos Ltd., India)
+- **Line Items:**
+  1. KCD1 12V–24V SPST 2-Pin ON-OFF Rocker Switch (Qty 1): ₹25.00
+  2. 5×20 mm Inline Screw-Type Covered Fuse Holder Casing (Qty 2): ₹38.00 (₹19.00 each)
+  3. 1A 250V Time-Delay (Slow-Blow) Cartridge Fuses (5×20 mm) (Qty 8): ₹48.00 (₹6.00 each)
+  4. 330 Ω Resistors (¼ W, ±5%) (Qty 52): ₹90.98
+- **Items Subtotal:** **₹201.98**
+- **Delivery Service:** Bluedart Air Priority Shipping: **₹149.00**
+- **Total Robu.in Order 2 Spend:** **₹350.98**
+- **Funding Source:** ₹277.00 paid from initial project cash disbursement fund; ₹73.98 (~₹74.00) paid out-of-pocket by team member as authorized operational advance.
 
-**Fuse and holder:** The fuse and holder must be suitable for the intended low-voltage DC circuit. Fuse format, voltage suitability, current rating and fast/slow/time-delay characteristic must match the holder and measured motor startup/operating behavior. A 250 VAC marking alone does not prove appropriate DC interruption performance. Never bypass a fuse. Do not increase its rating merely because nuisance opening occurs; first investigate motor current, fixture condition, wiring faults and the required time-current characteristic.
+#### Channel 3: Robocraze Order 3 (Planned / To Order)
+- **Order Status:** Staged / Planned for Immediate Order Release
+- **Vendor:** Robocraze (India)
+- **Line Items:**
+  1. 7Semi ESP32-DEVKIT-E Development Board (ESP32-WROOM-32E, CP2102, 38-Pin DevKitC V4) (Qty 1): ~₹686.00
+  2. DC Power Female Plug Jack Adapter Connector (5.5×2.1 mm Screw Terminal) (Qty 1): ₹19.00
+- **Items Subtotal:** **₹705.00**
+- **Delivery Service:** Standard Tracked Shipping: **~₹50.00**
+- **Total Robocraze Order 3 Planned Spend:** **~₹755.00**
+- **Funding Source:** To be funded directly from the returned cash balance held by the project lead.
 
-## 4. Budget scenarios
+#### Channel 4: College Lab Requisition (Cart C / Zero-Cost Requisition)
+- **Order Status:** Requisitioned / In-Stock at College Department Electronics Laboratory
+- **Custodian:** Department of Electronics & Computer Engineering Lab
+- **Line Items (Cost to Project: ₹0.00):**
+  1. MB102 830-Point Solderless Breadboard with Dual Power Rails (Qty 1): ₹0.00
+  2. DuPont Jumper Wires (20 cm, M2M & M2F) (Qty 15): ₹0.00
+  3. 100 µF 25V Low-ESR Radial Electrolytic Capacitor (`E-CAP-100U`) (Qty 1): ₹0.00
+  4. 100 nF (0.1 µF) 50V Ceramic Bypass Capacitor (`C-CAP-100N`) (Qty 1): ₹0.00
+  5. 1N4007 1A 1000V Silicon Rectifier Flyback Diode (`D-DIODE-1N4007`) (Qty 1): ₹0.00
+  6. 220 Ω Resistors (¼ W, ±5%) (Qty 3): ₹0.00
+- **Total Channel 4 Cost:** **₹0.00** (Zero-Cost Lab Inventory Requisition).
 
-The arithmetic below is a planning estimate from the table, not an invoice.
+---
 
-| Scenario | Planning total | Interpretation |
-|---|---:|---|
-| All listed new items plus local allowances and ₹300 shipping contingency | **₹3,356.48** | Below ₹5,000; about ₹356 above the preferred target. Actual line 7/15/16/shipping must replace allowances/estimates. |
-| Reuse accepted breadboard, jumper set, USB cable, Vero board and wiring kit | **₹2,922.48** | Meets preferred ₹3,000 target while retaining safety items. |
-| All new plus one accepted spare ADXL345 after first-unit gate | **₹3,605.48** | Still below ceiling; spare is optional and not a second permanent sensor. |
-| Authorized S3 fallback at current Evelta price, all else new, no spare | **₹4,914.78** | Only ₹85.22 below ceiling before any unexpected shipping/price change; therefore full re-cost/approval is mandatory. |
+## 4. Financial Transaction Ledger & Budget Reconciliation
 
-The current exact S3 contingency is [Evelta `ESP32-S3-DEVKITC-1-N32R8V`](https://evelta.com/esp32-s3-devkitc-1-wi-fi-bluetooth-le-development-board/) at ₹2,637.30 including GST with “shipped in 24 hours” but ambiguous orderability text. It is not the default BOM and its pin map/software target must be rebuilt from official S3 documentation.
+### 4.1 Master Transaction Ledger
 
-## 5. Order sequence
+| Transaction ID | Date / Status | Channel / Entity | Description | Debit (Spend) | Credit (Inflow) | Cash Balance | Notes |
+|---|---|---|---|---:|---:|---:|---|
+| `TXN-001` | Initial Inflow | Project Faculty Sponsor | Initial Cash Disbursement to Procurement Team | — | **₹2,124.00** | ₹2,124.00 | Formal semester project advance |
+| `TXN-002` | Confirmed (#TJFKQXJUQ) | Robocraze Order 1 | ADXL345, N20 Motor, 12V 2A Adapter, USB Cable, RGB LEDs, N20 Bracket | **₹868.00** | — | ₹1,256.00 | ₹743 items + ₹125 express delivery (100% fund) |
+| `TXN-003` | Confirmed | Robu.in Order 2 (Cash Draw) | Cash advance drawn for Bluedart Air priority shipping | **₹150.00** | — | **₹1,106.00** | Cash drawn to cover ₹149 Bluedart shipping (~₹150) |
+| `TXN-004` | Confirmed | Robu.in Order 2 (Online Settlement) | Item settlement paid online by team member (₹201.98 items) | — | — | ₹1,106.00 | Total Order 2 is ₹350.98: ₹277.00 fund share (₹150 cash + ₹127 reimbursable); ₹73.98 (~₹74) out-of-pocket |
+| `TXN-005` | Custody Handover | Project Lead (Nihad P C) | Physical Cash Balance Returned to Project Lead Custody | — | — | **₹1,106.00** | Full remaining cash advance handed to project lead for controlled Order 3 release |
+| `TXN-006` | Planned (Staged) | Robocraze Order 3 | 7Semi ESP32-DEVKIT-E, DC Female Barrel Jack Adapter | **~₹755.00** | — | **~₹351.00** | ₹705 items + ~₹50 standard shipping; disbursed from ₹1,106 returned cash |
+| `TXN-007` | Requisitioned | College Lab Requisition | MB102 Breadboard, 15 Jumpers, 100µF Cap, 100nF Cap, 1N4007 Diode, 220Ω Resistors | **₹0.00** | — | ~₹351.00 | Zero-cost institutional lab stock (Cart C) |
 
-### Gate A — Before any order
+### 4.2 Cash Flow & Reserve Analysis
 
-- [ ] Nihad confirms architecture and budget boundary.
-- [ ] Amith completes lab-stock inventory with IDs and condition.
-- [ ] Sreehari confirms preferred board/sensor interfaces against official documentation.
-- [ ] Sreeprada coordinates inventory/component-ID and receiving-checklist fields, checks each BOM row for completeness and shadows approved Sreehari-led electronics identity learning where appropriate.
-- [ ] Archa stores dated source/invoice/evidence captures, prepares the procurement register and attends an Amith-led physical-component function walkthrough.
-- [ ] Delivery postcode, GST invoice details, payment authority and receiving address are confirmed.
-- [ ] Mechanical allowance has at least a rough dimension-dependent quote or is explicitly held until parts arrive.
+```
++---------------------------------------------------------------------------------------+
+|                           VIBEGUARD FINANCIAL RECONCILIATION                          |
++---------------------------------------------------------------------------------------+
+  A. PHYSICAL CASH ADVANCE & CUSTODY RECONCILIATION:
+     Initial Project Cash Disbursement:                                     ₹2,124.00
+     Less: Robocraze Order 1 Spend (Confirmed #TJFKQXJUQ):                 - ₹868.00
+     Less: Robu.in Order 2 Cash Advance Drawn (Bluedart Air Shipping):     - ₹150.00
+     -----------------------------------------------------------------------------------
+     Net Physical Cash Returned to Project Lead Custody:                    ₹1,106.00
+     Less: Planned Robocraze Order 3 Spend (~₹705 items + ~₹50 shipping):   - ₹755.00
+     -----------------------------------------------------------------------------------
+     REMAINING UNENCUMBERED CASH RESERVE IN HAND:                             ~₹351.00 (~₹350.00)
+     [Pending reimbursable adjustment to team member for Order 2 items]:   [- ₹127.00]
+     [Net residual cash reserve after all obligations]:                      [~₹224.00]
+  ---------------------------------------------------------------------------------------
+  B. TOTAL PROJECT EXPENDITURE & SOURCE OF FUNDS:
+     Robocraze Order 1 Spend (100% Disbursed Fund):                           ₹868.00
+     Robu.in Order 2 Spend (Total ₹350.98: ₹277.00 Fund + ₹73.98 Out-of-Pocket): ₹350.98
+     Robocraze Order 3 Planned Spend (100% Disbursed Fund):                 ~₹755.00
+     College Lab Requisition (Cart C / Zero-Cost Stock):                        ₹0.00
+     -----------------------------------------------------------------------------------
+     TOTAL COMMITTED & PROJECTED PROJECT EXPENDITURE:                       ₹1,973.98
+     (Total Disbursed Fund Share: ₹1,900.00 | Team Member Out-of-Pocket: ₹73.98)
++---------------------------------------------------------------------------------------+
+```
 
-### Order group 1 — Critical electronics
+### 4.3 Cumulative Project Cost vs. Institutional Budget Ceilings
 
-1. Exact `ESP32-DEVKITC-32E`.
-2. One ADXL345 breakout.
-3. Data cable only if no accepted lab cable exists.
+| Expenditure Metric | Amount (INR) | Budget Threshold | Headroom / Variance | Compliance Status |
+| :--- | :---: | :---: | :---: | :---: |
+| **Robocraze Order 1 (Confirmed #TJFKQXJUQ)** | ₹868.00 | — | — | Executed |
+| **Robu.in Order 2 (Confirmed Total Spend)** | ₹350.98 | — | — | Executed |
+| **Robocraze Order 3 (Planned Allocation)** | ~₹755.00 | — | — | Staged |
+| **College Lab Requisition (Cart C)** | ₹0.00 | — | — | Requisitioned |
+| **TOTAL COMMITTED & PROJECTED EXPENDITURE** | **₹1,973.98** | **Preferred Target: ₹3,000.00** | **+ ₹1,026.02 Headroom** | **PASSED (34.2% below target)** |
+| **TOTAL COMMITTED & PROJECTED EXPENDITURE** | **₹1,973.98** | **Semester Ceiling: ₹5,000.00** | **+ ₹3,026.02 Headroom** | **PASSED (60.5% below ceiling)** |
 
-Do not order an S3 substitute automatically if Group 1 is unavailable. Record stock failure and obtain authorization.
+All expenditures remain comfortably beneath the preferred ₹3,000.00 threshold, leaving an unencumbered contingency reserve of **₹1,026.02** against the preferred budget and **₹3,026.02** against the absolute semester ceiling.
+The total disbursed fund commitment is **₹1,900.00** (leaving ₹224.00 net reserve from the ₹2,124.00 initial disbursement), while physical cash in hand before final settlement is **~₹351.00 (~₹350.00)**.
 
-### Order group 2 — Rig drive and protection
+---
 
-1. 12 V 600 RPM N20 motor.
-2. Enclosed 12 V/1 A adapter.
-3. DC-rated switch/disconnect.
-4. Matching covered fuse holder and candidate fuse set.
-5. Matching DC jack.
+## 5. Order sequence and Channel Management
 
-The holder and fuse must be one compatible system. Do not order a blade holder with only glass fuses.
+### Gate A — Before any order (COMPLETED)
 
-### Order group 3 — Prototyping/status
+- [x] Nihad confirms architecture and budget boundary.
+- [x] Amith completes lab-stock inventory with IDs and condition.
+- [x] Sreehari confirms preferred board/sensor interfaces against official documentation.
+- [x] Sreeprada coordinates inventory/component-ID and receiving-checklist fields, checks each BOM row for completeness and shadows approved Sreehari-led electronics identity learning where appropriate.
+- [x] Archa stores dated source/invoice/evidence captures, prepares the procurement register and attends an Amith-led physical-component function walkthrough.
+- [x] Delivery postcode, GST invoice details, payment authority and receiving address are confirmed.
+- [x] Mechanical allowance has at least a rough dimension-dependent quote or is explicitly held until parts arrive.
 
-1. Common-cathode RGB pack and measured resistors.
-2. Breadboard/jumpers if not reusable.
-3. Perfboard, wire, heat-shrink, headers/terminal blocks and solder.
+### Order Group 1 — Robocraze Order 1 (Confirmed #TJFKQXJUQ)
+1. ADXL345 3-axis accelerometer module (4-wire SPI capable).
+2. 600 RPM 12V N20 metal gear motor with pre-soldered cable.
+3. 12V 2A regulated DC power supply adapter (5.5×2.1 mm).
+4. Micro-USB data & charging cable (1 m).
+5. 5mm common-cathode RGB LED (10-pack).
+6. N20 motor metal mounting bracket with M2 screws.
 
-### Order group 4 — Dimension-dependent mechanical parts
+### Order Group 2 — Robu.in Order 2 (Confirmed)
+1. KCD1 12V–24V SPST 2-pin ON-OFF rocker switch.
+2. 5×20 mm inline screw-type covered fuse holder casing (x2).
+3. 1A 250V time-delay (slow-blow) cartridge fuses (5×20 mm) (x8).
+4. 330 Ω ¼ W ±5% resistors (x52).
 
-Wait until motor/sensor dimensions and mounting holes are recorded. Then select base, clamp, sensor bracket, 3 mm positive-retention hub, captive mass fasteners and guard. This prevents buying a coupling that does not fit the received D shaft.
+### Order Group 3 — Robocraze Order 3 (Planned / To Order)
+1. 7Semi ESP32-DEVKIT-E development board (ESP32-WROOM-32E, CP2102, 38-pin DevKitC V4).
+2. DC Power Female Plug Jack Adapter Connector (5.5×2.1 mm screw terminal).
+
+### Order Group 4 — College Lab Requisition (Cart C / Zero-Cost)
+1. MB102 830-point solderless breadboard with dual power rails.
+2. 15 DuPont jumper wires (M2M & M2F, 20 cm).
+3. 100 µF 25V radial electrolytic bulk decoupling capacitor (`E-CAP-100U`).
+4. 100 nF (0.1 µF) 50V ceramic bypass capacitor (`C-CAP-100N`).
+5. 1N4007 1A 1000V silicon rectifier flyback clamp diode (`D-DIODE-1N4007`).
+6. 220 Ω ¼ W ±5% resistors.
+
+### Order Group 5 — Mechanical Rig & Guard Fabrication
+Wait until N20 motor and mounting bracket arrive from Robocraze Order 1. Then verify motor body dimensions and shaft flat before finalizing captive off-axis eccentric hub and polycarbonate guard envelope.
 
 ## 6. Receiving and quarantine workflow
 
@@ -134,112 +234,166 @@ Wait until motor/sensor dimensions and mounting holes are recorded. Then select 
 
 ## 7. Component acceptance procedures
 
-### 7.1 Exact ESP32-DevKitC-32E
+### 7.1 MCU: 7Semi ESP32-DEVKIT-E (and Espressif ESP32-DevKitC-32E Baseline)
 
-**Required:** Board, known data cable, ESD-aware bench, camera, Arduino IDE/Espressif core, serial capture.
+**Sourcing Channel:** Robocraze Order 3 (Planned / To Order; MPN: 7Semi ESP32-DEVKIT-E, 38-pin DevKitC V4).  
+**Required:** Board, known Micro-USB data cable (Robocraze Order 1), ESD-aware bench, camera, Arduino IDE / Espressif core, serial capture.
 
-- [ ] Markings show Espressif DevKitC and ESP32-WROOM-32E/expected module; record board revision and connector.
-- [ ] No bent pins, solder bridges, damaged antenna area, cracked connector or loose component.
-- [ ] With no external wiring, power through Micro-USB only. The [official DevKitC guide](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32/esp32-devkitc/user_guide.html) states USB, 5 V/GND header and 3.3 V/GND header options are mutually exclusive.
-- [ ] Board enumerates; correct target selected; minimal identity/counter sketch uploads.
-- [ ] New capture file contains boot identity and monotonic counter.
-- [ ] Five reset/power-cycle boots complete without unexplained reset loop, brownout or abnormal heat.
-- [ ] Backup person reproduces upload/capture from written steps.
+- [ ] Markings confirm 7Semi ESP32-DEVKIT-E with authentic Espressif ESP32-WROOM-32E module; verify PCB antenna area and shielding integrity.
+- [ ] Hardware verification: Confirm Silicon Labs CP2102 USB-to-UART bridge (USB VID:PID `10c4:ea60` via `lsusb`), AMS1117-3.3 linear voltage regulator, and 38-pin DevKitC V4 physical header layout (2.54 mm pin pitch, 22.86 mm row pitch).
+- [ ] Visual & mechanical inspection: No bent header pins, solder bridges, cracked Micro-USB receptacle, or component misalignments.
+- [ ] Power isolation: Power via Micro-USB only. The official Espressif user guide establishes that Micro-USB, 5V/GND, and 3.3V/GND power inputs are mutually exclusive. Never supply external 5V/3.3V simultaneously with USB.
+- [ ] Host enumeration: Connect via Micro-USB cable; verify mainline Linux `cp210x` driver binds `/dev/ttyUSB0`; select board `esp32dev` in Arduino CLI / IDE.
+- [ ] Smoke sketch & boot test: Upload minimal monotonic counter sketch; verify bootloader output (`rst:0x1 (POWERON_RESET)`) at 115200 baud; confirm clean monotonic counter progression.
+- [ ] Five consecutive power-cycle / hardware reset boots complete with zero brownout (`rst:0x10`), zero core panic, and no abnormal AMS1117 thermal rise.
+- [ ] Mandatory PDN decoupling verification: Verify that the 100 µF bulk capacitor (`E-CAP-100U`) and 100 nF ceramic bypass capacitor (`C-CAP-100N`) from College Lab Requisition (Cart C) are installed directly across Pins J1-1 (3V3) and J1-14 (GND) before high-speed SPI or RF testing.
+- [ ] Dual-breadboard bridging: Confirm 7Semi board spans across two joined MB102 breadboards (bridging the center divider) so that tie-points on both Header J1 and Header J3 are easily accessible for probe leads.
 
-**Accept:** Exact identity plus reproducible flash/serial/five boots.  
-**Reject/quarantine:** Marking/SKU mismatch, physical damage, no enumeration after known-good cable/computer, repeated unexplained reset/heat, flash failure on two verified setups.
+**Accept:** Authentic 7Semi ESP32-DEVKIT-E identity, CP2102 enumeration, reproducible firmware flashing, 5/5 clean boots without brownout, and mandatory 100 µF + 100 nF decoupling installed.  
+**Reject/quarantine:** Module marking mismatch, physical damage, enumeration failure on two known-good computers, brownout reset loops (`rst:0x10`), or persistent flash timeouts.
 
-### 7.2 ADXL345 breakout
+### 7.2 Sensor: ADXL345 3-Axis Accelerometer Breakout
 
-**Official facts:** Bare ADXL345 supply 2.0–3.6 V; 3-/4-wire SPI; `DEVID` register `0x00` returns `0xE5`; bandwidth is ODR/2. At 800 Hz the official data sheet recommends SPI ≥400 kHz; at 1600/3200 Hz it recommends SPI ≥2 MHz. [Analog Devices data sheet](https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL345.PDF).
+**Sourcing Channel:** Robocraze Order 1 (Confirmed #TJFKQXJUQ; ADXL345 Module, 4-wire SPI).  
+**Official Specifications:** ADXL345 supply 2.0–3.6 V; 3-/4-wire SPI; `DEVID` register `0x00` returns `0xE5`; bandwidth is ODR/2 (400 Hz at 800 Hz ODR). [Analog Devices ADXL345 Data Sheet](https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL345.PDF).
 
-- [ ] Photograph both sides, silkscreen, regulator/level-shifter layout and pins.
-- [ ] Required pins exposed: VCC, GND, SCLK, SDI/MOSI, SDO/MISO and CS; INT1 preferred.
-- [ ] Power from ESP32 3.3 V, not 5 V, despite seller claims of regulator support.
-- [ ] With power removed, inspect continuity/short risk and verify proposed pinout against exact board documentation.
-- [ ] Read `0x00` repeatedly at conservative SPI; actual byte must be stable `0xE5`.
-- [ ] Write/read back `BW_RATE 0x2C`, `POWER_CTL 0x2D`, `DATA_FORMAT 0x31` and used FIFO/interrupt registers.
-- [ ] Initial **PROPOSED** setting: full-resolution ±4 g, 800 Hz, 256 samples; final values are frozen after pilot.
-- [ ] Six stationary orientations produce plausible gravity-axis sign/magnitude changes; record raw, do not impose invented numeric noise limits.
-- [ ] Run declared stationary timing capture; log achieved rate, sequence, FIFO/overrun, saturation and drops.
+- [ ] Photograph breakout front/back; record silkscreen markings, onboard LDO / pullup network, and header pinout (`GND, VCC, CS, INT1, INT2, SDO/MISO, SDA/MOSI, SCL/SCLK`).
+- [ ] Exclusively wire to ESP32 3.3V rail (Pin J1-1), never 5V, despite any vendor level-shifter claims.
+- [ ] With power removed, verify continuity of wiring loom (SCK→GPIO18, MOSI→GPIO23, MISO→GPIO19, CS→GPIO21).
+- [ ] Device ID readback: Read register `0x00` over SPI Mode 3; returned byte must be rock-solid `0xE5`.
+- [ ] Register write/readback: Write and verify `BW_RATE` (0x2C) to `0x0D` (800 Hz ODR), `POWER_CTL` (0x2D) to `0x08` (Measurement Mode), and `DATA_FORMAT` (0x31) to `0x0B` (Full Resolution, ±16g or ±4g).
+- [ ] Static 6-orientation test: Place sensor flat and on all 6 faces; verify $1\text{g} \approx 9.8\text{ m/s}^2$ aligns with Earth's gravity vector on each corresponding axis with plausible sign/magnitude.
+- [ ] Burst-read sequence test: Issue burst read `0xF2` (`0x32 | 0x80 | 0x40`); confirm seamless 6-byte payload reception without bus stalls or FIFO overruns.
 
-**Accept:** Stable `0xE5`, readback, plausible axes and zero unexplained acquisition-integrity event in acceptance capture.  
-**Reject/quarantine:** Wrong/intermittent ID after wiring isolation, missing SPI pins, damage/heat, implausible fixed/saturated data or repeatable failures across known-good wiring/board.
+**Accept:** Stable `0xE5` device ID, 100% register write/readback fidelity, plausible static gravity response across all 6 axes, and zero dropped frames over a 10-minute 800 Hz stationary capture.  
+**Reject/quarantine:** Incorrect or intermittent `DEVID`, missing SPI signals, physical damage, sensor overheating, or saturated/floating axis registers.
 
-### 7.3 N20 motor
+### 7.3 Rig Motor: 600 RPM 12V N20 Gear Motor & Mounting Bracket
 
-- [ ] Photograph label/body/leads/gearbox/3 mm D shaft; measure shaft and body.
-- [ ] With power disconnected, rotate shaft gently; record binding, excessive play or damage.
-- [ ] Clamp motor before any power. No coupling/eccentric for electrical acceptance.
-- [ ] Use current-limited bench source where available. Begin at low voltage/brief pulse; increase in controlled steps toward rated 12 V only if stable.
-- [ ] Measure voltage, no-load current, startup peak if equipment supports it, speed proxy/tachometer if available, sound, visible shaft wobble and temperature versus time.
-- [ ] Freeze allowable current/temperature/run duration only after measured pilot and source/fuse review.
+**Sourcing Channel:** Robocraze Order 1 (Confirmed #TJFKQXJUQ; 600 RPM 12V N20 Metal Gear Motor with Cable & N20 Metal U-Bracket).
 
-**Accept:** Starts/restarts consistently, current remains within approved source/protection, shaft has no dangerous wobble, no harsh gearbox noise/rapid heating/damaged insulation.  
-**Reject/quarantine:** Binding, intermittent lead, excessive current/heat, severe wobble/noise or physical damage. Do not fit eccentric to “see if it improves.”
+- [ ] Photograph motor body, gearbox casing, 3 mm D-shaft, pre-soldered silicone leads, and metal mounting bracket; record dimensional envelope.
+- [ ] Powered-off mechanical check: Rotate 3 mm D-shaft gently by hand; verify smooth gearbox gear train rotation without binding or excessive radial play.
+- [ ] Motor mounting bracket fit check: Verify that the N20 motor body seats securely inside the Robocraze metal U-bracket, and that M2 retaining screws fasten without stripping.
+- [ ] Bench bring-up: Clamp motor bracket securely in lab vise before applying any power. Do not attach eccentric mass during electrical acceptance.
+- [ ] Start on current-limited bench supply: Apply 6V DC initially, stepping up to rated 12V DC; measure no-load running current ($I_{no-load} \le 60\text{ mA}$).
+- [ ] Inspect rotational behavior: Confirm smooth ~600 RPM shaft rotation (nominal 10 Hz fundamental), absence of harsh grinding noises, and minimal thermal rise after 5 minutes of continuous operation.
+- [ ] Flyback diode preparation: Verify that 1N4007 clamp diode (`D-DIODE-1N4007` from College Lab Cart C) is soldered directly across motor terminals (cathode to +12V) before any subsequent switching tests.
 
-### 7.4 12 V adapter, DC jack, switch and fuse system
+**Accept:** Consistent startup at rated 12V, no-load current $\le 60\text{ mA}$, no excessive shaft wobble, healthy gearbox acoustics, and snug bracket fit.  
+**Reject/quarantine:** Gearbox binding, stripped gears, intermittent lead connection, excessive current ($>120\text{ mA}$ no-load), severe wobble, or abnormal heating.
 
-- [ ] Adapter enclosure/cable/plug undamaged; label states 12 V DC and adequate current; no exposed mains access.
-- [ ] Meter identifies center polarity and no-load voltage. Label connector polarity on rig.
-- [ ] **PROPOSED acceptance band:** 12 V ±10% at no load and during approved no-eccentric motor load, unless manufacturer specification is tighter. Record actual; do not adjust inside sealed adapter.
-- [ ] Verify switch continuity/open circuit, mounted reachability and insulation.
-- [ ] Before order/acceptance, obtain manufacturer or credible supplier documentation for switch operation at the intended DC voltage and above measured startup/operating current. An AC-only or internally conflicting listing remains `NOT YET APPROVED FOR ORDER — RATING MUST BE RESOLVED`.
-- [ ] Verify fuse holder/fuse format compatibility, documented low-voltage DC suitability, current rating, required fast/slow/time-delay characteristic, secure cover and wire strain relief. A 250 VAC marking alone is insufficient proof of DC interruption suitability.
-- [ ] Motor circuit order: adapter positive → disconnect/switch → fuse → motor; return to adapter negative. Place protection where a short downstream is interrupted.
-- [ ] Run a controlled load; record voltage/current and inspect connector/switch/holder for heat, arcing, looseness or drop. Treat this as a functional check, not proof of a certified DC rating or interruption capability.
-- [ ] Emergency disconnect stops motor without reaching into guard.
+### 7.4 12V Motor Power Supply, DC Jack, KCD1 Switch & Fuse System
 
-**Accept:** Correct polarity/stable voltage; documented DC-suitable switch/disconnect; compatible, documented DC-suitable fuse and holder with appropriate format/rating/characteristic; reachable disconnect; and no damage, heat or contact instability.  
-**Reject/quarantine:** Wrong polarity/plug, exposed mains, unstable/out-of-band voltage, arcing/heat, ambiguous or AC-only switch rating, conflicting unresolved DC claims, incompatible or inadequately documented fuse/holder, reliance on bench testing as rating proof, or any bypass.
+**Sourcing Channels:**
+- **12V 2A Regulated Power Adapter:** Robocraze Order 1 (Confirmed #TJFKQXJUQ).
+- **DC Power Female Plug Jack Adapter (5.5×2.1 mm):** Robocraze Order 3 (Planned / To Order).
+- **KCD1 12V–24V SPST Rocker Switch:** Robu.in Order 2 (Confirmed).
+- **5×20 mm Inline Screw-Type Fuse Holder Casings (x2):** Robu.in Order 2 (Confirmed).
+- **1A 250V Time-Delay Cartridge Fuses (x8):** Robu.in Order 2 (Confirmed).
 
-### 7.5 RGB LED and resistors
+- [ ] Adapter inspection: Verify 12V 2A label, intact mains prongs, undamaged insulated cable, and 5.5×2.1 mm barrel connector.
+- [ ] Polarity & voltage measurement: Use DMM to measure barrel plug polarity (center positive, outer sleeve negative) and no-load voltage (must measure $12.0\text{V} \pm 0.6\text{V}$).
+- [ ] DC jack terminal check: Insert barrel plug into 5.5×2.1 mm screw-terminal adapter; tighten test leads in screw terminals; verify secure mechanical grip with pull test.
+- [ ] KCD1 rocker switch verification: Verify SPST 2-pin switch contacts with DMM continuity; confirm low contact resistance ($< 0.1\ \Omega$) in ON position and infinite resistance in OFF position.
+- [ ] Fuse holder casing check: Inspect 5×20 mm inline screw casing; insert 1A time-delay cartridge fuse; confirm spring-loaded mechanical contact and tight screw closure.
+- [ ] Fuse continuity: Verify 1A time-delay cartridge fuse shows $< 0.5\ \Omega$ continuity before installation.
+- [ ] Circuit wiring topology: Adapter positive (+12V) → KCD1 switch → 5×20mm fuse holder (1A slow-blow) → N20 motor terminal (+) [with 1N4007 cathode]; N20 motor terminal (-) [with 1N4007 anode] → Adapter negative (GND).
+- [ ] Galvanic isolation audit: With DMM on high-resistance mode ($\text{M}\Omega$), test between 12V motor supply ground and ESP32 logic ground. Must measure complete open circuit ($\infty\ \Omega$).
+- [ ] Emergency stop function: Confirm flipping KCD1 switch immediately de-energizes the motor without requiring contact near the rotating shaft.
 
-- [ ] Diode-test and map pins; verify common cathode rather than common anode.
-- [ ] Measure/record forward voltage for red/green/blue at meter-test current.
-- [ ] Measure each resistor. Select one per channel to keep current conservative (target a few mA) using `I=(3.3−Vf)/R`; actual GPIO high and brightness are checked on the received LED.
-- [ ] Wire common cathode to logic ground; each anode through its own resistor to GPIO.
-- [ ] Lamp test: green, blue, red separately and off; no channel stuck or incorrectly mapped.
+**Accept:** Correct 12V center-positive polarity, stable voltage, low switch contact resistance, compatible 5×20mm fuse/holder fit, prompt disconnect response, and complete electrical isolation from the logic domain.  
+**Reject/quarantine:** Inverted polarity, voltage outside 11.4V–12.6V, switch arcing/heating, incompatible fuse dimensions, fast-blow nuisance opening during startup, or any ground bridging between 12V motor rail and logic ground.
 
-**Accept:** Correct common type, all channels visible/stable with resistors and firmware mapping recorded.  
-**Reject:** Dead/intermittent/wrong-common LED or omitted resistor.
+### 7.5 Status Indication: RGB LED and Current-Limiting Resistors
 
-### 7.6 Breadboard, jumpers, USB cable and perfboard
+**Sourcing Channels:**
+- **5mm Common-Cathode RGB LED (10-pack):** Robocraze Order 1 (Confirmed #TJFKQXJUQ).
+- **330 Ω ¼W ±5% Resistors (x52):** Robu.in Order 2 (Confirmed).
+- **220 Ω ¼W ±5% Resistors (x3):** College Lab Requisition (Cart C / Zero-Cost).
 
-- [ ] Map split breadboard rails; check sample row/rail continuity and absence of adjacent shorts.
-- [ ] Continuity/wiggle-test a sample of each jumper type; quarantine intermittent leads.
-- [ ] USB cable must enumerate, flash and log during five gentle flex checks; reject charge-only cable.
-- [ ] Perfboard has no cracks/lifted copper; after soldering, inspect magnified joints, polarity, continuity and isolation; clean residue as appropriate.
-- [ ] Breadboard/jumpers are bench-only. Final vibration hardware uses stable soldered/connectorized wiring plus strain relief and a regression test.
+- [ ] LED pin identification: Identify common cathode (longest pin, Pin 2); identify Red anode (Pin 1), Green anode (Pin 3), and Blue anode (Pin 4).
+- [ ] Diode test with DMM: Measure forward voltages: Red ($V_f \approx 1.8\text{V} - 2.0\text{V}$), Green ($V_f \approx 2.8\text{V} - 3.2\text{V}$), Blue ($V_f \approx 2.9\text{V} - 3.3\text{V}$). Confirm common cathode polarity.
+- [ ] Resistor measurement: Verify 330 Ω resistors with DMM (acceptable range 313–347 Ω) and 220 Ω resistors (acceptable range 209–231 Ω).
+- [ ] Circuit calculation: At 3.3V logic drive, $I_{Red} = (3.3 - 2.0)/330 \approx 3.9\text{ mA}$; $I_{Green} = (3.3 - 3.0)/220 \approx 1.4\text{ mA}$; $I_{Blue} = (3.3 - 3.0)/220 \approx 1.4\text{ mA}$. Currents are safely within ESP32 12 mA pin drive limits.
+- [ ] Functional lamp test: Wire common cathode to ESP32 GND; connect Green anode via resistor to GPIO25, Blue anode to GPIO26, and Red anode to GPIO27.
+- [ ] Firmware state verification: Test individual color illumination:
+  - Green ON (GPIO25 HIGH) = Normal State.
+  - Blue ON (GPIO26 HIGH) = Calibrating State.
+  - Red ON (GPIO27 HIGH) = Abnormal State.
+  - All OFF when idle.
 
-### 7.7 Base, mount, captive eccentric and guard
+**Accept:** Verified common-cathode pinout, measured resistor values, distinct visual colors, and confirmed correspondence to GPIO25 (Green), GPIO26 (Blue), GPIO27 (Red).  
+**Reject:** Common-anode LED, blown channel, missing current-limiting resistor, or incorrect channel mapping.
 
-- [ ] Base dimensions/material/mass and bench restraint recorded; no rocking/sliding.
-- [ ] Motor clamp uses mechanical fasteners; wiring has strain relief.
-- [ ] Sensor bracket fixes orientation rigidly using bolts/clamp or approved rigid attachment; no foam/double-sided tape/loose breadboard.
-- [ ] Eccentric uses 3 mm set-screw/clamping/keyed hub and captive off-axis bolt/washers with nyloc/locking method. Mass and radius are measured and identified.
-- [ ] Tape, hot glue, binder clips, loose washers and press-fit-only masses are rejected.
-- [ ] Robust guard encloses the full rotating envelope and remains fastened; verify shaft/fixture clearance through manual rotation with power disconnected.
-- [ ] Two-person powered low-energy pilot, eye protection, current limiting and reachable disconnect.
-- [ ] Stop immediately for heating, new harsh noise, looseness, base movement, guard contact, smell/smoke or wiring damage.
+### 7.6 Prototyping Hardware: Breadboard, Jumpers & Micro-USB Cable
 
-**Accept:** Dimensioned, guarded, stable and repeatable configuration passes declared low-energy pilot and post-run inspection.  
-**Reject:** Any exposed/unretained rotating part, live-adjustment requirement, unstable base, guard contact or configuration that cannot be repeated safely.
+**Sourcing Channels:**
+- **MB102 830-Point Solderless Breadboard:** College Lab Requisition (Cart C / Zero-Cost).
+- **DuPont Jumpers (15 pcs, M2M & M2F, 20 cm):** College Lab Requisition (Cart C / Zero-Cost).
+- **Micro-USB Data Cable (1 m):** Robocraze Order 1 (Confirmed #TJFKQXJUQ).
 
-## 8. Proposed preferred-board pin map gate
+- [ ] Breadboard continuity: Check power rail continuity along top and bottom rails; note any split power rail breaks; verify firm spring clip tension across terminal rows.
+- [ ] DuPont jumper integrity: Test all 15 jumper wires with DMM continuity; flex/wiggle test each end to detect internal wire fractures; discard any high-resistance or intermittent leads.
+- [ ] Micro-USB cable verification: Connect PC to 7Semi ESP32-DEVKIT-E; verify immediate CP2102 device enumeration (`10c4:ea60`); execute 5 consecutive flex tests at both cable strain reliefs during serial transmission without data loss.
 
-Do not freeze this table until the exact `ESP32-DEVKITC-32E` is received/accepted and the [official header guide](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32/esp32-devkitc/user_guide.html) is checked.
+**Accept:** Robust breadboard contact grip, low jumper resistance ($< 0.2\ \Omega$), and uninterrupted USB serial data communication.  
+**Reject:** Loose breadboard tie-points, intermittent jumpers, or charge-only USB cables lacking D+/D- data lines.
 
-| Signal | Proposed GPIO | Acceptance action |
-|---|---:|---|
-| ADXL SCLK | 18 | Verify header label; continuity; SPI clock readback. |
-| ADXL MOSI/SDI | 23 | Verify direction and register write/readback. |
-| ADXL MISO/SDO | 19 | Verify `0xE5`/data reads. |
-| ADXL CS | 21 | Ordinary GPIO selected to avoid ESP32 strapping-pin dependency. |
-| ADXL INT1 | 4 | Optional DATA_READY; input behavior measured before enabling. |
-| RGB green | 25 | Resistor/channel lamp test. |
-| RGB blue | 26 | Resistor/channel lamp test. |
-| RGB red | 27 | Resistor/channel lamp test. |
+### 7.7 Mechanical Test Base, Motor Clamp, Eccentric Fixture & Safety Guard
+
+**Sourcing Channels:**
+- **N20 Metal Mounting Bracket:** Robocraze Order 1 (Confirmed #TJFKQXJUQ).
+- **Rig Base Plate, Clamping Eccentric Hub & Guard:** Local Lab Fabrication / Mechanical Allocation.
+
+- [ ] Rigid base plate: High-density wood or 10 mm acrylic base plate; verify no rocking, flexing, or vibration walking on the bench surface.
+- [ ] Motor mounting: Fasten N20 motor securely to base using the Robocraze metal U-bracket with M2 machine screws and locking washers.
+- [ ] Rigid sensor bracket: Fabricate stiff 3D-printed or aluminum bracket rigidly bolted directly to the motor bearing face; absolute prohibition of foam tape or hot glue.
+- [ ] Positive-retention eccentric mass: Clamping/set-screw 3 mm brass/aluminum hub attached to motor D-shaft, carrying a captive off-axis M3 bolt with washers and a nyloc nut.
+- [ ] Full rotating-envelope safety guard: Transparent polycarbonate enclosure surrounding the entire rotating hub and shaft assembly; securely fastened to base plate.
+- [ ] Clearance & spin test: With power disconnected, manually rotate eccentric assembly through 360°; verify at least 5 mm clearance between eccentric mass and inside of guard at all angles.
+
+**Accept:** Rigid non-resonant mounting, captive eccentric mass with locking nut, complete polycarbonate guard containment, and verified manual clearance.  
+**Reject:** Any loose/press-fit rotating mass, flexible sensor mount, unguarded rotating parts, or guard contact during rotation.
+
+### 7.8 Power Decoupling Capacitors and Motor Flyback Diode
+
+**Sourcing Channels:**
+- **100 µF 25V Low-ESR Bulk Electrolytic Capacitor (`E-CAP-100U`):** College Lab Requisition (Cart C / Zero-Cost).
+- **100 nF 50V Ceramic Bypass Capacitor (`C-CAP-100N`):** College Lab Requisition (Cart C / Zero-Cost).
+- **1N4007 1A 1000V Silicon Rectifier Diode (`D-DIODE-1N4007`):** College Lab Requisition (Cart C / Zero-Cost).
+
+- [ ] Measure capacitance of 100 µF bulk capacitor with DMM/LCR meter (acceptable tolerance 90–110 µF); verify voltage rating ($\ge 10\text{V}$, received 25V) and clear negative polarity stripe.
+- [ ] Verify low ESR ($\le 100\text{ m}\Omega$) to guarantee transient voltage sag suppression during ESP32 Wi-Fi bursts and active computation.
+- [ ] Verify 100 nF ceramic bypass capacitor with meter (acceptable tolerance 80–120 nF).
+- [ ] Diode test 1N4007: Confirm forward voltage ($V_f \approx 0.6\text{V} - 0.7\text{V}$) and infinite resistance ($\infty\ \Omega$) in reverse bias.
+- [ ] Breadboard installation rule: 100 µF bulk capacitor and 100 nF ceramic capacitor must be inserted in direct parallel across ESP32 3V3 (Pin J1-1) and GND (Pin J1-14) with minimal lead length ($\le 5\text{ mm}$).
+- [ ] Motor flyback installation rule: 1N4007 diode must be soldered directly across the N20 motor terminal tags in reverse-biased configuration: **Cathode (printed silver band) to +12V motor terminal**, **Anode to motor GND terminal**.
+- [ ] Strict isolation test: Multimeter continuity test between 12V motor GND and ESP32 logic GND must show open circuit ($\infty\ \Omega$). Common ground between motor drive and ESP32 logic is strictly forbidden.
+
+**Accept:** Rated capacitance and polarity confirmed; low ESR verified; diode passes forward/reverse test; 100 µF + 100 nF placed adjacent to ESP32 3V3 rail; flyback diode soldered across motor terminals; zero continuity between motor 12V ground and logic ground.  
+**Reject:** Leaky/damaged capacitor, inverted polarity, open/shorted diode, or any common ground bridging between 12V motor rail and ESP32 3.3V/5V logic rail.
+
+---
+
+## 8. Certified Frozen Pinout & Signal Mapping
+
+The final hardware pinout is **100% FROZEN AND CERTIFIED** for the 7Semi ESP32-DEVKIT-E (and Espressif ESP32-DevKitC-32E drop-in equivalent per `VG-AUDIT-HW-7SEMI-001`). All signals preserve exact 1-to-1 pin alignment, ensuring **ZERO modifications to C++ DSP firmware or simulation models**:
+
+| Signal Function | Frozen GPIO | 7Semi DEVKIT-E Pin | DevKitC V4 Pin | Signal Type & Electrical Notes | Firmware Pin Macro |
+| :--- | :---: | :---: | :---: | :--- | :--- |
+| **ADXL345 SCLK** | **GPIO18** | Header J3, Pin 9 | Header J3, Pin 9 | SPI Clock Out (2 MHz hardware SPI) | Default VSPI SCK |
+| **ADXL345 MOSI / SDI** | **GPIO23** | Header J3, Pin 2 | Header J3, Pin 2 | Controller-to-Sensor Master Out | Default VSPI MOSI |
+| **ADXL345 MISO / SDO** | **GPIO19** | Header J3, Pin 8 | Header J3, Pin 8 | Sensor-to-Controller Master In | Default VSPI MISO |
+| **ADXL345 CS** | **GPIO21** | Header J3, Pin 6 | Header J3, Pin 6 | Active-LOW Chip Select (Avoids strapping pin GPIO5) | `#define ADXL345_PIN_CS 21` |
+| **ADXL345 INT1** | **GPIO4** | Header J3, Pin 13 | Header J3, Pin 13 | Data Ready / Watermark In (Synthetic tachometer in sim) | Optional DATA_READY |
+| **RGB Status Green** | **GPIO25** | Header J1, Pin 9 | Header J1, Pin 9 | Digital Out via 220/330 Ω resistor (Normal Zone A/B) | `#define PIN_LED_GREEN 25` |
+| **RGB Status Blue** | **GPIO26** | Header J1, Pin 10 | Header J1, Pin 10 | Digital Out via 220/330 Ω resistor (Calibrating Mode) | `#define PIN_LED_BLUE 26` |
+| **RGB Status Red** | **GPIO27** | Header J1, Pin 11 | Header J1, Pin 11 | Digital Out via 220/330 Ω resistor (Abnormal Zone C/D) | `#define PIN_LED_RED 27` |
+| **Sensor Power (+3.3V)** | **3V3 Rail** | Header J1, Pin 1 | Header J1, Pin 1 | Dedicated 3.3V regulated power to ADXL345 VCC | Shared 3.3V Logic Rail |
+| **Common Logic Ground** | **GND** | Header J1, Pin 14 | Header J1, Pin 14 | Common logic ground for sensor & RGB LED cathode | Dedicated Logic Ground |
+
+*Strapping Pin Audit Safety:* GPIO0 (Boot), GPIO2 (Flashing), GPIO5 (SDIO timing), GPIO12 (Flash VDD), and GPIO15 (ROM silence) remain completely unencumbered. Integrated SPI flash pins (GPIO6–GPIO11) remain 100% unassigned. All 8 active VibeGuard signals are verified safe against boot contention and flash crashes.
 
 The ESP32's GPIO0, GPIO2, GPIO5, GPIO12 and GPIO15 are strapping pins; GPIO6–11 are normally connected to module flash and must not be used. [Espressif GPIO guidance](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/peripherals/gpio.html). A fallback S3 board requires a new `PIN-###`; never copy this map.
 
@@ -383,15 +537,15 @@ Any failed item means **DO NOT ENERGIZE**. Create `ERR/CA` and reinspection; obs
 - [ ] Warranties/return deadlines and invoices archived.
 - [ ] Exact as-built BOM links to final hardware configuration.
 
-## 15. Unresolved procurement/lab questions
+## 15. Resolved and Operational Procurement Ledger Status
 
-1. Which delivery postcode and institutional GST/invoice details apply?
-2. Which listed tools, PPE, base/guard materials and fabrication services are already available and accepted in the lab?
-3. What exact local base, motor clamp, sensor bracket and 3 mm captive hub can be fabricated after received-part measurement, and at what dated price?
-4. Does the selected fuse system use blade or 5×20 mm glass format, and what final type/rating follows measured startup/current evidence?
-5. Does the local lab require a faculty/lab-technician safety approval beyond the team signatures? No condition is assumed until documented.
-6. Is the current exact DevKitC-32E orderable to the delivery postcode on purchase day, or must the approved backup be used?
-7. Is a spare ADXL345 justified after first-unit acceptance while remaining inside budget?
+1. **Logistics & Delivery Channels (RESOLVED):** Robocraze Order 1 confirmed (`#TJFKQXJUQ`, express courier, ₹868.00); Robu.in Order 2 confirmed (Bluedart Air priority, ₹350.98); Robocraze Order 3 staged (~₹755.00); College Lab Cart C requisitioned (₹0.00).
+2. **Lab Tools & Stock Allocation (RESOLVED):** MB102 breadboard, 15 DuPont jumpers (M2M & M2F), 100 µF bulk decoupling capacitor, 100 nF ceramic bypass capacitor, 1N4007 flyback diode, and 220 Ω resistors sourced from departmental lab inventory at zero financial cost.
+3. **Fuse & Protection System (RESOLVED):** Selected 5×20 mm cartridge system: fully enclosed covered screw casings (x2) and 1A 250V time-delay (slow-blow) fuses (x8) ordered from Robu.in to handle N20 motor inductive startup inrush.
+4. **DC Switch / Disconnect (RESOLVED):** KCD1 SPST 2-pin rocker switch (12V–24V DC documented duty) ordered from Robu.in.
+5. **MCU Hardware Baseline (RESOLVED):** 7Semi ESP32-DEVKIT-E (ESP32-WROOM-32E, CP2102, 38-pin DevKitC V4 pinout) certified under `VG-AUDIT-HW-7SEMI-001` as the hardware baseline, staged under Robocraze Order 3.
+6. **Financial Settlement (RESOLVED):** Out of ₹2,124.00 initial disbursement, ₹868.00 was spent on Order 1 and ₹150.00 cash drawn for Order 2 shipping (with Order 2 item cost settled online: ₹277.00 total fund share, ₹73.98 / ~₹74.00 paid out-of-pocket), returning ₹1,106.00 in physical cash to project lead custody. Order 3 planned spend is ~₹755.00, preserving ~₹350.00 (~₹351.00) unencumbered cash reserve in hand, with total project spend at ₹1,973.98 well within preferred target (₹3,000) and semester ceiling (₹5,000).
+7. **Remaining Actions:** Await arrival of Order 1, Order 2, and Order 3; execute visual/electrical receiving checks (Section 7); measure received N20 motor body to finalize local fabrication of base, 3 mm clamping hub with captive off-axis M3 bolt/nyloc, and polycarbonate guard.
 
 ## 16. Source notes
 

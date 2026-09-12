@@ -12,3 +12,8 @@
 .agents/
 TEST_INFRA.md
 TEST_READY.md
+
+# Python cache files
+**/__pycache__/
+*.pyc
+*.pyo

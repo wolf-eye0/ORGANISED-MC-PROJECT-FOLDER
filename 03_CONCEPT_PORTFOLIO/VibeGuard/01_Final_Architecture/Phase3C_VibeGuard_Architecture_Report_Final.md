@@ -110,6 +110,8 @@ This was flagged in Phase 3A and Phase 3B as VibeGuard's one genuinely hard, uns
 
 ESP32 (WROOM-32 class) is the unanimous primary recommendation: 240 MHz dual-core Xtensa LX6, 520 KB SRAM, hardware FPU, DMA-capable SPI, ₹300–500. This is consistent with — and reinforces — Phase 3B's own cross-portfolio finding that ESP32/STM32 is a shared platform investment across the whole five-concept portfolio, not a VibeGuard-specific decision. STM32F4-class (Cortex-M4, hardware FPU) is the universal fallback if ESP32 sourcing fails. Arduino Uno-class (ATmega328P, no FPU, 2 KB RAM) and RP2040 (no hardware FPU) are both explicitly disqualified by multiple reports for real-time FFT — RP2040's absence of hardware floating point is specifically flagged by Gemini as disqualifying despite its otherwise-attractive PIO peripheral.
 
+**Hardware Baseline Finalization (Phase 4):** For physical implementation, the **7Semi ESP32-DEVKIT-E** development board (carrying an authentic Espressif ESP32-WROOM-32E module, Silicon Labs CP2102 USB-to-UART bridge, and 38-pin DevKitC V4 pinout) is formally certified and adopted as the MCU hardware baseline per audit `VG-AUDIT-HW-7SEMI-001`. The Espressif `ESP32-DEVKITC-32E` remains an approved 100% pin-compatible alternative. Crucially, the 7Semi carrier affirms **zero changes to the frozen 8-signal pinout (GPIO18, 23, 19, 21, 4, 25, 26, 27) and zero changes to the modular C++ DSP firmware codebase**. To guarantee power distribution network (PDN) stability and eliminate brownout detector reset loops (`rst:0x10`) during Wi-Fi or active DSP bursts, a **100 µF low-ESR bulk electrolytic capacitor in parallel with a 100 nF ceramic bypass capacitor** is installed directly across the 3.3V and GND rails (Header Pins J1-1 and J1-14).
+
 **One new, genuinely useful technical finding from this round, not previously surfaced in Phase 3A or 3B:** Gemini identifies that achieving the ADXL345's full 3,200 Hz output data rate requires **SPI, not I²C** — I²C's ~400 kHz Fast-Mode ceiling cannot sustain three-axis 16-bit samples at that rate without buffer overflow. This is a concrete, checkable engineering constraint that should be treated as settled rather than re-litigated in Phase 4: **the electrical architecture must use SPI.**
 
 ## 6. Signal Acquisition & Processing Pipeline
@@ -128,21 +130,30 @@ Per §3(a): implement a calibrated single-feature threshold (RMS, with a persist
 
 ## 8. Mechanical & Electrical Architecture
 
-- **Mounting:** Rigid — 3D-printed bracket bolted or bonded (epoxy/cyanoacrylate) directly to the motor/fan housing. No magnetic or foam-adhesive mounting for the final demonstration.
-- **Interface:** SPI (not I²C — see §5), 3.3V shared logic rail between ESP32 and ADXL345 (both operate natively at 3.3V, eliminating level-shifter complexity), 0.1 µF decoupling capacitor at the sensor's supply pins.
-- **Indication:** A common-cathode RGB LED (Green/Red/Blue for Normal/Abnormal/Calibrating) satisfies the MDS's "clear output" requirement without added display complexity; an optional small OLED can be added later for numeric feature readout if time permits (Perplexity), but is not required.
-- **Test rig:** A small 12V DC motor or PC cooling fan on a heavy, vibration-damped base (plywood or acrylic), with an attachable eccentric mass for the primary fault-injection scenario.
+- **MCU Carrier:** 7Semi ESP32-DEVKIT-E (ESP32-WROOM-32E, CP2102, 38-pin DevKitC V4 pinout), supplemented with a **100 µF low-ESR bulk electrolytic brownout decoupling capacitor** and 100 nF ceramic bypass capacitor across 3.3V/GND, with dual-breadboard mechanical bridging for pin access.
+- **Mounting:** Rigid — Metal N20 mounting bracket and 3D-printed fixture bolted directly to the motor housing. No magnetic or foam-adhesive mounting for the final demonstration.
+- **Interface & Frozen Pinout:** 4-wire hardware SPI (not I²C — see §5), 3.3V shared logic rail between ESP32 and ADXL345 (both operate natively at 3.3V, eliminating level-shifter complexity), 0.1 µF decoupling capacitor at the sensor's supply pins. Frozen 8-signal mapping:
+  - SPI SCK: **GPIO18**
+  - SPI MOSI: **GPIO23**
+  - SPI MISO: **GPIO19**
+  - SPI CS: **GPIO21** (Active-LOW; deliberately avoids boot-strapping pin GPIO5)
+  - Sensor INT1: **GPIO4** (Optional DATA_READY / synthetic tachometer ISR in simulation)
+  - RGB Status LEDs: Green on **GPIO25**, Blue on **GPIO26**, Red on **GPIO27** via current-limiting resistors (220/330 Ω).
+  - Preserves 100% fidelity with zero changes to modular C++ DSP firmware or simulation models.
+- **Indication:** A common-cathode RGB LED (Green/Blue/Red for Normal/Calibrating/Abnormal) satisfies the MDS's "clear output" requirement without added display complexity.
+- **Test rig & Inductive Clamp:** A compact 12V 600 RPM N20 DC metal gear motor on a heavy, vibration-damped base, powered from a dedicated 12V 2A DC adapter with KCD1 rocker switch and 1A time-delay fuse. A **1N4007 rectifier diode (`D-DIODE-1N4007`)** is soldered directly across the motor terminal tags in reverse-bias for inductive flyback clamp protection. The 12V motor power rail remains **strictly galvanically isolated** from the ESP32 logic ground.
 
 ## 9. Cost Assessment
 
-| Report | Total (INR) | Notes |
+| Report / Ledger Channel | Total (INR) | Notes |
 |---|---|---|
-| Gemini | ₹1,919–2,207 | ADXL345 route; includes 20% contingency and full test-rig cost |
-| Mistral | ₹4,070 | IIS3DWB route; includes dedicated test rig and 10% contingency |
-| Perplexity | Not itemized | States "comfortably within ₹3,000–5,000" |
-| Qwen | ~₹1,170 *(incomplete)* | **Flag: omits any motor/test-rig line item.** Adding a comparable rig cost (~₹300–500, per Gemini's and Mistral's own itemization) brings Qwen's realistic total to roughly ₹1,500–1,700 |
+| Gemini Synthesis Estimate | ₹1,919–2,207 | ADXL345 route; includes 20% contingency and full test-rig cost |
+| Mistral Synthesis Estimate | ₹4,070 | IIS3DWB route; includes dedicated test rig and 10% contingency |
+| Perplexity Synthesis Estimate | Not itemized | States "comfortably within ₹3,000–5,000" |
+| Qwen Synthesis Estimate | ~₹1,170 *(incomplete)* | Flag: omits motor/test-rig line item; realistic total roughly ₹1,500–1,700 |
+| **Final Reconciled Multi-Channel Ledger** | **₹1,973.98** | **Actual/Projected Total across 4 channels (Robocraze 1: ₹868.00, Robu 2: ₹350.98, Robocraze 3: ~₹755.00, College Lab: ₹0.00). Comfortably within ₹3,000 preferred target and ₹5,000 ceiling.** |
 
-All four estimates — Qwen's once corrected — land well inside the ₹5,000 ceiling, with the ADXL345 route (Gemini/Qwen) landing near ₹1,700–2,200 and the IIS3DWB route (Mistral) near ₹4,000. **Budget confidence: High**, with ample headroom for the ADXL345-to-IIS3DWB upgrade path if the team chooses it later.
+All four initial estimates and the finalized multi-channel procurement ledger land well inside the ₹5,000 ceiling, with the finalized procurement ledger landing at **₹1,973.98** (well within Gemini's ₹1,919–2,207 bracket and below the ₹3,000 preferred target). **Budget confidence: High**, with ₹1,026.02 headroom against the preferred target and ₹3,026.02 against the semester ceiling. Out of the initial ₹2,124.00 project cash disbursement, ₹868.00 was committed to Robocraze Order 1 and ₹150.00 cash advance drawn for Robu.in Order 2 shipping (with Order 2 item cost settled online: ₹277.00 project fund share and ₹73.98 / ~₹74.00 paid out-of-pocket), returning ₹1,106.00 in physical cash balance to project lead custody. Staged Robocraze Order 3 planned spend is ~₹755.00, preserving ~₹350.00 (~₹351.00) unencumbered cash reserve in hand.
 
 ## 10. Engineering Risk Assessment & Kill Factors
 
