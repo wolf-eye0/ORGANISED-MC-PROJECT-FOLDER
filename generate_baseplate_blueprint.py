@@ -286,6 +286,96 @@ def generate_svg(filepath):
 # =============================================================================
 # 2. GENERATE 1:1 TRUE-SCALE PRINTABLE DRILLING STICKER TEMPLATE (A4 PDF)
 # =============================================================================
+def draw_arrow(cr, x, y, angle_rad, size=4.0):
+    """Draws a solid arrowhead pointing in the direction of angle_rad at (x, y)."""
+    cr.save()
+    cr.translate(x, y)
+    cr.rotate(angle_rad)
+    cr.new_path()
+    cr.move_to(0, 0)
+    cr.line_to(-size, -size * 0.4)
+    cr.line_to(-size * 0.7, 0)
+    cr.line_to(-size, size * 0.4)
+    cr.close_path()
+    cr.fill()
+    cr.restore()
+
+def draw_dim_h(cr, x1, x2, y, text, offset_text_y=-3.0, font_size=6.2, color=(0.15, 0.25, 0.45), tick=True):
+    """Draws a horizontal dimension line between x1 and x2 at y with arrows and centered text."""
+    cr.save()
+    cr.set_source_rgb(*color)
+    cr.set_line_width(0.55)
+    
+    cr.new_path()
+    cr.move_to(x1, y)
+    cr.line_to(x2, y)
+    cr.stroke()
+    
+    if tick:
+        cr.new_path()
+        cr.move_to(x1, y - 2.5)
+        cr.line_to(x1, y + 2.5)
+        cr.move_to(x2, y - 2.5)
+        cr.line_to(x2, y + 2.5)
+        cr.stroke()
+        
+    if abs(x2 - x1) >= 8.0:
+        draw_arrow(cr, x1, y, 0.0, size=3.5)
+        draw_arrow(cr, x2, y, math.pi, size=3.5)
+        
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+    cr.set_font_size(font_size)
+    ext = cr.text_extents(text)
+    tx = (x1 + x2) / 2.0 - ext.width / 2.0
+    ty = y + offset_text_y
+    
+    cr.set_source_rgba(1.0, 1.0, 1.0, 0.85)
+    cr.rectangle(tx - 1.5, ty - ext.height - 0.5, ext.width + 3.0, ext.height + 2.0)
+    cr.fill()
+    
+    cr.set_source_rgb(*color)
+    cr.move_to(tx, ty)
+    cr.show_text(text)
+    cr.restore()
+
+def draw_dim_v(cr, x, y1, y2, text, offset_text_x=4.0, font_size=6.2, color=(0.15, 0.25, 0.45), tick=True):
+    """Draws a vertical dimension line between y1 and y2 at x with arrows and text."""
+    cr.save()
+    cr.set_source_rgb(*color)
+    cr.set_line_width(0.55)
+    
+    cr.new_path()
+    cr.move_to(x, y1)
+    cr.line_to(x, y2)
+    cr.stroke()
+    
+    if tick:
+        cr.new_path()
+        cr.move_to(x - 2.5, y1)
+        cr.line_to(x + 2.5, y1)
+        cr.move_to(x - 2.5, y2)
+        cr.line_to(x + 2.5, y2)
+        cr.stroke()
+        
+    if abs(y2 - y1) >= 8.0:
+        draw_arrow(cr, x, y1, math.pi / 2.0, size=3.5)
+        draw_arrow(cr, x, y2, -math.pi / 2.0, size=3.5)
+        
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+    cr.set_font_size(font_size)
+    ext = cr.text_extents(text)
+    tx = x + offset_text_x
+    ty = (y1 + y2) / 2.0 + ext.height / 3.0
+    
+    cr.set_source_rgba(1.0, 1.0, 1.0, 0.85)
+    cr.rectangle(tx - 1.5, ty - ext.height - 0.5, ext.width + 3.0, ext.height + 2.0)
+    cr.fill()
+    
+    cr.set_source_rgb(*color)
+    cr.move_to(tx, ty)
+    cr.show_text(text)
+    cr.restore()
+
 def generate_1to1_pdf(filepath):
     PT_PER_MM = 72.0 / 25.4
     A4_W_PT = 595.28
@@ -297,36 +387,60 @@ def generate_1to1_pdf(filepath):
     board_w_pt = BOARD_W * PT_PER_MM
     board_h_pt = BOARD_H * PT_PER_MM
     start_x = (A4_W_PT - board_w_pt) / 2.0
-    start_y = (A4_H_PT - board_h_pt) / 2.0 + 35.0
+    start_y = 150.0
+
+    def to_pt_x(x_mm):
+        return start_x + x_mm * PT_PER_MM
+
+    def to_pt_y(y_mm):
+        return start_y + (BOARD_H - y_mm) * PT_PER_MM
 
     # Header
     cr.save()
     cr.set_source_rgb(0.0, 0.0, 0.0)
     cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
     cr.set_font_size(13.0)
-    cr.move_to(start_x, start_y - 65.0)
-    cr.show_text("VIBEGUARD: 1:1 SCALE DIRECT DRILLING DRILL STICKER TEMPLATE")
+    cr.move_to(start_x, 42.0)
+    cr.show_text("VIBEGUARD: 1:1 SCALE DRILLING TEMPLATE & DUAL-DATUM BLUEPRINT")
     
     cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
-    cr.set_font_size(8.5)
-    cr.move_to(start_x, start_y - 50.0)
-    cr.show_text("INSTRUCTIONS: Print at 100% (Do NOT fit to page). Cut along outer border, tape to acrylic, and center punch crosshairs.")
+    cr.set_font_size(8.2)
+    cr.set_source_rgb(0.2, 0.2, 0.2)
+    cr.move_to(start_x, 56.0)
+    cr.show_text("100% TRUE PHYSICAL SCALE • 150 × 150 mm ACRYLIC BASEPLATE • ALL 8 HOLES Ø3.3 mm THROUGH-HOLES")
     
-    # Calibration Bar (50.0 mm test bar)
+    cr.set_source_rgb(0.75, 0.1, 0.1)
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+    cr.set_font_size(8.0)
+    cr.move_to(start_x, 70.0)
+    cr.show_text("CRITICAL: In Print Dialog, select 'Actual Size' / 100% Scale. DO NOT select 'Fit to Page' or 'Shrink'.")
+
+    # 50.0 mm Calibration Bar
     bar_w_mm = 50.0
     bar_w_pt = bar_w_mm * PT_PER_MM
-    cr.new_path()
-    cr.rectangle(start_x, start_y - 38.0, bar_w_pt, 6.0)
-    cr.set_source_rgb(0.2, 0.2, 0.2)
+    bar_y = 80.0
+    cr.set_source_rgb(0.15, 0.15, 0.15)
+    cr.rectangle(start_x, bar_y, bar_w_pt, 7.0)
     cr.fill()
-    cr.move_to(start_x + bar_w_pt + 8.0, start_y - 32.0)
-    cr.set_font_size(8.0)
+    
+    cr.set_source_rgb(1.0, 1.0, 1.0)
+    cr.set_line_width(0.5)
+    for mm in range(0, 51, 5):
+        tx_tick = start_x + mm * PT_PER_MM
+        th = 7.0 if mm % 10 == 0 else 4.0
+        cr.move_to(tx_tick, bar_y)
+        cr.line_to(tx_tick, bar_y + th)
+        cr.stroke()
+        
+    cr.set_source_rgb(0.1, 0.1, 0.1)
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+    cr.set_font_size(7.8)
+    cr.move_to(start_x + bar_w_pt + 10.0, bar_y + 5.5)
     cr.show_text("CALIBRATION BAR: Verify with physical ruler that this bar is EXACTLY 50.0 mm!")
     cr.restore()
 
     # Outer Cutting Border (150 mm x 150 mm)
     cr.save()
-    cr.new_path()
     cr.set_source_rgb(0.0, 0.0, 0.0)
     cr.set_line_width(1.5)
     cr.rectangle(start_x, start_y, board_w_pt, board_h_pt)
@@ -334,86 +448,113 @@ def generate_1to1_pdf(filepath):
 
     # Corner 45° Notch Marker (Index A)
     cr.new_path()
-    cr.set_source_rgb(0.85, 0.2, 0.2)
-    cr.set_line_width(1.0)
+    cr.set_source_rgb(0.85, 0.15, 0.15)
+    cr.set_line_width(1.2)
     notch_pt = 15.0 * PT_PER_MM
     cr.move_to(start_x, start_y + notch_pt)
     cr.line_to(start_x + notch_pt, start_y)
     cr.stroke()
-    cr.set_font_size(7.5)
-    cr.move_to(start_x + 3.0, start_y + 11.0)
+    cr.set_font_size(8.0)
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+    cr.move_to(start_x + 3.5, start_y + 11.5)
     cr.show_text("INDEX A")
+    cr.restore()
 
-    # Centerlines (dashed)
-    cr.new_path()
+    # Centerlines (dashed Datum B crossing at X=75, Y=75)
+    cr.save()
     cr.set_source_rgb(0.5, 0.5, 0.5)
-    cr.set_line_width(0.75)
-    cr.set_dash([4.0, 3.0, 1.0, 3.0])
-    cr.move_to(start_x - 10.0, start_y + board_h_pt/2.0)
-    cr.line_to(start_x + board_w_pt + 10.0, start_y + board_h_pt/2.0)
+    cr.set_line_width(0.65)
+    cr.set_dash([5.0, 3.0, 1.5, 3.0])
+    
+    cy_pt = to_pt_y(75.0)
+    cr.move_to(start_x - 12.0, cy_pt)
+    cr.line_to(start_x + board_w_pt + 12.0, cy_pt)
     cr.stroke()
-    cr.new_path()
-    cr.move_to(start_x + board_w_pt/2.0, start_y - 10.0)
-    cr.line_to(start_x + board_w_pt/2.0, start_y + board_h_pt + 10.0)
+    
+    cx_pt = to_pt_x(75.0)
+    cr.move_to(cx_pt, start_y - 12.0)
+    cr.line_to(cx_pt, start_y + board_h_pt + 12.0)
     cr.stroke()
     cr.set_dash([])
+    
+    cr.set_source_rgb(0.3, 0.3, 0.3)
+    cr.arc(cx_pt, cy_pt, 1.2, 0, 2*math.pi)
+    cr.fill()
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+    cr.set_font_size(6.0)
+    cr.move_to(cx_pt + 3.0, cy_pt - 3.0)
+    cr.show_text("CENTER (75, 75)")
+    cr.restore()
 
-    # 10 mm Perimeter Border Line
-    cr.new_path()
-    cr.set_source_rgb(0.75, 0.75, 0.75)
-    cr.set_line_width(0.5)
-    in_pt = 10.0 * PT_PER_MM
-    cr.rectangle(start_x + in_pt, start_y + in_pt, board_w_pt - 2*in_pt, board_h_pt - 2*in_pt)
+    # The Smaller Square (130 x 130 mm connecting C1, C2, C4, C3)
+    cr.save()
+    cr.set_source_rgb(0.15, 0.45, 0.85)
+    cr.set_line_width(0.7)
+    cr.set_dash([4.0, 2.5])
+    sq_x1 = to_pt_x(10.0)
+    sq_x2 = to_pt_x(140.0)
+    sq_y_bot = to_pt_y(10.0)
+    sq_y_top = to_pt_y(140.0)
+    cr.rectangle(sq_x1, sq_y_top, sq_x2 - sq_x1, sq_y_bot - sq_y_top)
     cr.stroke()
+    cr.set_dash([])
+    
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+    cr.set_font_size(6.2)
+    cr.set_source_rgb(0.15, 0.45, 0.85)
+    cr.move_to((sq_x1 + sq_x2)/2.0 - 55.0, sq_y_bot + 9.0)
+    cr.show_text("130.0 mm (SMALLER SQUARE: PITCH BETWEEN CORNER LEG HOLES C1–C2)")
+    cr.restore()
 
-    # Draw Component Outlines
-    # 1. MB102 Breadboard Zone
-    cr.new_path()
-    cr.set_source_rgb(0.65, 0.65, 0.65)
-    cr.set_line_width(0.75)
+    # Component Footprints
+    cr.save()
+    cr.set_source_rgb(0.68, 0.68, 0.68)
+    cr.set_line_width(0.6)
     cr.set_dash([3.0, 2.0])
-    bb_x = start_x + 32.5 * PT_PER_MM
-    bb_y = start_y + (BOARD_H - 140.0) * PT_PER_MM
+    bb_x = to_pt_x(32.5)
+    bb_y = to_pt_y(140.0)
     bb_w = 85.0 * PT_PER_MM
     bb_h = 55.0 * PT_PER_MM
     cr.rectangle(bb_x, bb_y, bb_w, bb_h)
     cr.stroke()
     cr.set_dash([])
     cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
-    cr.set_font_size(8.0)
-    cr.move_to(bb_x + 18.0, bb_y + bb_h/2.0)
+    cr.set_font_size(7.5)
+    cr.move_to(bb_x + 18.0, bb_y + bb_h / 2.0)
     cr.show_text("MB102 BREADBOARD & ESP32 ADHESIVE ZONE")
+    cr.restore()
 
-    # 2. Motor Bracket Footprint (24x26 mm at X=40, Y=55)
-    cr.new_path()
-    mot_x = start_x + (40.0 - 12.0) * PT_PER_MM
-    mot_y = start_y + (BOARD_H - (55.0 + 13.0)) * PT_PER_MM
+    # Motor Footprint
+    cr.save()
+    mot_x = to_pt_x(40.0 - 12.0)
+    mot_y = to_pt_y(55.0 + 13.0)
     mot_w = 24.0 * PT_PER_MM
     mot_h = 26.0 * PT_PER_MM
-    cr.set_source_rgb(0.8, 0.5, 0.1)
-    cr.set_line_width(0.75)
+    cr.set_source_rgb(0.82, 0.45, 0.1)
+    cr.set_line_width(0.65)
     cr.rectangle(mot_x, mot_y, mot_w, mot_h)
     cr.stroke()
+    cr.restore()
 
-    # 3. Sensor Bracket Footprint (24x18 mm at X=84, Y=55)
-    cr.new_path()
-    sens_x = start_x + (84.0 - 12.0) * PT_PER_MM
-    sens_y = start_y + (BOARD_H - (55.0 + 9.0)) * PT_PER_MM
+    # Sensor Footprint
+    cr.save()
+    sens_x = to_pt_x(84.0 - 12.0)
+    sens_y = to_pt_y(55.0 + 9.0)
     sens_w = 24.0 * PT_PER_MM
     sens_h = 18.0 * PT_PER_MM
     cr.set_source_rgb(0.5, 0.2, 0.8)
-    cr.set_line_width(0.75)
+    cr.set_line_width(0.65)
     cr.rectangle(sens_x, sens_y, sens_w, sens_h)
     cr.stroke()
+    cr.restore()
 
-    # Draw Each Hole Independently (with cr.new_path() to eliminate stray lines)
+    # Holes
     for h in HOLES:
-        hx = start_x + h["x_a"] * PT_PER_MM
-        hy = start_y + (BOARD_H - h["y_a"]) * PT_PER_MM
+        hx = to_pt_x(h["x_a"])
+        hy = to_pt_y(h["y_a"])
         hr = (h["dia"] / 2.0) * PT_PER_MM
         pilot_r = (h["pilot"] / 2.0) * PT_PER_MM
 
-        # Pilot circle
         cr.save()
         cr.new_path()
         cr.set_source_rgb(0.55, 0.55, 0.55)
@@ -423,25 +564,22 @@ def generate_1to1_pdf(filepath):
         cr.stroke()
         cr.restore()
 
-        # Final through-hole circle
         cr.save()
         cr.new_path()
         cr.set_source_rgb(0.0, 0.0, 0.0)
-        cr.set_line_width(0.8)
+        cr.set_line_width(0.85)
         cr.arc(hx, hy, hr, 0, 2*math.pi)
         cr.stroke()
         cr.restore()
 
-        # Center dot
         cr.save()
         cr.new_path()
         cr.set_source_rgb(0.0, 0.0, 0.0)
-        cr.arc(hx, hy, 0.6, 0, 2*math.pi)
+        cr.arc(hx, hy, 0.65, 0, 2*math.pi)
         cr.fill()
         cr.restore()
 
-        # Fine Crosshairs
-        ch_len = hr + 4.0 * PT_PER_MM
+        ch_len = hr + 4.5 * PT_PER_MM
         cr.save()
         cr.new_path()
         cr.set_source_rgb(0.0, 0.0, 0.0)
@@ -455,86 +593,275 @@ def generate_1to1_pdf(filepath):
         cr.stroke()
         cr.restore()
 
-        # Text Label positioned safely with ample clearance
         cr.save()
-        cr.set_source_rgb(0.1, 0.1, 0.1)
+        cr.set_source_rgb(0.0, 0.0, 0.0)
         cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
-        cr.set_font_size(6.8)
+        cr.set_font_size(6.5)
         if h["id"] == "C1":
-            cr.move_to(hx + hr + 5.0, hy - hr - 2.0)
+            cr.move_to(hx + hr + 4.0, hy - 4.0)
+            cr.show_text("C1: Ø3.3 (10, 10)")
         elif h["id"] == "C2":
-            cr.move_to(hx - hr - 38.0, hy - hr - 2.0)
+            cr.move_to(hx - 58.0, hy - 4.0)
+            cr.show_text("C2: Ø3.3 (140, 10)")
         elif h["id"] == "C3":
-            cr.move_to(hx + hr + 5.0, hy + hr + 10.0)
+            cr.move_to(hx + hr + 4.0, hy + 10.0)
+            cr.show_text("C3: Ø3.3 (10, 140)")
         elif h["id"] == "C4":
-            cr.move_to(hx - hr - 38.0, hy + hr + 10.0)
-        elif h["id"] in ["M1", "M2", "S1", "S2"]:
-            cr.move_to(hx - 11.0, hy - hr - 6.0)
-        cr.show_text(f"{h['id']}: Ø3.3")
+            cr.move_to(hx - 62.0, hy + 10.0)
+            cr.show_text("C4: Ø3.3 (140, 140)")
+        elif h["id"] == "M1":
+            cr.move_to(hx - 12.0, hy - hr - 5.0)
+            cr.show_text("M1: Ø3.3")
+        elif h["id"] == "M2":
+            cr.move_to(hx - 12.0, hy - hr - 5.0)
+            cr.show_text("M2: Ø3.3")
+        elif h["id"] == "S1":
+            cr.move_to(hx - 10.0, hy - hr - 5.0)
+            cr.show_text("S1: Ø3.3")
+        elif h["id"] == "S2":
+            cr.move_to(hx - 10.0, hy - hr - 5.0)
+            cr.show_text("S2: Ø3.3")
         cr.restore()
 
-    # Dimension Annotations on PDF Template
+    # Dimensioning
+    c1_x = to_pt_x(10.0)
+    c1_y = to_pt_y(10.0)
+    edge_l_x = to_pt_x(0.0)
+    edge_b_y = to_pt_y(0.0)
+    
+    # Extension witness lines outside the board at bottom-left
     cr.save()
-    cr.set_source_rgb(0.3, 0.3, 0.3)
-    cr.set_line_width(0.5)
-    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
-    cr.set_font_size(6.5)
-
-    # 17.0 mm motor pitch
-    m1_x = start_x + 31.5 * PT_PER_MM
-    m2_x = start_x + 48.5 * PT_PER_MM
-    m_dim_y = start_y + (BOARD_H - 55.0) * PT_PER_MM + 18.0
-    cr.new_path()
-    cr.move_to(m1_x, m_dim_y)
-    cr.line_to(m2_x, m_dim_y)
+    cr.set_source_rgb(0.7, 0.15, 0.15)
+    cr.set_line_width(0.4)
+    cr.move_to(edge_l_x, edge_b_y)
+    cr.line_to(edge_l_x - 14.0, edge_b_y)
+    cr.move_to(c1_x, c1_y)
+    cr.line_to(edge_l_x - 14.0, c1_y)
+    cr.move_to(edge_l_x, edge_b_y)
+    cr.line_to(edge_l_x, edge_b_y + 14.0)
+    cr.move_to(c1_x, c1_y)
+    cr.line_to(c1_x, edge_b_y + 14.0)
     cr.stroke()
-    cr.move_to((m1_x + m2_x)/2.0 - 12.0, m_dim_y + 8.0)
-    cr.show_text("17.0 mm")
-
-    # 15.0 mm sensor pitch
-    s1_x = start_x + 76.5 * PT_PER_MM
-    s2_x = start_x + 91.5 * PT_PER_MM
-    s_dim_y = start_y + (BOARD_H - 55.0) * PT_PER_MM + 18.0
-    cr.new_path()
-    cr.move_to(s1_x, s_dim_y)
-    cr.line_to(s2_x, s_dim_y)
-    cr.stroke()
-    cr.move_to((s1_x + s2_x)/2.0 - 12.0, s_dim_y + 8.0)
-    cr.show_text("15.0 mm")
-
-    # 20.0 mm gap between brackets (placed cleanly above bracket boxes)
-    gap_x1 = start_x + 52.0 * PT_PER_MM
-    gap_x2 = start_x + 72.0 * PT_PER_MM
-    gap_y = start_y + (BOARD_H - 55.0) * PT_PER_MM - 42.0
-    cr.new_path()
-    cr.move_to(gap_x1, gap_y)
-    cr.line_to(gap_x2, gap_y)
-    # small vertical ticks at ends
-    cr.move_to(gap_x1, gap_y - 3.0)
-    cr.line_to(gap_x1, gap_y + 3.0)
-    cr.move_to(gap_x2, gap_y - 3.0)
-    cr.line_to(gap_x2, gap_y + 3.0)
-    cr.stroke()
-    cr.move_to((gap_x1 + gap_x2)/2.0 - 16.0, gap_y - 4.0)
-    cr.show_text("20.0 mm gap")
-
-    # 150 mm outer dimension text
-    cr.move_to(start_x + board_w_pt/2.0 - 18.0, start_y - 4.0)
-    cr.show_text("150.0 mm (W)")
-    cr.move_to(start_x + board_w_pt + 4.0, start_y + board_h_pt/2.0)
-    cr.show_text("150.0 mm (H)")
-
+    cr.restore()
+    
+    draw_dim_h(cr, edge_l_x, c1_x, edge_b_y + 10.0, "10.0", offset_text_y=7.5, font_size=6.2, color=(0.75, 0.1, 0.1))
+    draw_dim_v(cr, edge_l_x - 10.0, c1_y, edge_b_y, "10.0", offset_text_x=-18.0, font_size=6.2, color=(0.75, 0.1, 0.1))
+    
+    cr.save()
+    cr.set_source_rgb(0.75, 0.1, 0.1)
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+    cr.set_font_size(6.0)
+    cr.move_to(c1_x + 6.0, c1_y + 15.0)
+    cr.show_text("← 10.0 mm CORNER SETBACK (TYP. ×4 HOLES)")
     cr.restore()
 
-    # Bottom Legend
+    # Distances from smaller square (130x130) to holes
+    hole_y_pt = to_pt_y(55.0)
+    inner_bot_y = to_pt_y(10.0)
+    inner_top_y = to_pt_y(140.0)
+    inner_left_x = to_pt_x(10.0)
+    inner_right_x = to_pt_x(140.0)
+    
+    m1_x_pt = to_pt_x(31.5)
+    m2_x_pt = to_pt_x(48.5)
+    s1_x_pt = to_pt_x(76.5)
+    s2_x_pt = to_pt_x(91.5)
+
     cr.save()
-    cr.set_source_rgb(0.3, 0.3, 0.3)
-    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+    cr.set_source_rgb(0.75, 0.75, 0.75)
+    cr.set_line_width(0.35)
+    cr.set_dash([2.0, 2.0])
+    for x_pt in [inner_left_x, m1_x_pt, m2_x_pt, s1_x_pt, s2_x_pt, inner_right_x]:
+        cr.move_to(x_pt, hole_y_pt + 8.0)
+        cr.line_to(x_pt, to_pt_y(22.0))
+        cr.stroke()
+    cr.restore()
+
+    v_dim_x = to_pt_x(20.0)
+    draw_dim_v(cr, v_dim_x, hole_y_pt, inner_bot_y, "45.0 mm (Inner Sq. Bot to Holes)", offset_text_x=4.0, font_size=6.2, color=(0.1, 0.45, 0.2))
+    draw_dim_v(cr, v_dim_x, inner_top_y, hole_y_pt, "85.0 mm (Holes to Inner Sq. Top)", offset_text_x=4.0, font_size=6.0, color=(0.35, 0.35, 0.35))
+
+    chain_y = to_pt_y(39.0)
+    draw_dim_h(cr, inner_left_x, m1_x_pt, chain_y, "21.5 mm", offset_text_y=-3.0, font_size=6.0, color=(0.1, 0.45, 0.2))
+    draw_dim_h(cr, m1_x_pt, m2_x_pt, chain_y, "17.0 mm", offset_text_y=-3.0, font_size=6.0, color=(0.8, 0.35, 0.0))
+    draw_dim_h(cr, m2_x_pt, s1_x_pt, chain_y, "28.0 mm (20 mm Gap)", offset_text_y=-3.0, font_size=5.8, color=(0.4, 0.4, 0.4))
+    draw_dim_h(cr, s1_x_pt, s2_x_pt, chain_y, "15.0 mm", offset_text_y=-3.0, font_size=6.0, color=(0.5, 0.2, 0.8))
+    draw_dim_h(cr, s2_x_pt, inner_right_x, chain_y, "48.5 mm (to Inner Right)", offset_text_y=-3.0, font_size=6.0, color=(0.1, 0.45, 0.2))
+
+    chain2_y = to_pt_y(29.0)
+    draw_dim_h(cr, inner_left_x, m2_x_pt, chain2_y, "38.5 mm (Inner Left to M2)", offset_text_y=-3.0, font_size=5.8, color=(0.1, 0.45, 0.2))
+    
+    chain3_y = to_pt_y(22.0)
+    draw_dim_h(cr, inner_left_x, s1_x_pt, chain3_y, "66.5 mm (Inner Left to S1)", offset_text_y=-3.0, font_size=5.8, color=(0.1, 0.45, 0.2))
+
+    # Centerline Offsets
+    center_y_pt = to_pt_y(75.0)
+    center_x_pt = to_pt_x(75.0)
+
+    v_center_x = to_pt_x(62.5)
+    draw_dim_v(cr, v_center_x, center_y_pt, hole_y_pt, "20.0 mm (Below Centerline)", offset_text_x=4.0, font_size=6.2, color=(0.85, 0.1, 0.1))
+
+    center_dim_y = to_pt_y(68.0)
+    draw_dim_h(cr, m2_x_pt, center_x_pt, center_dim_y, "26.5 mm (L)", offset_text_y=-3.0, font_size=6.0, color=(0.85, 0.1, 0.1))
+    draw_dim_h(cr, m1_x_pt, center_x_pt, center_dim_y - 8.0, "43.5 mm Left of Center", offset_text_y=-3.0, font_size=5.8, color=(0.85, 0.1, 0.1))
+    
+    cr.save()
+    cr.set_source_rgb(0.85, 0.1, 0.1)
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+    cr.set_font_size(5.8)
+    cr.move_to(s1_x_pt + 3.0, center_dim_y - 2.5)
+    cr.show_text("+1.5 mm (R)")
+    cr.restore()
+    
+    draw_dim_h(cr, center_x_pt, s2_x_pt, center_dim_y, "16.5 mm (R)", offset_text_y=-3.0, font_size=6.0, color=(0.85, 0.1, 0.1))
+
+    # Outer Board Dimensions
+    draw_dim_h(cr, start_x, start_x + board_w_pt, start_y - 8.0, "150.0 mm (OUTER BOARD WIDTH)", offset_text_y=-4.0, font_size=7.2, color=(0.0, 0.0, 0.0))
+    
+    right_dim_x = start_x + board_w_pt + 10.0
+    cr.save()
+    cr.set_source_rgb(0.0, 0.0, 0.0)
+    cr.set_line_width(0.6)
+    cr.move_to(right_dim_x, start_y)
+    cr.line_to(right_dim_x, start_y + board_h_pt)
+    cr.stroke()
+    cr.move_to(right_dim_x - 3.0, start_y)
+    cr.line_to(right_dim_x + 3.0, start_y)
+    cr.move_to(right_dim_x - 3.0, start_y + board_h_pt)
+    cr.line_to(right_dim_x + 3.0, start_y + board_h_pt)
+    cr.stroke()
+    draw_arrow(cr, right_dim_x, start_y, math.pi / 2.0, size=3.5)
+    draw_arrow(cr, right_dim_x, start_y + board_h_pt, -math.pi / 2.0, size=3.5)
+    
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+    cr.set_font_size(7.0)
+    h_ext = cr.text_extents("150.0 mm (OUTER BOARD HEIGHT)")
+    cr.translate(right_dim_x + 9.0, start_y + board_h_pt / 2.0)
+    cr.rotate(-math.pi / 2.0)
+    cr.move_to(-h_ext.width / 2.0, 0)
+    cr.show_text("150.0 mm (OUTER BOARD HEIGHT)")
+    cr.restore()
+
+    # Table on A4 Sheet
+    tbl_x = start_x - 10.0
+    tbl_y = start_y + board_h_pt + 28.0
+    tbl_w = board_w_pt + 20.0
+    
+    cr.save()
+    cr.set_source_rgb(0.12, 0.18, 0.28)
+    cr.rectangle(tbl_x, tbl_y, tbl_w, 14.0)
+    cr.fill()
+    cr.set_source_rgb(1.0, 1.0, 1.0)
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
     cr.set_font_size(7.5)
-    cr.move_to(start_x, start_y + board_h_pt + 20.0)
-    cr.show_text("Jyothi Engineering College • Dept of Cyber Security • VibeGuard Project Workbench")
-    cr.move_to(start_x, start_y + board_h_pt + 32.0)
-    cr.show_text("Tool Sequence: 1) Pilot drill 2.5 mm -> 2) Final drill 3.3 mm -> 3) Deburr edge by hand. Ready to mount.")
+    cr.move_to(tbl_x + 8.0, tbl_y + 10.0)
+    cr.show_text("VERIFIED HOLE LOCATION MATRIX: DUAL-DATUM & RELATIVE OFFSETS (ALL UNITS IN MM)")
+    cr.restore()
+    
+    cols = [
+        ("ID", 24),
+        ("PURPOSE", 110),
+        ("DATUM A (0,0)", 78),
+        ("FROM INNER SQ (130x130)", 105),
+        ("FROM CENTER (75,75)", 75),
+        ("RADIAL (R)", 52)
+    ]
+    
+    row_y = tbl_y + 14.0
+    cr.save()
+    cr.set_source_rgb(0.92, 0.94, 0.96)
+    cr.rectangle(tbl_x, row_y, tbl_w, 12.0)
+    cr.fill()
+    cr.set_source_rgb(0.1, 0.1, 0.1)
+    cr.set_line_width(0.4)
+    cr.rectangle(tbl_x, row_y, tbl_w, 12.0)
+    cr.stroke()
+    
+    cx = tbl_x
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+    cr.set_font_size(6.2)
+    for title, w in cols:
+        cr.move_to(cx + 3.0, row_y + 8.5)
+        cr.show_text(title)
+        cx += w
+    cr.restore()
+    
+    table_data = [
+        ("C1", "Leg Standoff (Front-Left)",  "X= 10.0, Y= 10.0", "At Inner Corner (0, 0)",    "ΔX= -65.0, ΔY= -65.0", "91.92 mm"),
+        ("C2", "Leg Standoff (Front-Right)", "X=140.0, Y= 10.0", "At Inner Corner (130, 0)",  "ΔX= +65.0, ΔY= -65.0", "91.92 mm"),
+        ("C3", "Leg Standoff (Rear-Left)",   "X= 10.0, Y=140.0", "At Inner Corner (0, 130)",  "ΔX= -65.0, ΔY= +65.0", "91.92 mm"),
+        ("C4", "Leg Standoff (Rear-Right)",  "X=140.0, Y=140.0", "At Inner Corner (130,130)", "ΔX= +65.0, ΔY= +65.0", "91.92 mm"),
+        ("M1", "N20 Motor Mount (Left)",     "X= 31.5, Y= 55.0", "21.5 mm Left, 45.0 mm Bot", "ΔX= -43.5, ΔY= -20.0", "47.88 mm"),
+        ("M2", "N20 Motor Mount (Right)",    "X= 48.5, Y= 55.0", "38.5 mm Left, 45.0 mm Bot", "ΔX= -26.5, ΔY= -20.0", "33.20 mm"),
+        ("S1", "ADXL345 Bracket (Left)",     "X= 76.5, Y= 55.0", "66.5 mm Left, 45.0 mm Bot", "ΔX=  +1.5, ΔY= -20.0", "20.06 mm"),
+        ("S2", "ADXL345 Bracket (Right)",    "X= 91.5, Y= 55.0", "81.5 mm Left / 48.5 mm R",  "ΔX= +16.5, ΔY= -20.0", "25.93 mm"),
+    ]
+    
+    row_y += 12.0
+    cr.save()
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+    cr.set_font_size(5.8)
+    for i, row in enumerate(table_data):
+        bg = (1.0, 1.0, 1.0) if i % 2 == 0 else (0.96, 0.97, 0.99)
+        cr.set_source_rgb(*bg)
+        cr.rectangle(tbl_x, row_y, tbl_w, 10.5)
+        cr.fill()
+        
+        cr.set_source_rgb(0.8, 0.82, 0.85)
+        cr.set_line_width(0.3)
+        cr.rectangle(tbl_x, row_y, tbl_w, 10.5)
+        cr.stroke()
+        
+        cx = tbl_x
+        for val_idx, val in enumerate(row):
+            w = cols[val_idx][1]
+            if val_idx == 0:
+                cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+                cr.set_source_rgb(0.1, 0.2, 0.5)
+            elif val_idx == 1:
+                cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+                cr.set_source_rgb(0.15, 0.15, 0.15)
+            elif val_idx in [2, 3]:
+                cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+                cr.set_source_rgb(0.05, 0.4, 0.15)
+            elif val_idx == 4:
+                cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+                cr.set_source_rgb(0.75, 0.1, 0.1)
+            else:
+                cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+                cr.set_source_rgb(0.2, 0.2, 0.2)
+                
+            cr.move_to(cx + 3.0, row_y + 7.5)
+            cr.show_text(val)
+            cx += w
+            
+        row_y += 10.5
+    cr.restore()
+
+    # Footer
+    foot_y = row_y + 8.0
+    cr.save()
+    cr.set_source_rgb(0.25, 0.3, 0.35)
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+    cr.set_font_size(6.5)
+    cr.move_to(tbl_x, foot_y)
+    cr.show_text("WORKSHOP TOOLING SEQUENCE:")
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+    cr.set_font_size(6.2)
+    cr.move_to(tbl_x + 115.0, foot_y)
+    cr.show_text("1) Center-punch 8 crosshairs  →  2) Pilot drill Ø2.5 mm (600–800 RPM)  →  3) Finish drill Ø3.3 mm  →  4) Deburr holes")
+    
+    cr.move_to(tbl_x, foot_y + 10.0)
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+    cr.show_text("SANDWICH CLAMPING:")
+    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+    cr.move_to(tbl_x + 105.0, foot_y + 10.0)
+    cr.show_text("Stack both acrylic plates (4.2 + 4.6 mm), mark INDEX A on top-left edge, clamp to wooden scrap backing board.")
+    
+    cr.set_source_rgb(0.5, 0.5, 0.5)
+    cr.set_font_size(5.8)
+    cr.move_to(tbl_x, foot_y + 21.0)
+    cr.show_text("Jyothi Engineering College • Department of Cyber Security • VibeGuard Testbed Project • Lab Certified Baseline")
     cr.restore()
 
     surface.finish()
@@ -897,6 +1224,7 @@ def main():
     artifact_dir = "/home/paradoxpete/.gemini/antigravity-cli/brain/f55a1ebc-7c35-4bc1-9341-35878b82ae59"
     os.system(f"cp '{png_ws}' '{artifact_dir}/baseplate_blueprint.png'")
     os.system(f"cp '{svg_ws}' '{artifact_dir}/VibeGuard_Baseplate_Drilling_Blueprint_Exact.svg'")
+    os.system(f"cp '{pdf_ws}' '{artifact_dir}/VibeGuard_Baseplate_1to1_Drill_Sticker_Template.pdf'")
 
     print("\nAll engineering files regenerated and mirrored successfully!")
 
