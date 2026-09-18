@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VibeGuard™ Mechanical Lab Requisition & Measurement Workbench</title>
+<style>
+  :root {
+    --navy: #0f172a;
+    --navy-light: #1e293b;
+    --blue: #2563eb;
+    --blue-light: #3b82f6;
+    --accent-green: #10b981;
+    --accent-red: #ef4444;
+    --accent-amber: #f59e0b;
+    --bg-page: #f8fafc;
+    --bg-card: #ffffff;
+    --border: #e2e8f0;
+    --text-primary: #1e293b;
+    --text-muted: #64748b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    line-height: 1.5;
+    padding: 1rem;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    color: #ffffff;
+    padding: 1.75rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  }
+
+  .header-badge {
+    display: inline-block;
+    background-color: var(--blue);
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 0.35rem; }
+  p.subtitle { color: #94a3b8; font-size: 0.95rem; }
+
+  .progress-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .progress-bar-bg {
+    background-color: var(--border);
+    height: 10px;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    background: linear-gradient(90deg, var(--blue) 0%, var(--accent-green) 100%);
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  .card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 0.5rem;
+  }
+
+  /* Checklist Styles */
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    background-color: #f8fafc;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .checklist-item:hover { background-color: #f1f5f9; }
+  .checklist-item.checked {
+    background-color: #f0fdf4;
+    border-color: #bbf7d0;
+  }
+
+  .checklist-item input[type="checkbox"] {
+    margin-top: 0.2rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    accent-color: var(--accent-green);
+    cursor: pointer;
+  }
+
+  .checklist-item.checked label {
+    text-decoration: line-through;
+    color: var(--text-muted);
+  }
+
+  .checklist-item label {
+    font-size: 0.9rem;
+    cursor: pointer;
+    flex: 1;
+  }
+
+  .checklist-item label strong { color: var(--navy); }
+
+  /* Letter Format Tabs */
+  .tab-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    background-color: #f1f5f9;
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 0.45rem 0.9rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-btn.active {
+    background-color: var(--blue);
+    color: #ffffff;
+    border-color: var(--blue);
+  }
+
+  .letter-box {
+    position: relative;
+    background-color: #0f172a;
+    color: #e2e8f0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.8rem;
+    padding: 1.25rem;
+    border-radius: 8px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background-color: rgba(255,255,255,0.15);
+    color: #ffffff;
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 0.35rem 0.75rem;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: background-color 0.2s;
+  }
+
+  .copy-btn:hover { background-color: rgba(255,255,255,0.3); }
+
+  /* Table & Input Styles */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+  }
+
+  th, td {
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--border);
+    text-align: left;
+  }
+
+  th {
+    background-color: #f1f5f9;
+    color: var(--navy);
+    font-weight: 700;
+  }
+
+  tr:nth-child(even) { background-color: #f8fafc; }
+
+  input.measure-input {
+    width: 90px;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: right;
+  }
+
+  input.measure-input:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
+  }
+
+  .svg-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8fafc;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--navy);
+    color: #ffffff;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2);
+    display: none;
+    z-index: 1000;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <div class="header-badge">Mechanical Execution Hub</div>
+    <h1>VibeGuard™ Mechanical Lab & Measurement Workbench</h1>
+    <p class="subtitle">Interactive checklist, official request letters, Vernier Caliper measurement ledger, and Option 3 window blueprint.</p>
+  </header>
+
+  <!-- Progress Tracker -->
+  <div class="progress-card">
+    <div class="progress-header">
+      <span>Execution Progress</span>
+      <span id="progress-text">0 of 13 Steps Completed (0%)</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- Interactive Checklist -->
+  <div class="card">
+    <div class="card-title">
+      <span>📋</span> Tomorrow's Action Checklist
+    </div>
+    <div class="checklist" id="checklist-container">
+      <!-- Generated via JavaScript -->
+    </div>
+  </div>
+
+  <!-- Letter Requisition Hub -->
+  <div class="card">
+    <div class="card-title">
+      <span>✉️</span> Official Mechanical Request Letters
+    </div>
+    <div class="tab-buttons">
+      <button class="tab-btn active" onclick="switchLetter('A')">Format A: Inter-Departmental (Recommended)</button>
+      <button class="tab-btn" onclick="switchLetter('B')">Format B: Internal to Your HOD</button>
+      <button class="tab-btn" onclick="switchLetter('C')">Format C: Workshop Issue Slip</button>
+    </div>
+    <div style="position: relative;">
+      <button class="copy-btn" onclick="copyActiveLetter()">📋 Copy Letter</button>
+      <pre class="letter-box" id="letter-content"></pre>
+    </div>
+  </div>
+
+  <!-- What to Request from Lab -->
+  <div class="card">
+    <div class="card-title">
+      <span>🛠️</span> What to Request from the Mechanical Workshop
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Tool / Equipment</th>
+          <th>Specification</th>
+          <th>Purpose in VibeGuard Assembly</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Digital / Vernier Caliper</strong></td>
+          <td>0–150 mm, 0.01 mm resolution</td>
+          <td>Measure N20 D-shaft flat, ADXL hole pitch, and screw diameters</td>
+        </tr>
+        <tr>
+          <td><strong>Pillar / Bench Drill Press</strong></td>
+          <td>Vertical quill bench press</td>
+          <td>Drill smooth 90° holes in acrylic without cracking brittle plastic</td>
+        </tr>
+        <tr>
+          <td><strong>HSS Drill Bits</strong></td>
+          <td>2.5 mm, 3.0 mm, 3.2 mm</td>
+          <td>2.5 mm pilot hole; 3.2 mm standard M3 screw through-hole clearance</td>
+        </tr>
+        <tr>
+          <td><strong>Vise & Plywood Backing</strong></td>
+          <td>Machine vise + scrap wood</td>
+          <td>Clamp acrylic firmly with scrap wood underneath to prevent back blowout</td>
+        </tr>
+        <tr>
+          <td><strong>Masking Tape & Scriber</strong></td>
+          <td>Paper tape + center punch</td>
+          <td>Tape over acrylic before marking; stops drill bit from skating/slipping</td>
+        </tr>
+        <tr>
+          <td><strong>Deburring / Countersink Tool</strong></td>
+          <td>Hand deburring tool or 90° bit</td>
+          <td>Lightly chamfer hole rims to relieve stress and prevent spiderweb cracks</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Vernier Caliper Measurement Ledger -->
+  <div class="card">
+    <div class="card-title">
+      <span>📐</span> Vernier Caliper Precision Measurement Ledger
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+      Type your caliper readings in millimeters below. Values are saved automatically in your browser.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Target Dimension</th>
+          <th>Nominal</th>
+          <th>Your Reading (mm)</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="measurement-rows">
+        <!-- Generated by JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Option 3 Blueprint -->
+  <div class="card">
+    <div class="card-title">
+      <span>🪟</span> Option 3: Window Cutout Mechanical Blueprint (FAB-02)
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+      Because the ADXL345 header pins were soldered extending out the back, this window cutout lets the DuPont female connector pass straight through into the rear with zero wall interference.
+    </p>
+    <div class="svg-container">
+      <svg width="450" height="240" viewBox="0 0 450 240">
+        <!-- Bracket Outer Wall -->
+        <rect x="75" y="20" width="300" height="180" rx="4" fill="#cbd5e1" stroke="#475569" stroke-width="2"/>
+        <!-- Window Cutout -->
+        <rect x="135" y="45" width="180" height="85" rx="3" fill="#ffffff" stroke="#ef4444" stroke-width="2" stroke-dasharray="4"/>
+        <text x="225" y="85" font-size="12" font-weight="bold" fill="#ef4444" text-anchor="middle">CLEARANCE WINDOW</text>
+        <text x="225" y="103" font-size="10" fill="#64748b" text-anchor="middle">(18 mm Wide × 8.5 mm High)</text>
+        
+        <!-- M3 Mounting Holes -->
+        <circle cx="150" cy="165" r="14" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+        <circle cx="150" cy="165" r="4" fill="#2563eb"/>
+        <text x="150" y="195" font-size="10" font-weight="bold" fill="#1e293b" text-anchor="middle">M3 Hole 1</text>
+
+        <circle cx="300" cy="165" r="14" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+        <circle cx="300" cy="165" r="4" fill="#2563eb"/>
+        <text x="300" y="195" font-size="10" font-weight="bold" fill="#1e293b" text-anchor="middle">M3 Hole 2</text>
+
+        <!-- Pitch Dimension -->
+        <line x1="150" y1="140" x2="300" y2="140" stroke="#0f172a" stroke-width="1.5" marker-start="url(#dot)" marker-end="url(#dot)"/>
+        <text x="225" y="135" font-size="11" font-weight="bold" fill="#0f172a" text-anchor="middle">15.0 mm Pitch</text>
+
+        <!-- Base Foot -->
+        <rect x="45" y="200" width="360" height="25" rx="2" fill="#94a3b8" stroke="#475569" stroke-width="2"/>
+        <text x="225" y="218" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">BASE FOOT (Bolts Down into Acrylic Sheet)</text>
+      </svg>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast">Copied to clipboard!</div>
+
+<script>
+  const CHECKLIST_ITEMS = [
+    { id: 1, text: "Step 1: Choose & Print Request Letter (Format A recommended)" },
+    { id: 2, text: "Step 2: Get your Department HOD's signature and stamp in the Forwarding Box" },
+    { id: 3, text: "Step 3: Submit the endorsed letter to the Mechanical HOD office for lab access approval" },
+    { id: 4, text: "Step 4: Present approved letter to Tool Crib In-Charge; check out Digital Vernier Caliper & book drill press" },
+    { id: 5, text: "Step 5: Calibrate Caliper (clean jaws, close fully, zero display at 0.00 mm)" },
+    { id: 6, text: "Step 6: Measure N20 Motor D-Shaft (outer diameter, flat thickness, flat length)" },
+    { id: 7, text: "Step 7: Measure ADXL345 Board (hole pitch, hole diameter, hole-to-header clearance)" },
+    { id: 8, text: "Step 8: Measure Fasteners & Baseplate (M3 screw threads, washers, acrylic sheet thickness)" },
+    { id: 9, text: "Step 9: Apply paper masking tape over acrylic; mark 15.0 mm hole pairs with sharp scribe" },
+    { id: 10, text: "Step 10: Clamp acrylic between scrap wood blocks in drill press vise to prevent shatter" },
+    { id: 11, text: "Step 11: Precision Drilling (drill 2.5 mm pilot holes, follow with 3.2 mm HSS bit at medium RPM)" },
+    { id: 12, text: "Step 12: Enter recorded measurements into VibeGuard 3D CAD generator" },
+    { id: 13, text: "Step 13: Export verified STLs with window cutout to FabLab technician" }
+  ];
+
+  const LETTERS = {
+    A: `To,
+The Head of the Department,
+Department of Mechanical Engineering,
+Jyothi Engineering College (Autonomous),
+Cheruthuruthy, Thrissur.
+
+THROUGH:
+The Head of the Department (Dr. Geethu Mary George),
+Department of Cyber Security,
+Jyothi Engineering College.
+
+Date: 15 / 09 / 2026
+
+Subject: Requisition for Vernier Caliper & Machine Shop Drilling Access for Project Testbed
+
+Respected Sir / Madam,
+
+As part of our project work titled "VibeGuard: Machine Vibration & Industrial Predictive Maintenance Testbed" (S5 Cyber Security), we are currently fabricating the physical motor-sensor testing rig on an acrylic baseplate.
+
+To ensure accurate fabrication and avoid assembly errors during mounting, we respectfully request permission to utilize the following facilities in the Department of Mechanical Engineering:
+
+1. Issue of a Vernier Caliper (0.01 mm resolution) to measure motor D-shaft dimensions, fastener tolerances, and sensor PCB mounting pitches.
+2. Access to the Workshop Bench / Pillar Drill Press facility (with 2.5 mm and 3.2 mm HSS drill bits) to drill precision mounting holes in our acrylic plate.
+
+We assure you that all workshop safety guidelines will be strictly followed, tools will be handled with utmost care, and instruments will be safely returned to the Tool Crib immediately upon completion.
+
+Kindly grant us permission to access the requested measuring tools and drilling facility.
+
+Thank you.
+
+Yours sincerely,
+1. Mohammed Nihad P C — Roll No: JEC24CC044 (Signature)
+2. Sreehari K — Roll No: JEC24CC055 (Signature)
+
+--------------------------------------------------------------------------------
+RECOMMENDATION & FORWARDING OF DEPUTED HOD (DEPARTMENT OF CYBER SECURITY)
+Recommended and forwarded to the Head of the Department, Mechanical Engineering.
+
+Dr. Geethu Mary George
+Head of the Department, Cyber Security
+(Signature & Department Seal)
+--------------------------------------------------------------------------------`,
+    B: `To,
+The Head of the Department,
+Dr. Geethu Mary George,
+Department of Cyber Security,
+Jyothi Engineering College (Autonomous),
+Cheruthuruthy, Thrissur.
+
+Date: 15 / 09 / 2026
+
+Subject: Request for Official Endorsement / Forwarding for Mechanical Workshop Access
+
+Respected Madam,
+
+As part of our project work on "VibeGuard: Machine Vibration & Industrial Predictive Maintenance Testbed", we are currently setting up the physical hardware testbed rig. For this, we require precision measurements using a Vernier Caliper and need to drill mounting holes into our acrylic baseplate using the pillar drill press in the Mechanical Workshop.
+
+The Department of Mechanical Engineering has indicated that inter-departmental equipment loan and workshop access require an official recommendation and forwarding letter from our Head of Department.
+
+We kindly request you to endorse and forward our attached requisition letter to the Head of the Department, Mechanical Engineering, so that we may obtain the measuring instruments and complete our fabrication work.
+
+We assure you that all workshop activities will be carried out safely in adherence to institutional guidelines, and without disruption to our scheduled academic classes.
+
+Thank you.
+
+Yours respectfully,
+1. Mohammed Nihad P C — Roll No: JEC24CC044 (Signature)
+2. Sreehari K — Roll No: JEC24CC055 (Signature)`,
+    C: `FORMAT C: MECHANICAL WORKSHOP TOOL & FACILITY ISSUE SLIP
+
+Project Title: VibeGuard (Vibration Monitoring Testbed)
+Department:    Cyber Security (Semester S5)
+Faculty Guide: Project Coordinator / Mentor
+Date:          15 / 09 / 2026
+
+Student 1: Mohammed Nihad P C (JEC24CC044)
+Student 2: Sreehari K (JEC24CC055)
+
+ITEMS & WORKSHOP MACHINERY REQUESTED:
+1. Digital / Vernier Caliper (0–150 mm, 0.01 mm resolution) - Measure N20 D-shaft & hole pitches
+2. Pillar / Bench Drill Press (Fixed vertical quill press) - Drill 90° holes in acrylic baseplate
+3. HSS Drill Bit (Pilot) (2.5 mm High Speed Steel) - Pilot centering to prevent drill walk
+4. HSS Drill Bit (Clearance) (3.2 mm High Speed Steel) - Standard M3 bolt clearance through-hole
+5. Machine Vise & Wood Backing (Plywood block) - Clamp acrylic without cracking sheet
+6. Hand Deburring / Chamfer Tool (90° countersink) - Lightly deburr holes to prevent cracks
+
+STUDENT UNDERTAKING:
+We undertake to abide by all mechanical workshop safety regulations, wear appropriate protective eye gear, operate machinery strictly under technician guidance, and return all checked-out tools in sound working condition.
+
+Signatures:
+Mohammed Nihad P C (JEC24CC044)    Sreehari K (JEC24CC055)    Lab Staff / Technician
+
+TOOL CRIB RETURN VERIFICATION:
+Returned in good condition on Date: ____ / ____ / 2026  |  Technician Signature: __________________`
+  };
+
+  const MEASUREMENTS = [
+    { key: "n20_od", comp: "N20 Motor", param: "Round Shaft Outer Diameter", nom: "3.00 mm", expected: [2.90, 3.05] },
+    { key: "n20_flat", comp: "N20 Motor", param: "Flat-to-Back Thickness", nom: "2.50 mm", expected: [2.40, 2.55] },
+    { key: "n20_len", comp: "N20 Motor", param: "Usable Flat Length", nom: "9.0–9.5 mm", expected: [8.5, 10.0] },
+    { key: "n20_collar", comp: "N20 Motor", param: "Front Gearbox Collar Dia", nom: "4.0–4.5 mm", expected: [3.8, 4.6] },
+    { key: "adxl_pitch", comp: "ADXL345", param: "Center-to-Center Hole Pitch", nom: "15.00 mm", expected: [14.8, 15.2] },
+    { key: "adxl_hole_dia", comp: "ADXL345", param: "Mounting Hole Diameter", nom: "3.1–3.2 mm", expected: [3.0, 3.4] },
+    { key: "adxl_pcb_w", comp: "ADXL345", param: "PCB Width & Length", nom: "20.5 × 15.5 mm", expected: [15.0, 21.0] },
+    { key: "adxl_header_dist", comp: "ADXL345", param: "Holes-to-Header Distance", nom: "10.5–12.0 mm", expected: [10.0, 13.0] },
+    { key: "adxl_plug_depth", comp: "ADXL345", param: "Rear DuPont Plug Depth", nom: "14.0–15.0 mm", expected: [13.0, 16.0] },
+    { key: "m3_thread_od", comp: "Fasteners", param: "M3 Screw Major Thread OD", nom: "2.90–2.98 mm", expected: [2.85, 3.0] },
+    { key: "washer_od", comp: "Fasteners", param: "Washer Outer Diameter", nom: "6.8–7.0 mm", expected: [6.5, 7.2] },
+    { key: "acrylic_thick", comp: "Baseplate", param: "Acrylic Sheet Thickness", nom: "3.0 or 4.0 mm", expected: [2.8, 4.2] }
+  ];
+
+  let currentLetter = 'A';
+
+  function init() {
+    renderChecklist();
+    renderMeasurements();
+    switchLetter('A');
+  }
+
+  function renderChecklist() {
+    const cont = document.getElementById('checklist-container');
+    cont.innerHTML = '';
+    const state = JSON.parse(localStorage.getItem('vg_checklist') || '{}');
+
+    let completed = 0;
+    CHECKLIST_ITEMS.forEach(item => {
+      const isChecked = !!state[item.id];
+      if (isChecked) completed++;
+
+      const div = document.createElement('div');
+      div.className = `checklist-item ${isChecked ? 'checked' : ''}`;
+      div.onclick = (e) => {
+        if (e.target.tagName !== 'INPUT') {
+          const cb = div.querySelector('input');
+          cb.checked = !cb.checked;
+          toggleCheck(item.id, cb.checked);
+        }
+      };
+
+      div.innerHTML = `
+        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleCheck(${item.id}, this.checked)">
+        <label>${item.text}</label>
+      `;
+      cont.appendChild(div);
+    });
+
+    updateProgress(completed, CHECKLIST_ITEMS.length);
+  }
+
+  function toggleCheck(id, checked) {
+    const state = JSON.parse(localStorage.getItem('vg_checklist') || '{}');
+    state[id] = checked;
+    localStorage.setItem('vg_checklist', JSON.stringify(state));
+    renderChecklist();
+  }
+
+  function updateProgress(done, total) {
+    const pct = Math.round((done / total) * 100);
+    document.getElementById('progress-text').innerText = `${done} of ${total} Steps Completed (${pct}%)`;
+    document.getElementById('progress-fill').style.width = `${pct}%`;
+  }
+
+  function switchLetter(key) {
+    currentLetter = key;
+    document.querySelectorAll('.tab-btn').forEach((b, idx) => {
+      b.classList.toggle('active', ['A','B','C'][idx] === key);
+    });
+    document.getElementById('letter-content').innerText = LETTERS[key];
+  }
+
+  function copyActiveLetter() {
+    navigator.clipboard.writeText(LETTERS[currentLetter]).then(() => {
+      showToast("Letter Format " + currentLetter + " copied to clipboard!");
+    });
+  }
+
+  function renderMeasurements() {
+    const tbody = document.getElementById('measurement-rows');
+    tbody.innerHTML = '';
+    const stored = JSON.parse(localStorage.getItem('vg_measurements') || '{}');
+
+    MEASUREMENTS.forEach(m => {
+      const val = stored[m.key] || '';
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${m.comp}</strong></td>
+        <td>${m.param}</td>
+        <td>${m.nom}</td>
+        <td><input class="measure-input" type="number" step="0.01" value="${val}" onchange="saveMeasure('${m.key}', this.value)" placeholder="0.00"> mm</td>
+        <td id="status-${m.key}">${val ? 'Recorded' : 'Pending'}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function saveMeasure(key, val) {
+    const stored = JSON.parse(localStorage.getItem('vg_measurements') || '{}');
+    stored[key] = val;
+    localStorage.setItem('vg_measurements', JSON.stringify(stored));
+    const statusEl = document.getElementById(`status-${key}`);
+    if (statusEl) {
+      statusEl.innerHTML = val ? '<span style="color: var(--accent-green); font-weight: bold;">Recorded</span>' : 'Pending';
+    }
+    showToast("Measurement saved!");
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.innerText = msg;
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 2000);
+  }
+
+  window.onload = init;
+</script>
+
+</body>
+</html>

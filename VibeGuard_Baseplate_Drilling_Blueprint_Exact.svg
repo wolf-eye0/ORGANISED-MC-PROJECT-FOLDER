@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 880" width="1040" height="880">
+<defs>
+<pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+  <path d="M 36 0 L 0 0 0 36" fill="none" stroke="#1e293b" stroke-width="0.75" />
+</pattern>
+<marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+  <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#38bdf8" />
+</marker>
+</defs>
+<rect width="1040" height="880" fill="#0f172a" />
+<rect width="1040" height="880" fill="url(#grid)" />
+<rect x="25" y="25" width="990" height="830" fill="none" stroke="#334155" stroke-width="1.5" rx="4" />
+<rect x="25" y="25" width="990" height="55" fill="#1e293b" />
+<text x="45" y="52" fill="#f8fafc" font-family="sans-serif" font-size="18" font-weight="bold">VIBEGUARD DRILLING BLUEPRINT &amp; HOLE LOCATION MATRIX</text>
+<text x="45" y="70" fill="#38bdf8" font-family="sans-serif" font-size="11">ACRYLIC BASEPLATE (150 × 150 × 10 mm LAMINATED) • ALL HOLES Ø3.3 mm (PRE-DRILL Ø2.5 mm)</text>
+<text x="820" y="58" fill="#94a3b8" font-family="sans-serif" font-size="11">DATE: 17/09/2026 | REV 2.1</text>
+<rect x="70.0" y="110.0" width="540.0" height="540.0" fill="#1e293b" fill-opacity="0.65" stroke="#38bdf8" stroke-width="2.5" rx="6" />
+<line x1="55.0" y1="380.0" x2="625.0" y2="380.0" stroke="#475569" stroke-width="1" stroke-dasharray="8,4,2,4" />
+<line x1="340.0" y1="95.0" x2="340.0" y2="665.0" stroke="#475569" stroke-width="1" stroke-dasharray="8,4,2,4" />
+<text x="346.0" y="104.0" fill="#64748b" font-family="sans-serif" font-size="9">CENTERLINE X=0</text>
+<polygon points="70.0,110.0 115.0,110.0 70.0,155.0" fill="#ef4444" fill-opacity="0.35" stroke="#ef4444" stroke-width="1.5" />
+<text x="78.0" y="132.0" fill="#fca5a5" font-family="sans-serif" font-size="10" font-weight="bold">INDEX A</text>
+<text x="120.0" y="128.0" fill="#ef4444" font-family="sans-serif" font-size="9">Mark permanent notch here on BOTH sheets before drilling!</text>
+<rect x="187.0" y="146.0" width="306.0" height="198.0" fill="#334155" fill-opacity="0.4" stroke="#64748b" stroke-width="1.2" stroke-dasharray="5,3" rx="3" />
+<text x="340.0" y="239.0" fill="#94a3b8" font-family="sans-serif" font-size="11" font-weight="bold" text-anchor="middle">MB102 BREADBOARD &amp; ESP32 ZONE</text>
+<text x="340.0" y="255.0" fill="#64748b" font-family="sans-serif" font-size="9" text-anchor="middle">(85 mm × 55 mm • Peel-and-Stick Adhesive Base)</text>
+<rect x="170.8" y="405.2" width="86.4" height="93.60000000000001" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-width="1.2" rx="2" />
+<text x="214.0" y="399.2" fill="#fbbf24" font-family="sans-serif" font-size="10" font-weight="bold" text-anchor="middle">N20 MOTOR (U-BRACKET)</text>
+<circle cx="214.0" cy="533.0" r="59.4" fill="#06b6d4" fill-opacity="0.12" stroke="#06b6d4" stroke-width="1" stroke-dasharray="3,3" />
+<circle cx="214.0" cy="533.0" r="3" fill="#06b6d4" />
+<text x="214.0" y="537.0" fill="#22d3ee" font-family="sans-serif" font-size="9" text-anchor="middle">Rotor Arm Sweep</text>
+<rect x="329.2" y="419.6" width="86.4" height="64.8" fill="#a855f7" fill-opacity="0.15" stroke="#a855f7" stroke-width="1.2" rx="2" />
+<text x="372.40000000000003" y="413.6" fill="#c084fc" font-family="sans-serif" font-size="10" font-weight="bold" text-anchor="middle">ADXL345 BRACKET (FAB-02)</text>
+<line x1="257.20000000000005" y1="452.0" x2="329.2" y2="452.0" stroke="#38bdf8" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+<text x="293.20000000000005" y="444.0" fill="#38bdf8" font-family="sans-serif" font-size="10" font-weight="bold" text-anchor="middle">20.0 mm GAP</text>
+<line x1="70.0" y1="660.0" x2="70.0" y2="695.0" stroke="#64748b" stroke-width="1" />
+<line x1="610.0" y1="660.0" x2="610.0" y2="695.0" stroke="#64748b" stroke-width="1" />
+<line x1="70.0" y1="685.0" x2="610.0" y2="685.0" stroke="#38bdf8" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+<text x="340.0" y="679.0" fill="#38bdf8" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle">150.0 mm</text>
+<line x1="60.0" y1="110.0" x2="25.0" y2="110.0" stroke="#64748b" stroke-width="1" />
+<line x1="60.0" y1="650.0" x2="25.0" y2="650.0" stroke="#64748b" stroke-width="1" />
+<line x1="35.0" y1="110.0" x2="35.0" y2="650.0" stroke="#38bdf8" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+<text x="23.0" y="380.0" fill="#38bdf8" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle" transform="rotate(-90 23.0 380.0)">150.0 mm</text>
+<circle cx="106.0" cy="614.0" r="10.722" fill="none" stroke="#0284c7" stroke-width="1" stroke-dasharray="2,2" />
+<circle cx="106.0" cy="614.0" r="7.7219999999999995" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+<line x1="92.278" y1="614.0" x2="119.722" y2="614.0" stroke="#38bdf8" stroke-width="1" />
+<line x1="106.0" y1="600.278" x2="106.0" y2="627.722" stroke="#38bdf8" stroke-width="1" />
+<circle cx="121.722" cy="598.278" r="9" fill="#38bdf8" />
+<text x="121.722" y="601.278" fill="#0f172a" font-family="sans-serif" font-size="9" font-weight="bold" text-anchor="middle">C1</text>
+<circle cx="574.0" cy="614.0" r="10.722" fill="none" stroke="#0284c7" stroke-width="1" stroke-dasharray="2,2" />
+<circle cx="574.0" cy="614.0" r="7.7219999999999995" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+<line x1="560.278" y1="614.0" x2="587.722" y2="614.0" stroke="#38bdf8" stroke-width="1" />
+<line x1="574.0" y1="600.278" x2="574.0" y2="627.722" stroke="#38bdf8" stroke-width="1" />
+<circle cx="558.278" cy="598.278" r="9" fill="#38bdf8" />
+<text x="558.278" y="601.278" fill="#0f172a" font-family="sans-serif" font-size="9" font-weight="bold" text-anchor="middle">C2</text>
+<circle cx="106.0" cy="146.0" r="10.722" fill="none" stroke="#0284c7" stroke-width="1" stroke-dasharray="2,2" />
+<circle cx="106.0" cy="146.0" r="7.7219999999999995" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+<line x1="92.278" y1="146.0" x2="119.722" y2="146.0" stroke="#38bdf8" stroke-width="1" />
+<line x1="106.0" y1="132.278" x2="106.0" y2="159.722" stroke="#38bdf8" stroke-width="1" />
+<circle cx="121.722" cy="165.722" r="9" fill="#38bdf8" />
+<text x="121.722" y="168.722" fill="#0f172a" font-family="sans-serif" font-size="9" font-weight="bold" text-anchor="middle">C3</text>
+<circle cx="574.0" cy="146.0" r="10.722" fill="none" stroke="#0284c7" stroke-width="1" stroke-dasharray="2,2" />
+<circle cx="574.0" cy="146.0" r="7.7219999999999995" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+<line x1="560.278" y1="146.0" x2="587.722" y2="146.0" stroke="#38bdf8" stroke-width="1" />
+<line x1="574.0" y1="132.278" x2="574.0" y2="159.722" stroke="#38bdf8" stroke-width="1" />
+<circle cx="558.278" cy="165.722" r="9" fill="#38bdf8" />
+<text x="558.278" y="168.722" fill="#0f172a" font-family="sans-serif" font-size="9" font-weight="bold" text-anchor="middle">C4</text>
+<circle cx="183.4" cy="452.0" r="10.722" fill="none" stroke="#d97706" stroke-width="1" stroke-dasharray="2,2" />
+<circle cx="183.4" cy="452.0" r="7.7219999999999995" fill="#0f172a" stroke="#f59e0b" stroke-width="2" />
+<line x1="169.678" y1="452.0" x2="197.122" y2="452.0" stroke="#f59e0b" stroke-width="1" />
+<line x1="183.4" y1="438.278" x2="183.4" y2="465.722" stroke="#f59e0b" stroke-width="1" />
+<circle cx="183.4" cy="434.278" r="9" fill="#f59e0b" />
+<text x="183.4" y="437.278" fill="#0f172a" font-family="sans-serif" font-size="9" font-weight="bold" text-anchor="middle">M1</text>
+<circle cx="244.6" cy="452.0" r="10.722" fill="none" stroke="#d97706" stroke-width="1" stroke-dasharray="2,2" />
+<circle cx="244.6" cy="452.0" r="7.7219999999999995" fill="#0f172a" stroke="#f59e0b" stroke-width="2" />
+<line x1="230.878" y1="452.0" x2="258.322" y2="452.0" stroke="#f59e0b" stroke-width="1" />
+<line x1="244.6" y1="438.278" x2="244.6" y2="465.722" stroke="#f59e0b" stroke-width="1" />
+<circle cx="244.6" cy="434.278" r="9" fill="#f59e0b" />
+<text x="244.6" y="437.278" fill="#0f172a" font-family="sans-serif" font-size="9" font-weight="bold" text-anchor="middle">M2</text>
+<circle cx="345.40000000000003" cy="452.0" r="10.722" fill="none" stroke="#9333ea" stroke-width="1" stroke-dasharray="2,2" />
+<circle cx="345.40000000000003" cy="452.0" r="7.7219999999999995" fill="#0f172a" stroke="#c084fc" stroke-width="2" />
+<line x1="331.67800000000005" y1="452.0" x2="359.122" y2="452.0" stroke="#c084fc" stroke-width="1" />
+<line x1="345.40000000000003" y1="438.278" x2="345.40000000000003" y2="465.722" stroke="#c084fc" stroke-width="1" />
+<circle cx="345.40000000000003" cy="434.278" r="9" fill="#c084fc" />
+<text x="345.40000000000003" y="437.278" fill="#0f172a" font-family="sans-serif" font-size="9" font-weight="bold" text-anchor="middle">S1</text>
+<circle cx="399.40000000000003" cy="452.0" r="10.722" fill="none" stroke="#9333ea" stroke-width="1" stroke-dasharray="2,2" />
+<circle cx="399.40000000000003" cy="452.0" r="7.7219999999999995" fill="#0f172a" stroke="#c084fc" stroke-width="2" />
+<line x1="385.67800000000005" y1="452.0" x2="413.122" y2="452.0" stroke="#c084fc" stroke-width="1" />
+<line x1="399.40000000000003" y1="438.278" x2="399.40000000000003" y2="465.722" stroke="#c084fc" stroke-width="1" />
+<circle cx="399.40000000000003" cy="434.278" r="9" fill="#c084fc" />
+<text x="399.40000000000003" y="437.278" fill="#0f172a" font-family="sans-serif" font-size="9" font-weight="bold" text-anchor="middle">S2</text>
+<line x1="183.4" y1="452.0" x2="183.4" y2="482.0" stroke="#f59e0b" stroke-width="0.8" stroke-dasharray="2,2" />
+<line x1="244.6" y1="452.0" x2="244.6" y2="482.0" stroke="#f59e0b" stroke-width="0.8" stroke-dasharray="2,2" />
+<line x1="183.4" y1="476.0" x2="244.6" y2="476.0" stroke="#f59e0b" stroke-width="1.2" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+<text x="214.0" y="489.0" fill="#fbbf24" font-family="sans-serif" font-size="9" font-weight="bold" text-anchor="middle">17.0 mm</text>
+<line x1="345.40000000000003" y1="452.0" x2="345.40000000000003" y2="482.0" stroke="#c084fc" stroke-width="0.8" stroke-dasharray="2,2" />
+<line x1="399.40000000000003" y1="452.0" x2="399.40000000000003" y2="482.0" stroke="#c084fc" stroke-width="0.8" stroke-dasharray="2,2" />
+<line x1="345.40000000000003" y1="476.0" x2="399.40000000000003" y2="476.0" stroke="#c084fc" stroke-width="1.2" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+<text x="372.40000000000003" y="489.0" fill="#e9d5ff" font-family="sans-serif" font-size="9" font-weight="bold" text-anchor="middle">15.0 mm</text>
+<rect x="645" y="100" width="350" height="32" fill="#1e293b" stroke="#475569" stroke-width="1" rx="4" />
+<text x="657" y="121" fill="#38bdf8" font-family="sans-serif" font-size="12" font-weight="bold">EXACT DRILLING COORDINATES (TABLE)</text>
+<rect x="645" y="142" width="350" height="22" fill="#334155" />
+<text x="651" y="157" fill="#f8fafc" font-family="sans-serif" font-size="9.5" font-weight="bold">ID</text>
+<text x="683" y="157" fill="#f8fafc" font-family="sans-serif" font-size="9.5" font-weight="bold">Hole Purpose</text>
+<text x="823" y="157" fill="#f8fafc" font-family="sans-serif" font-size="9.5" font-weight="bold">Datum A (X, Y)</text>
+<text x="928" y="157" fill="#f8fafc" font-family="sans-serif" font-size="9.5" font-weight="bold">Dia / Pilot</text>
+<rect x="645" y="164" width="350" height="24" fill="#1e293b" stroke="#334155" stroke-width="0.5" />
+<text x="651" y="180" fill="#38bdf8" font-family="sans-serif" font-size="9.5" font-weight="bold">C1</text>
+<text x="683" y="180" fill="#cbd5e1" font-family="sans-serif" font-size="9">Corner Standoff (Front-Left)</text>
+<text x="823" y="180" fill="#f8fafc" font-family="monospace" font-size="9.5">(10.0, 10.0)</text>
+<text x="928" y="180" fill="#4ade80" font-family="monospace" font-size="9.5" font-weight="bold">Ø3.3 (2.5)</text>
+<rect x="645" y="188" width="350" height="24" fill="#0f172a" stroke="#334155" stroke-width="0.5" />
+<text x="651" y="204" fill="#38bdf8" font-family="sans-serif" font-size="9.5" font-weight="bold">C2</text>
+<text x="683" y="204" fill="#cbd5e1" font-family="sans-serif" font-size="9">Corner Standoff (Front-Right)</text>
+<text x="823" y="204" fill="#f8fafc" font-family="monospace" font-size="9.5">(140.0, 10.0)</text>
+<text x="928" y="204" fill="#4ade80" font-family="monospace" font-size="9.5" font-weight="bold">Ø3.3 (2.5)</text>
+<rect x="645" y="212" width="350" height="24" fill="#1e293b" stroke="#334155" stroke-width="0.5" />
+<text x="651" y="228" fill="#38bdf8" font-family="sans-serif" font-size="9.5" font-weight="bold">C3</text>
+<text x="683" y="228" fill="#cbd5e1" font-family="sans-serif" font-size="9">Corner Standoff (Rear-Left)</text>
+<text x="823" y="228" fill="#f8fafc" font-family="monospace" font-size="9.5">(10.0, 140.0)</text>
+<text x="928" y="228" fill="#4ade80" font-family="monospace" font-size="9.5" font-weight="bold">Ø3.3 (2.5)</text>
+<rect x="645" y="236" width="350" height="24" fill="#0f172a" stroke="#334155" stroke-width="0.5" />
+<text x="651" y="252" fill="#38bdf8" font-family="sans-serif" font-size="9.5" font-weight="bold">C4</text>
+<text x="683" y="252" fill="#cbd5e1" font-family="sans-serif" font-size="9">Corner Standoff (Rear-Right)</text>
+<text x="823" y="252" fill="#f8fafc" font-family="monospace" font-size="9.5">(140.0, 140.0)</text>
+<text x="928" y="252" fill="#4ade80" font-family="monospace" font-size="9.5" font-weight="bold">Ø3.3 (2.5)</text>
+<rect x="645" y="260" width="350" height="24" fill="#1e293b" stroke="#334155" stroke-width="0.5" />
+<text x="651" y="276" fill="#f59e0b" font-family="sans-serif" font-size="9.5" font-weight="bold">M1</text>
+<text x="683" y="276" fill="#cbd5e1" font-family="sans-serif" font-size="9">N20 Motor Bracket (Left)</text>
+<text x="823" y="276" fill="#f8fafc" font-family="monospace" font-size="9.5">(31.5, 55.0)</text>
+<text x="928" y="276" fill="#4ade80" font-family="monospace" font-size="9.5" font-weight="bold">Ø3.3 (2.5)</text>
+<rect x="645" y="284" width="350" height="24" fill="#0f172a" stroke="#334155" stroke-width="0.5" />
+<text x="651" y="300" fill="#f59e0b" font-family="sans-serif" font-size="9.5" font-weight="bold">M2</text>
+<text x="683" y="300" fill="#cbd5e1" font-family="sans-serif" font-size="9">N20 Motor Bracket (Right)</text>
+<text x="823" y="300" fill="#f8fafc" font-family="monospace" font-size="9.5">(48.5, 55.0)</text>
+<text x="928" y="300" fill="#4ade80" font-family="monospace" font-size="9.5" font-weight="bold">Ø3.3 (2.5)</text>
+<rect x="645" y="308" width="350" height="24" fill="#1e293b" stroke="#334155" stroke-width="0.5" />
+<text x="651" y="324" fill="#c084fc" font-family="sans-serif" font-size="9.5" font-weight="bold">S1</text>
+<text x="683" y="324" fill="#cbd5e1" font-family="sans-serif" font-size="9">ADXL345 Bracket (Left)</text>
+<text x="823" y="324" fill="#f8fafc" font-family="monospace" font-size="9.5">(76.5, 55.0)</text>
+<text x="928" y="324" fill="#4ade80" font-family="monospace" font-size="9.5" font-weight="bold">Ø3.3 (2.5)</text>
+<rect x="645" y="332" width="350" height="24" fill="#0f172a" stroke="#334155" stroke-width="0.5" />
+<text x="651" y="348" fill="#c084fc" font-family="sans-serif" font-size="9.5" font-weight="bold">S2</text>
+<text x="683" y="348" fill="#cbd5e1" font-family="sans-serif" font-size="9">ADXL345 Bracket (Right)</text>
+<text x="823" y="348" fill="#f8fafc" font-family="monospace" font-size="9.5">(91.5, 55.0)</text>
+<text x="928" y="348" fill="#4ade80" font-family="monospace" font-size="9.5" font-weight="bold">Ø3.3 (2.5)</text>
+<rect x="645" y="374" width="350" height="240" fill="#1e293b" stroke="#475569" stroke-width="1" rx="4" />
+<text x="657" y="396" fill="#38bdf8" font-family="sans-serif" font-size="11" font-weight="bold">WORKSHOP TOOLING &amp; CLAMPING INSTRUCTIONS</text>
+<text x="657" y="416" fill="#fbbf24" font-family="sans-serif" font-size="9.5" font-weight="bold">1. Total Holes:</text>
+<text x="775" y="416" fill="#cbd5e1" font-family="sans-serif" font-size="9">Exactly 8 holes (all identical Ø3.3 mm through-holes).</text>
+<text x="657" y="436" fill="#fbbf24" font-family="sans-serif" font-size="9.5" font-weight="bold">2. Pilot Bit (2.5 mm):</text>
+<text x="775" y="436" fill="#cbd5e1" font-family="sans-serif" font-size="9">Drill all 8 holes first at 600–800 RPM with wood backing.</text>
+<text x="657" y="456" fill="#fbbf24" font-family="sans-serif" font-size="9.5" font-weight="bold">3. Final Bit (3.3 mm):</text>
+<text x="775" y="456" fill="#cbd5e1" font-family="sans-serif" font-size="9">Re-drill straight through pilot holes for clean M3 clearance.</text>
+<text x="657" y="476" fill="#fbbf24" font-family="sans-serif" font-size="9.5" font-weight="bold">4. Sandwich Drilling:</text>
+<text x="775" y="476" fill="#cbd5e1" font-family="sans-serif" font-size="9">Clamp both 5 mm acrylic sheets together with tape/clamps.</text>
+<text x="657" y="496" fill="#fbbf24" font-family="sans-serif" font-size="9.5" font-weight="bold">5. Mandatory INDEX A:</text>
+<text x="775" y="496" fill="#cbd5e1" font-family="sans-serif" font-size="9">Mark 'INDEX A' on the top-left edge of BOTH sheets.</text>
+<text x="657" y="516" fill="#fbbf24" font-family="sans-serif" font-size="9.5" font-weight="bold">6. No Glue Today?</text>
+<text x="775" y="516" fill="#cbd5e1" font-family="sans-serif" font-size="9">Assemble with 4 corner M3 bolts immediately! Tightening</text>
+<text x="775" y="536" fill="#cbd5e1" font-family="sans-serif" font-size="9">provides ~3500 N clamping force, fully rigid for motor testing.</text>
+<text x="657" y="556" fill="#fbbf24" font-family="sans-serif" font-size="9.5" font-weight="bold">7. Solvent/Epoxy Later:</text>
+<text x="775" y="556" fill="#cbd5e1" font-family="sans-serif" font-size="9">Introduce DCM solvent along edges via capillary syringe,</text>
+<text x="775" y="576" fill="#cbd5e1" font-family="sans-serif" font-size="9">or separate, apply Araldite Clear, and re-bolt using holes.</text>
+<rect x="645" y="628" width="350" height="80" fill="#064e3b" fill-opacity="0.4" stroke="#10b981" stroke-width="1.2" rx="4" />
+<text x="659" y="650" fill="#34d399" font-family="sans-serif" font-size="10.5" font-weight="bold">✓ MATHEMATICAL VERIFICATION PASSED</text>
+<text x="659" y="668" fill="#a7f3d0" font-family="sans-serif" font-size="9">• 3.3 mm Hole vs M3 Bolt (2.95 mm): Clearance = 0.175 mm/side (ISO Normal).</text>
+<text x="659" y="682" fill="#a7f3d0" font-family="sans-serif" font-size="9">• Washer Bearing Area = 29.9 mm² (98.4% retention vs 3.2 mm hole).</text>
+<text x="659" y="696" fill="#a7f3d0" font-family="sans-serif" font-size="9">• Inter-bracket daylight clearance = exactly 20.00 mm.</text>
+</svg>
