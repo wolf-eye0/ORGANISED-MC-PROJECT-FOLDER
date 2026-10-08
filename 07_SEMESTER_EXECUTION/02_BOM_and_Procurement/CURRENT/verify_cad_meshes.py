@@ -11,12 +11,12 @@ Verification Criteria:
   2. Strict 2-manifold condition (3F == 2E, 0 non-manifold edges, 0 boundary seams)
   3. Uniform outward-pointing face normals (0 inverted directed edges, dot product > 0.99)
   4. Single connected outer shell topology (1 connected component via BFS face-graph)
-  5. Euler-Poincaré genus invariant: g = (2 - chi) / 2 (g == 2 for FAB-01, g == 4 for FAB-02)
+  5. Euler-Poincaré genus invariant: g = (2 - chi) / 2 (g == 2 for FAB-01, g == 5 for FAB-02)
   6. Positive signed volume via tetrahedron divergence theorem (V > 0)
   7. Non-degenerate triangle mesh (0 zero-area faces)
   8. Exact dimensional audit:
      - FAB-01: 3.15 mm D-bore with 2.65 mm flat chord, 12.0 mm eccentric pitch, 3.2 mm M3 hole
-     - FAB-02: 15.0 mm upright sensor hole pitch (3.2 mm dia), 15.0 mm base hole pitch (3.2 mm dia),
+     - FAB-02: 15.0 mm upright sensor hole pitch (3.2 mm dia at Z=7.0 mm), 18.0x8.5 mm wire window, 15.0 mm base pitch,
                3.5 mm vertical wall, 4.0 mm baseplate foot, triangular stiffening gussets
 
 Environment: Standard Library Only (struct, math, collections, sys, os)
@@ -279,22 +279,27 @@ class MeshAuditor:
             
         ((min_x, max_x), (min_y, max_y), (min_z, max_z)) = self.metrics['bbox']
         
-        if self.name == 'FAB-01':
+        if self.name.startswith('FAB-01'):
+            is_3p4 = '3.4' in self.name or '3p4' in self.name
+            target_dia = 3.40 if is_3p4 else 3.35
+            target_flat = 2.825 if is_3p4 else 2.775
+            y_flat_check = 1.125 if is_3p4 else 1.100
+
             # 1. Height audit (Z span: 8.0 mm)
             height = max_z - min_z
             if abs(height - 8.0) > 0.05:
-                self.log_error(f"FAB-01 Hub Height {height:.3f} mm out of spec [8.0 - 9.0 mm]")
+                self.log_error(f"{self.name} Hub Height {height:.3f} mm out of spec [8.0 - 9.0 mm]")
                 
             # 2. D-Bore audit around (0,0)
             bore_top = [v for v in verts if abs(v[2] - max_z) < 1e-3 and math.hypot(v[0], v[1]) < 2.0]
             if not bore_top:
-                self.log_error("FAB-01 D-Bore vertices not found at top face")
+                self.log_error(f"{self.name} D-Bore vertices not found at top face")
             else:
-                flat_verts = [v for v in bore_top if abs(v[1] - 1.05) < 0.02]
-                arc_verts = [v for v in bore_top if v[1] < 1.04]
+                flat_verts = [v for v in bore_top if abs(v[1] - y_flat_check) < 0.03]
+                arc_verts = [v for v in bore_top if v[1] < y_flat_check - 0.05]
                 
                 if len(flat_verts) < 2 or len(arc_verts) < 3:
-                    self.log_error("FAB-01 Flat chord or circular arc vertices insufficient")
+                    self.log_error(f"{self.name} Flat chord or circular arc vertices insufficient")
                 else:
                     flat_chord_y = sum(v[1] for v in flat_verts) / len(flat_verts)
                     bore_x, bore_y, arc_radius = fit_circle_2d([(v[0], v[1]) for v in arc_verts])
@@ -304,16 +309,18 @@ class MeshAuditor:
                     self.metrics['bore_center'] = (bore_x, bore_y)
                     self.metrics['bore_diameter'] = bore_diameter
                     self.metrics['flat_to_back_depth'] = flat_to_back_depth
+                    self.metrics['target_dia'] = target_dia
+                    self.metrics['target_flat'] = target_flat
                     
-                    if abs(bore_diameter - 3.15) > 0.05:
-                        self.log_error(f"FAB-01 Bore Dia {bore_diameter:.3f} mm out of spec (3.15 mm)")
-                    if abs(flat_to_back_depth - 2.65) > 0.05:
-                        self.log_error(f"FAB-01 Flat Depth {flat_to_back_depth:.3f} mm out of spec (2.65 mm)")
+                    if abs(bore_diameter - target_dia) > 0.05:
+                        self.log_error(f"{self.name} Bore Dia {bore_diameter:.3f} mm out of spec ({target_dia:.2f} mm)")
+                    if abs(flat_to_back_depth - target_flat) > 0.05:
+                        self.log_error(f"{self.name} Flat Depth {flat_to_back_depth:.3f} mm out of spec ({target_flat:.3f} mm)")
                         
             # 3. Eccentric M3 Mass Hole audit around (12.0, 0)
             mass_verts = [v for v in verts if abs(v[2] - max_z) < 1e-3 and math.hypot(v[0] - 12.0, v[1]) < 2.0]
             if not mass_verts or len(mass_verts) < 3:
-                self.log_error("FAB-01 Mass hole vertices not found at top face")
+                self.log_error(f"{self.name} Mass hole vertices not found at top face")
             else:
                 mass_x, mass_y, mass_r = fit_circle_2d([(v[0], v[1]) for v in mass_verts])
                 mass_hole_dia = 2.0 * mass_r
@@ -327,11 +334,11 @@ class MeshAuditor:
                 self.metrics['eccentric_pitch'] = pitch
                 
                 if abs(pitch - 12.0) > 0.05:
-                    self.log_error(f"FAB-01 Eccentric pitch {pitch:.3f} mm out of spec (12.0 mm)")
+                    self.log_error(f"{self.name} Eccentric pitch {pitch:.3f} mm out of spec (12.0 mm)")
                 if abs(mass_hole_dia - 3.20) > 0.05:
-                    self.log_error(f"FAB-01 Mass Hole Dia {mass_hole_dia:.3f} mm out of spec (3.20 mm)")
+                    self.log_error(f"{self.name} Mass Hole Dia {mass_hole_dia:.3f} mm out of spec (3.20 mm)")
                     
-        elif self.name == 'FAB-02':
+        elif self.name.startswith('FAB-02'):
             # 1. Bracket dimensions
             width = max_x - min_x
             depth = max_y - min_y
@@ -348,12 +355,12 @@ class MeshAuditor:
             if abs(height - 22.0) > 0.05:
                 self.log_error(f"FAB-02 Height {height:.3f} mm out of spec (22.0 mm)")
                 
-            # 2. Sensor upright holes at Z=15.0 mm, Y=3.5 mm
-            sensor_h1 = [v for v in verts if abs(v[1] - 3.5) < 1e-3 and math.hypot(v[0] - (-7.5), v[2] - 15.0) < 1.8]
-            sensor_h2 = [v for v in verts if abs(v[1] - 3.5) < 1e-3 and math.hypot(v[0] - (7.5), v[2] - 15.0) < 1.8]
+            # 2. Sensor upright holes at Z=7.0 mm, Y=3.5 mm
+            sensor_h1 = [v for v in verts if abs(v[1] - 3.5) < 1e-3 and math.hypot(v[0] - (-7.5), v[2] - 7.0) < 1.8]
+            sensor_h2 = [v for v in verts if abs(v[1] - 3.5) < 1e-3 and math.hypot(v[0] - (7.5), v[2] - 7.0) < 1.8]
             
             if not sensor_h1 or not sensor_h2:
-                self.log_error("FAB-02 Sensor upright holes not found at Z=15.0, X=+-7.5")
+                self.log_error("FAB-02 Sensor upright holes not found at Z=7.0, X=+-7.5")
             else:
                 s1_x, s1_z, r1 = fit_circle_2d([(v[0], v[2]) for v in sensor_h1])
                 s2_x, s2_z, r2 = fit_circle_2d([(v[0], v[2]) for v in sensor_h2])
@@ -403,7 +410,27 @@ class MeshAuditor:
             else:
                 self.metrics['junction_elements'] = len(junction_verts)
 
-                
+            # 5. Rectangular wire passthrough window verification (X in [-10.8, 10.8], Z in [10.5, 21.0] or [10.5, 22.0])
+            is_opentop = (self.expected_genus == 4 and 'OpenTop' in self.name)
+            target_w = 21.60
+            target_h = 11.50 if is_opentop else 10.50
+            z_max_expected = 22.001 if is_opentop else 21.001
+
+            win_verts = [v for v in verts if abs(v[0]) <= 10.801 and 10.499 <= v[2] <= z_max_expected and (abs(v[1]) < 1e-3 or abs(v[1] - 3.5) < 1e-3)]
+            if not win_verts:
+                self.log_error("FAB-02 Wire passthrough window not detected")
+            else:
+                w_xs = [v[0] for v in win_verts]
+                w_zs = [v[2] for v in win_verts]
+                win_w = max(w_xs) - min(w_xs)
+                win_h = max(w_zs) - min(w_zs)
+                self.metrics['window_width'] = win_w
+                self.metrics['window_height'] = win_h
+                if abs(win_w - target_w) > 0.05:
+                    self.log_error(f"FAB-02 Window width {win_w:.3f} mm out of spec ({target_w:.2f} mm)")
+                if abs(win_h - target_h) > 0.05:
+                    self.log_error(f"FAB-02 Window height {win_h:.3f} mm out of spec ({target_h:.2f} mm)")
+
         return len(self.errors) == 0
 
 def print_audit_report(auditors):
@@ -440,19 +467,21 @@ def print_audit_report(auditors):
         bbox = m.get('bbox', ((0,0), (0,0), (0,0)))
         print(f"  * Bounding Box         : X=[{bbox[0][0]:.2f}, {bbox[0][1]:.2f}], Y=[{bbox[1][0]:.2f}, {bbox[1][1]:.2f}], Z=[{bbox[2][0]:.2f}, {bbox[2][1]:.2f}] mm")
         
-        if a.name == 'FAB-01':
+        if a.name.startswith('FAB-01'):
             bore_c = m.get('bore_center', (0.0, 0.0))
             mass_c = m.get('mass_center', (0.0, 0.0))
-            print("  --- Hardware Fit & Sizing (FAB-01 Rotor Cam) ---")
+            t_dia = m.get('target_dia', 3.35)
+            t_flat = m.get('target_flat', 2.775)
+            print(f"  --- Hardware Fit & Sizing ({a.name} Rotor Cam) ---")
             print(f"  * Hub Height           : {bbox[2][1] - bbox[2][0]:.2f} mm (Spec: 8.0-9.0 mm)")
             print(f"  * Bore Center (fit)    : ({bore_c[0]:.4f}, {bore_c[1]:.4f}) mm")
-            print(f"  * N20 D-Bore Diameter  : {m.get('bore_diameter', 0.0):.3f} mm (Spec: 3.15 mm, 0.15 mm PLA shrinkage compensation)")
-            print(f"  * Flat-to-Back Chord   : {m.get('flat_to_back_depth', 0.0):.3f} mm (Spec: 2.65 mm, for 2.50 mm N20 flat)")
+            print(f"  * N20 D-Bore Diameter  : {m.get('bore_diameter', 0.0):.3f} mm (Spec: {t_dia:.2f} mm, enlarged for D-shaft push-fit)")
+            print(f"  * Flat-to-Back Chord   : {m.get('flat_to_back_depth', 0.0):.3f} mm (Spec: {t_flat:.3f} mm, for 2.50 mm N20 flat)")
             print(f"  * Mass Center (fit)    : ({mass_c[0]:.4f}, {mass_c[1]:.4f}) mm")
             print(f"  * Eccentric Mass Pitch : {m.get('eccentric_pitch', 0.0):.3f} mm (Spec: 12.00 mm center-to-center)")
             print(f"  * M3 Mass Bolt Hole Dia: {m.get('mass_hole_dia', 0.0):.3f} mm (Spec: 3.20 mm clearance)")
             
-        elif a.name == 'FAB-02':
+        elif a.name.startswith('FAB-02'):
             sh1_c = m.get('sensor_h1_center', (0.0, 0.0))
             sh2_c = m.get('sensor_h2_center', (0.0, 0.0))
             bh1_c = m.get('base_h1_center', (0.0, 0.0))
@@ -466,6 +495,7 @@ def print_audit_report(auditors):
             print(f"  * Base Flange Pitch    : {m.get('base_pitch', 0.0):.3f} mm (Spec: 15.00 mm matching baseplate template)")
             print(f"  * Base Hole Diameter   : {m.get('base_hole_dia', 0.0):.3f} mm (Spec: 3.20 mm clearance for wood screws)")
             print(f"  * Monolithic Junction  : {m.get('junction_elements', 0)} contiguous boundary elements uniting upright & foot")
+            print(f"  * Wire Passthrough Win : {m.get('window_width', 0.0):.2f} mm (W) x {m.get('window_height', 0.0):.2f} mm (H) (Spec: 21.60 mm W, Z=10.5 mm sill)")
             
         if a.errors:
             print("  [!] Errors Detected:")
@@ -495,9 +525,15 @@ def main():
         p_fab02 = os.path.join(default_dir, 'VibeGuard_ADXL345_Rigid_Mount.stl')
         
     auditors = [
-        MeshAuditor(p_fab01, 'FAB-01', expected_genus=2),
-        MeshAuditor(p_fab02, 'FAB-02', expected_genus=4)
+        MeshAuditor(p_fab01, 'FAB-01 Standard (3.35mm)', expected_genus=2),
+        MeshAuditor(p_fab02, 'FAB-02 Standard', expected_genus=5)
     ]
+    p_fab01_3p4 = os.path.join(default_dir, 'VibeGuard_Rotor_Arm_D_Shaft_3p40mm.stl')
+    if os.path.exists(p_fab01_3p4):
+        auditors.append(MeshAuditor(p_fab01_3p4, 'FAB-01 Failsafe (3.40mm)', expected_genus=2))
+    p_fab02_top = os.path.join(default_dir, 'VibeGuard_ADXL345_Rigid_Mount_OpenTop.stl')
+    if os.path.exists(p_fab02_top):
+        auditors.append(MeshAuditor(p_fab02_top, 'FAB-02 OpenTop', expected_genus=4))
     
     for a in auditors:
         tris = a.parse_binary_stl()

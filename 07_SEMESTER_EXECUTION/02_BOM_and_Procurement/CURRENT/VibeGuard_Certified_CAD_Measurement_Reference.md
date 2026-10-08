@@ -49,15 +49,15 @@ Every dimension below was physically measured with precision vernier calipers, r
 
 ## 2. Certified 3D CAD Specifications for Post-Drilling Phase
 
-### FAB-01: Eccentric Rotor Cam Arm (`VibeGuard_Rotor_Arm_D_Shaft.stl`)
+### FAB-01: Eccentric Rotor Cam Arm (`VibeGuard_Rotor_Arm_D_Shaft.stl` & Failsafe `_3p40mm.stl`)
 * **Function:** Presses onto the N20 motor D-shaft and carries an M3 bolt + nuts as an adjustable eccentric unbalance mass.
-* **Shaft Bore Diameter:** **$3.15\text{ mm}$** (provides exact $+0.15\text{ mm}$ diametral clearance compensation for FDM PLA thermal shrinkage, ensuring a solid friction-fit over the $3.00\text{ mm}$ shaft without loose slop or shaft cracking).
-* **Flat Chord Dimension:** **$2.65\text{ mm}$** (compensates for the $2.50\text{ mm}$ D-flat).
+* **Standard Model Bore Diameter:** **$3.350\text{ mm}$** with **$2.775\text{ mm}$** flat chord (calibrated for snug light press-fit / friction fit under FDM PLA inward thermal contraction).
+* **Failsafe Model Bore Diameter:** **$3.400\text{ mm}$** with **$2.825\text{ mm}$** flat chord (`VibeGuard_Rotor_Arm_D_Shaft_3p40mm.stl`, clearance slip-fit variant).
 * **Hub Axial Height:** **$8.00\text{ mm}$** (deliberately designed $1.00\text{ mm}$ shorter than the $9.00\text{ mm}$ usable shaft length to guarantee that the hub never rubs against the motor brass bushing or front gearbox plate).
 * **Center-to-Center Pitch:** **$12.00\text{ mm}$** from shaft centerline to eccentric mass hole.
 * **Eccentric Mass Hole Diameter:** **$3.20\text{ mm}$** through-hole for standard M3 bolts.
-* **External Hub OD:** $8.50\text{ mm}$ cylindrical reinforcement.
-* **Calculated Part Mass (100% PLA):** **$1.36\text{ grams}$** (Volume: $1099.9\text{ mm}^3$).
+* **External Hub OD:** $8.50\text{ mm}$ cylindrical reinforcement ($\ge 4$ solid wall perimeters).
+* **Calculated Part Mass (100% PLA):** **$1.36\text{ grams}$** (Volume: $1093.1\text{ mm}^3$ for 3.35mm, $1091.2\text{ mm}^3$ for 3.40mm).
 
 ---
 
@@ -107,13 +107,50 @@ $$\begin{aligned}
 
 ## 4. Immediate Workshop Checklist
 
-1. [ ] **Stack Acrylic Sheets:** Stack Plate 1 ($4.2\text{ mm}$) and Plate 2 ($4.6\text{ mm}$) with protective paper intact.
-2. [ ] **Index Orientation:** Mark **INDEX A** with a permanent marker across the top-left edge of both plates.
-3. [ ] **Print Template:** Print `VibeGuard_Baseplate_1to1_Drill_Sticker_Template.pdf` at **100% scale (Actual Size)**. Confirm the $50\text{ mm}$ scale check bar with a physical ruler.
-4. [ ] **Clamp & Center-Punch:** Tape the template squarely onto the acrylic, clamp the stack to a wooden scrap backer board, and center-punch all 8 crosshairs.
-5. [ ] **Pilot Drilling:** Drill all 8 holes through both sheets using a **$\varnothing 2.5\text{ mm}$ pilot bit** at 800–1000 RPM with soapy water coolant.
-6. [ ] **Final Reaming:** Ream all 8 holes to final size (**$\varnothing 3.0\text{ mm}$ or $\varnothing 3.3\text{ mm}$**).
-7. [ ] **Drilling Phase Complete:** Once finished, notify the assistant to proceed immediately with the final 3D printing and assembly phase.
+1. [x] **Stack Acrylic Sheets:** Stack Plate 1 ($4.2\text{ mm}$) and Plate 2 ($4.6\text{ mm}$) with protective paper intact.
+2. [x] **Index Orientation:** Mark **INDEX A** with a permanent marker across the top-left edge of both plates.
+3. [x] **Print Template:** Print `VibeGuard_Baseplate_1to1_Drill_Sticker_Template.pdf` at **100% scale (Actual Size)**. Confirm the $50\text{ mm}$ scale check bar with a physical ruler.
+4. [x] **Clamp & Center-Punch:** Tape the template squarely onto the acrylic, clamp the stack to a wooden scrap backer board, and center-punch all 8 crosshairs.
+5. [x] **Pilot Drilling:** Drill all 8 holes through both sheets using a **$\varnothing 2.5\text{ mm}$ pilot bit** at 800–1000 RPM with soapy water coolant.
+6. [x] **Final Reaming:** Ream all 8 holes to final size (**$\varnothing 3.0\text{ mm}$ or $\varnothing 3.3\text{ mm}$**).
+7. [x] **Drilling Phase Complete:** Baseplate stack drilled and verified.
+
+---
+
+## 5. Physical 3D Print Fit Trial & Motor Mounting Selection Log (October 2026)
+
+### 5.1 Physical Fit Bench Trial Results on N20 Motor D-Shaft
+
+Two certified monolithic rotor arm variants were fabricated in PLA at the college FabLab and tested on the physical $12\text{V } 600\text{ RPM}$ N20 micro metal gear motor ($3.00\text{ mm}$ outer diameter, $2.50\text{ mm}$ flat-to-back chord):
+
+| Rotor Arm Variant | File Name | Nominal CAD D-Bore | Physical Fit Classification | Physical Behavior on Motor D-Shaft |
+| :--- | :--- | :--- | :--- | :--- |
+| **Standard Rotor Arm** | `VibeGuard_Rotor_Arm_D_Shaft.stl` | **$\varnothing 3.350\text{ mm}$**<br>(Chord: $2.775\text{ mm}$) | **Light Interference / Friction Press-Fit** | Enters snug; seats fully after a firm hand push ("strength push"). Zero radial play, zero axial slip under manual torque. |
+| **Failsafe Rotor Arm** | `VibeGuard_Rotor_Arm_D_Shaft_3p40mm.stl` | **$\varnothing 3.400\text{ mm}$**<br>(Chord: $2.825\text{ mm}$) | **Clearance / Sliding Slip-Fit** | Slides on effortlessly ("moves like a perfect shoe smoothly fit in"). Minimal friction; free axial travel along the shaft. |
+
+---
+
+### 5.2 Engineering Selection Decision: Which Arm to Use for the Motor?
+
+> [!IMPORTANT]
+> **OFFICIAL ENGINEERING SELECTION: USE THE $3.350\text{ mm}$ ROTOR ARM (`VibeGuard_Rotor_Arm_D_Shaft.stl`) ON THE MOTOR.**
+
+#### Mechanical Dynamics & Physics Rationale:
+1. **Dynamic Centrifugal Retention:**  
+   The rotor arm carries an off-center M3 bolt unbalance mass spinning up to $600\text{ RPM}$ ($10\text{ Hz}$). The resulting centrifugal force $F_c = m \cdot r \cdot \omega^2$ generates continuous dynamic radial loading. Under high vibration, any sliding slip-fit component ($3.40\text{ mm}$) will experience micro-motion and **walk along the shaft axially (axial shaft walking)**, eventually flying off during continuous testing. The $3.350\text{ mm}$ light interference fit provides hoop-stress friction clamping that permanently locks the hub axially without needing set screws or messy adhesives.
+2. **Elimination of Rotational Backlash Hammering:**  
+   During every rotation of the eccentric unbalance mass, gravitational torque alternately aids and opposes motor rotation. A loose or sliding fit ($3.40\text{ mm}$) allows micro-backlash between the motor D-flat and the plastic chord. Over hundreds of thousands of cycles, this cyclical hammering rounds the plastic D-flat, induces false high-frequency acoustic/impact noise into the ADXL345 accelerometer data, and eventually strips the hub. The $3.350\text{ mm}$ fit locks the flat face flush with zero play.
+3. **Role of the $3.400\text{ mm}$ Failsafe Arm:**  
+   Keep the $3.400\text{ mm}$ arm in the test kit as a spare. It is ideal for zero-load static alignment checks or bench calibration. If it is ever deployed for active motorized spin tests, it **must** be secured with a tiny drop of medium threadlocker (or removable adhesive) on the shaft to prevent axial migration.
+
+---
+
+### 5.3 Motor Installation & Alignment Safety Protocol
+
+When mounting the **$3.350\text{ mm}$** arm onto the motor shaft:
+1. **Support the Gearbox Backing:** Place your thumb or a wooden/acrylic block firmly behind the front metal gearbox faceplate when pushing the rotor arm on. **Never press against the rear cylindrical motor can or the delicate rear electrical soldering terminals**, which could damage the motor brushes.
+2. **Preserve the $1.0\text{ mm}$ Daylight Air Gap:** Push the rotor hub along the D-shaft until there is approximately a **$1.0\text{ mm}$ daylight clearance gap** between the rear face of the plastic hub and the brass bushing on the gearbox front plate. The plastic hub must **never rub** against the stationary gearbox casing or brass bushing, ensuring zero parasitic drag.
 
 ---
 *Certified & Logged for VibeGuard Engineering Records.*
+
