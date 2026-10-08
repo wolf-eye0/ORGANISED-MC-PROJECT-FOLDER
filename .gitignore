@@ -17,3 +17,7 @@ TEST_READY.md
 **/__pycache__/
 *.pyc
 *.pyo
+
+# Node.js dependencies
+**/node_modules/
+**/.npm/
