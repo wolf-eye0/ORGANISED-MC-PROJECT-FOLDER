@@ -105,10 +105,23 @@ async function choosePort() {
   return likely?.path || null;
 }
 
+let reconnectTimer = null;
+function scheduleReconnect() {
+  if (reconnectTimer) return;
+  reconnectTimer = setTimeout(async () => {
+    reconnectTimer = null;
+    if (!serial?.isOpen) {
+      console.log('[SERIAL] Attempting reconnection...');
+      try { await connectSerial(); } catch {}
+    }
+  }, 2000);
+}
+
 async function connectSerial() {
   const portPath = await choosePort();
   if (!portPath) {
     serialState = { ...serialState, status: 'DISCONNECTED', error: 'No serial port configured' };
+    scheduleReconnect();
     return;
   }
   serialState = { ...serialState, status: 'CONNECTING', port: portPath, error: null };
@@ -123,14 +136,26 @@ async function connectSerial() {
     serialState = { ...serialState, status: 'FAULT', error: err.message };
     console.error(`[SERIAL ERROR] ${err.message}`);
     emitBridgeStatus();
+    scheduleReconnect();
   });
   serial.on('close', () => {
-    serialState = { ...serialState, status: 'DISCONNECTED' };
-    console.log('[SERIAL] Disconnected');
+    serialState = { ...serialState, status: 'DISCONNECTED', sensor: 'UNKNOWN' };
+    console.log('[SERIAL] Disconnected - will auto-reconnect in 2s');
     emitBridgeStatus();
+    scheduleReconnect();
   });
   let packetCount = 0;
   parser.on('data', line => {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('[CAL') || trimmed.startsWith('[STATUS') || trimmed.startsWith('[COMMAND') || trimmed.startsWith('[RESET')) {
+      console.log(trimmed);
+    }
+    if (trimmed.includes('sensor=OK') || trimmed.includes('[DATA]') || trimmed.startsWith('>VRMS:')) {
+      if (serialState.sensor !== 'CONNECTED') {
+        serialState.sensor = 'CONNECTED';
+        emitBridgeStatus();
+      }
+    }
     const packet = parseSerialLine(line);
     if (!packet) return;
     serialState.lastMessageMs = Date.now();
@@ -145,6 +170,7 @@ async function connectSerial() {
       serialState = { ...serialState, status: 'FAULT', error: err.message };
       console.error(`[SERIAL OPEN ERROR] ${err.message}`);
       emitBridgeStatus();
+      scheduleReconnect();
     }
   });
 }
