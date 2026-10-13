@@ -8,7 +8,7 @@ import { exportSession } from './csv-export.js';
 import { updateTwin } from './twin.js';
 import { openDrawer,closeDrawers,installFocusHandling } from './accessibility.js';
 
-const params=new URLSearchParams(location.search);const mode=params.get('source')==='live'?'LIVE':'PREVIEW';const store=new SessionStore(mode);const source=mode==='LIVE'?new WebSocketSource(CONFIG.websocketUrl):new PreviewSource();const charts=new DashboardCharts();let renderedTableAt=0;let lastReason='';
+const params=new URLSearchParams(location.search);const mode=params.get('source')==='preview'?'PREVIEW':'LIVE';const store=new SessionStore(mode);const source=mode==='LIVE'?new WebSocketSource(CONFIG.websocketUrl):new PreviewSource();const charts=new DashboardCharts();let renderedTableAt=0;let lastReason='';
 const $=selector=>document.querySelector(selector);
 
 function setText(selector,value){const node=$(selector);if(node&&node.textContent!==String(value))node.textContent=value;}
