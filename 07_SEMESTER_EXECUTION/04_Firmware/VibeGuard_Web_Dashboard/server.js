@@ -29,11 +29,20 @@ app.get('/health', (_req, res) => res.json({
 
 const clients = new Set();
 const commandMap = Object.freeze({
-  CALIBRATE: 'CALIBRATE',
-  DEMO_ALARM: 'DEMO_ALARM',
+  CALIBRATE: 'CAL_OFF',
+  DEMO_ALARM: 'FORCE_ALARM',
   CLEAR_ALARM: 'CLEAR_ALARM',
   LED_TEST: 'LED_TEST',
-  SET_THRESHOLDS: 'SET_THRESHOLDS'
+  SET_THRESHOLDS: 'SET_THRESHOLDS',
+  FORCE_ALARM: 'FORCE_ALARM',
+  CAL_OFF: 'CAL_OFF',
+  CAL_RUN: 'CAL_RUN',
+  PROFILE_APPROVE: 'PROFILE_APPROVE',
+  CAL_CANCEL: 'CAL_CANCEL',
+  PROFILE_CLEAR: 'PROFILE_CLEAR',
+  STATUS: 'STATUS',
+  TEST_ON: 'TEST_ON',
+  TEST_OFF: 'TEST_OFF'
 });
 let serial = null;
 let serialState = {
@@ -54,7 +63,22 @@ function parseSerialLine(line) {
   const value = line.trim();
   if (!value) return null;
   try { return JSON.parse(value); } catch { /* tolerate labelled or CSV firmware output */ }
-  const pairs = Object.fromEntries([...value.matchAll(/([A-Za-z_]+)\s*[:=]\s*(-?\d+(?:\.\d+)?|[A-Za-z_]+)/g)].map(m => [m[1], m[2]]));
+  const pairs = Object.fromEntries([...value.matchAll(/([A-Za-z_]+)\s*[:=]\s*(-?\d+(?:\.\d+)?|[A-Za-z0-9_-]+)/g)].map(m => [m[1], m[2]]));
+  const meanMatch = value.match(/mean\s*=\s*\(([-0-9.]+),([-0-9.]+),([-0-9.]+)\)/);
+  if (meanMatch) {
+    pairs.meanX = meanMatch[1];
+    pairs.meanY = meanMatch[2];
+    pairs.meanZ = meanMatch[3];
+  }
+  const rmsMatch = value.match(/rms\s*=\s*\(([-0-9.]+),([-0-9.]+),([-0-9.]+)\)/);
+  if (rmsMatch) {
+    pairs.rmsX = rmsMatch[1];
+    pairs.rmsY = rmsMatch[2];
+    pairs.rmsZ = rmsMatch[3];
+  }
+  if (pairs.vector && !pairs.vectorRms) pairs.vectorRms = pairs.vector;
+  if (pairs.warn && !pairs.warning) pairs.warning = pairs.warn;
+  if (pairs.device_ms && !pairs.deviceTsMs) pairs.deviceTsMs = pairs.device_ms;
   if (Object.keys(pairs).length) return { raw: value, fields: pairs };
   const columns = value.split(',').map(part => part.trim());
   if (columns.length >= 8 && columns.every((part, i) => i === 0 || Number.isFinite(Number(part)))) {
@@ -83,25 +107,34 @@ async function connectSerial() {
   const parser = serial.pipe(new ReadlineParser({ delimiter: '\n' }));
   serial.on('open', () => {
     serialState = { ...serialState, status: 'CONNECTED', error: null };
+    console.log(`[SERIAL] Connected to ${portPath} @ ${SERIAL_BAUD} baud`);
     emitBridgeStatus();
   });
   serial.on('error', err => {
     serialState = { ...serialState, status: 'FAULT', error: err.message };
+    console.error(`[SERIAL ERROR] ${err.message}`);
     emitBridgeStatus();
   });
   serial.on('close', () => {
     serialState = { ...serialState, status: 'DISCONNECTED' };
+    console.log('[SERIAL] Disconnected');
     emitBridgeStatus();
   });
+  let packetCount = 0;
   parser.on('data', line => {
     const packet = parseSerialLine(line);
     if (!packet) return;
     serialState.lastMessageMs = Date.now();
     broadcast('telemetry', { packet });
+    if (++packetCount % 50 === 0) {
+      const v = packet.fields?.vectorRms || packet.fields?.vector || packet.rms?.vectorG || 'ok';
+      console.log(`[TELEMETRY] Broadcast ${packetCount} samples. Vector RMS: ${v} g`);
+    }
   });
   serial.open(err => {
     if (err) {
       serialState = { ...serialState, status: 'FAULT', error: err.message };
+      console.error(`[SERIAL OPEN ERROR] ${err.message}`);
       emitBridgeStatus();
     }
   });
@@ -156,7 +189,7 @@ wss.on('connection', socket => {
   socket.on('close', () => clients.delete(socket));
 });
 
-server.listen(PORT, '127.0.0.1', async () => {
+server.listen(PORT, '0.0.0.0', async () => {
   console.log(`VibeGuard: http://127.0.0.1:${PORT}/vibeguard-dashboard.html`);
   try { await connectSerial(); } catch (error) { console.error('Serial setup failed:', error.message); }
 });
