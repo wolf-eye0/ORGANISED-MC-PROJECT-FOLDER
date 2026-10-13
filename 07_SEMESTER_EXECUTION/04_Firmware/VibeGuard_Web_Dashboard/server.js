@@ -26,6 +26,15 @@ app.get('/health', (_req, res) => res.json({
   websocket: `ws://127.0.0.1:${PORT}/ws`,
   serial: serialState
 }));
+app.all('/api/cmd/:cmd', (req, res) => {
+  const cmd = req.params.cmd.toUpperCase();
+  if (!serial?.isOpen) return res.status(503).json({ ok: false, error: 'Serial connection unavailable' });
+  serial.write(`${cmd}\n`, err => {
+    if (err) return res.status(500).json({ ok: false, error: err.message });
+    console.log(`[HTTP API] Sent command: ${cmd}`);
+    res.json({ ok: true, command: cmd });
+  });
+});
 
 const clients = new Set();
 const commandMap = Object.freeze({
