@@ -47,10 +47,10 @@
 #define RMS_WARN_LIMIT 0.35f
 #define RMS_ALARM_LIMIT 0.70f
 
-// Faster than the original 128-sample window while retaining the same 800 Hz loop.
+// 128-sample window (160 ms) covers 1.6 rotations at 600 RPM for smooth cycle integration.
 #define SAMPLE_RATE_HZ 800
 #define SAMPLE_PERIOD_US 1250UL
-#define BUFFER_SIZE 64
+#define BUFFER_SIZE 128
 
 #define PROFILE_MAGIC 0x56474233UL
 #define PROFILE_SCHEMA 3
@@ -86,7 +86,7 @@
 #define ALARM_EXIT_FRACTION 0.70f
 #define DEFAULT_WARN_PERSIST 3
 #define DEFAULT_ALARM_PERSIST 2
-#define DEFAULT_RECOVERY_PERSIST 8
+#define DEFAULT_RECOVERY_PERSIST 16
 #define INVALID_WINDOWS_FOR_FAULT 5
 #define CLIP_LIMIT_G 15.5f
 
@@ -207,6 +207,7 @@ uint8_t g_warning_count = 0;
 uint8_t g_alarm_count = 0;
 uint8_t g_recovery_count = 0;
 uint8_t g_invalid_window_count = 0;
+float g_smoothed_vrms = -1.0f;
 uint32_t g_sequence = 0;
 uint32_t g_last_telemetry_ms = 0;
 uint32_t g_last_status_ms = 0;
@@ -284,6 +285,7 @@ void resetConditionCounters() {
   g_warning_count = 0;
   g_alarm_count = 0;
   g_recovery_count = 0;
+  g_smoothed_vrms = -1.0f;
 }
 
 uint8_t incrementSaturated(uint8_t value) {
@@ -1231,13 +1233,23 @@ void loop() {
     return;
   }
 
-  ConditionState next = evaluateCondition(metrics.vector_rms, metrics.valid);
+  if (metrics.valid) {
+    if (g_smoothed_vrms < 0.0f) {
+      g_smoothed_vrms = metrics.vector_rms;
+    } else {
+      g_smoothed_vrms = 0.35f * metrics.vector_rms + 0.65f * g_smoothed_vrms;
+    }
+  }
+
+  ConditionState next = evaluateCondition(g_smoothed_vrms >= 0.0f ? g_smoothed_vrms : metrics.vector_rms, metrics.valid);
   commitState(next);
 
   uint32_t now = millis();
   if (metrics.valid && (g_state_changed || now - g_last_telemetry_ms >= TELEMETRY_INTERVAL_MS)) {
     g_last_telemetry_ms = now;
-    printTelemetry(metrics);
+    WindowMetrics smoothMetrics = metrics;
+    if (g_smoothed_vrms >= 0.0f) smoothMetrics.vector_rms = g_smoothed_vrms;
+    printTelemetry(smoothMetrics);
     g_state_changed = false;
   }
 
