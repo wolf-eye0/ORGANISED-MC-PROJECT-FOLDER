@@ -393,13 +393,14 @@ bool loadProfile() {
   g_profile.alarm_persist = DEFAULT_ALARM_PERSIST;
   g_profile.recovery_persist = DEFAULT_RECOVERY_PERSIST;
 
-  // Auto-migrate to decoupled Planar Asymmetry Demodulation threshold ladder:
-  // Baseline = ~0.675g - 0.691g (Green) | Bolt Only = ~0.919g (Yellow) | Bolt + 2 Nuts = ~1.089g (Red)
-  if (fabsf(g_profile.warning_enter - 0.78000f) > 0.005f || fabsf(g_profile.alarm_enter - 1.00000f) > 0.005f) {
-    g_profile.warning_enter = 0.78000f;
-    g_profile.warning_exit = 0.74000f;
-    g_profile.alarm_enter = 1.00000f;
-    g_profile.alarm_exit = 0.96000f;
+  // Auto-migrate to decoupled physical Vector RMS threshold ladder:
+  // Baseline = ~0.675g (Green) | Bolt Only = ~0.792g (Yellow) | Bolt + 2 Nuts = ~0.935g (Red)
+  if (fabsf(g_profile.warning_enter - 0.74000f) > 0.005f || fabsf(g_profile.alarm_enter - 0.84500f) > 0.005f) {
+    g_profile.baseline_rms = 0.67535f;
+    g_profile.warning_enter = 0.74000f;
+    g_profile.warning_exit = 0.71000f;
+    g_profile.alarm_enter = 0.84500f;
+    g_profile.alarm_exit = 0.83000f;
     saveProfile();
   }
   return true;
@@ -542,14 +543,9 @@ WindowMetrics sampleWindowMetrics() {
   out.peak_vector = sqrtf(peak_sq);
   out.crest_factor = out.vector_rms > 0.0001f ? out.peak_vector / out.vector_rms : NAN;
 
-  // Planar Asymmetry Demodulation:
-  // Eccentric unbalance causes vertical rocking deflection (Y-axis), whereas high-frequency
-  // gear-mesh chatter is evenly distributed across both transverse axes (X & Y).
-  // Subtracting transverse noise (rms_x) cancels gear chatter and isolates the unbalance rocking couple.
-  float planar_asymmetry = fmaxf(0.0f, out.rms_y - out.rms_x);
-  out.unbalance_1x = planar_asymmetry;
-  out.condition_vrms = out.vector_rms + 0.80f * planar_asymmetry;
-  out.valid = !out.clipped && isfinite(out.vector_rms) && isfinite(out.condition_vrms);
+  out.unbalance_1x = fmaxf(0.0f, out.rms_y - out.rms_x);
+  out.condition_vrms = out.vector_rms;
+  out.valid = !out.clipped && isfinite(out.vector_rms);
   return out;
 }
 
