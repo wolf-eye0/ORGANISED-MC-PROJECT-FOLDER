@@ -86,9 +86,9 @@
 #define ALARM_EXIT_FRACTION 0.70f
 #define DEFAULT_WARN_PERSIST 3
 #define DEFAULT_ALARM_PERSIST 2
-#define DEFAULT_RECOVERY_PERSIST 16
-#define PEAK_ALARM_LIMIT_G 3.50f
-#define PEAK_ALARM_EXIT_G  3.00f
+#define DEFAULT_RECOVERY_PERSIST 8
+#define PEAK_ALARM_LIMIT_G 7.00f
+#define PEAK_ALARM_EXIT_G  5.50f
 #define INVALID_WINDOWS_FOR_FAULT 5
 #define CLIP_LIMIT_G 15.5f
 
@@ -389,6 +389,7 @@ bool loadProfile() {
 
   strlcpy(g_pending_profile_id, g_profile.profile_id, sizeof(g_pending_profile_id));
   g_pending_motor_mass_g = g_profile.motor_mass_g;
+  g_profile.recovery_persist = DEFAULT_RECOVERY_PERSIST;
   return true;
 }
 
