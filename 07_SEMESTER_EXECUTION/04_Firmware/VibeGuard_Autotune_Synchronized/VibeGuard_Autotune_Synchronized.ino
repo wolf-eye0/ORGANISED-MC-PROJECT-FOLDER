@@ -87,6 +87,8 @@
 #define DEFAULT_WARN_PERSIST 3
 #define DEFAULT_ALARM_PERSIST 2
 #define DEFAULT_RECOVERY_PERSIST 16
+#define PEAK_ALARM_LIMIT_G 3.50f
+#define PEAK_ALARM_EXIT_G  3.00f
 #define INVALID_WINDOWS_FOR_FAULT 5
 #define CLIP_LIMIT_G 15.5f
 
@@ -549,7 +551,7 @@ void commitState(ConditionState next) {
   applyIndicator();
 }
 
-ConditionState evaluateCondition(float rms, bool valid) {
+ConditionState evaluateCondition(float rms, float peak, bool valid) {
   if (!g_sensor_ready || g_invalid_window_count >= INVALID_WINDOWS_FOR_FAULT) {
     return ConditionState::SENSOR_FAULT;
   }
@@ -561,10 +563,10 @@ ConditionState evaluateCondition(float rms, bool valid) {
   if (!activeMonitoring || !g_profile.approved) return ConditionState::UNKNOWN;
   if (!valid) return g_committed_state;
 
-  bool alarmEvidence = rms >= g_profile.alarm_enter;
-  bool warningEvidence = rms >= g_profile.warning_enter;
-  bool alarmReleased = rms < g_profile.alarm_exit;
-  bool warningReleased = rms < g_profile.warning_exit;
+  bool alarmEvidence = (rms >= g_profile.alarm_enter) || (peak >= PEAK_ALARM_LIMIT_G);
+  bool warningEvidence = (rms >= g_profile.warning_enter);
+  bool alarmReleased = (rms < g_profile.alarm_exit) && (peak < PEAK_ALARM_EXIT_G);
+  bool warningReleased = (rms < g_profile.warning_exit);
 
   g_alarm_count = alarmEvidence ? incrementSaturated(g_alarm_count) : decayCounter(g_alarm_count);
   g_warning_count = warningEvidence ? incrementSaturated(g_warning_count) : decayCounter(g_warning_count);
@@ -1294,7 +1296,7 @@ void loop() {
     }
   }
 
-  ConditionState next = evaluateCondition(g_smoothed_vrms >= 0.0f ? g_smoothed_vrms : metrics.vector_rms, metrics.valid);
+  ConditionState next = evaluateCondition(g_smoothed_vrms >= 0.0f ? g_smoothed_vrms : metrics.vector_rms, metrics.peak_vector, metrics.valid);
   commitState(next);
 
   uint32_t now = millis();
