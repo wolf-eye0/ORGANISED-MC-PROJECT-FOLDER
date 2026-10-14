@@ -48,7 +48,8 @@ app.all('/api/cmd/:cmd', (req, res) => {
 
 const clients = new Set();
 const commandMap = Object.freeze({
-  CALIBRATE: 'CAL_OFF',
+  CALIBRATE: 'CAL',
+  CAL_AUTO: 'CAL',
   DEMO_ALARM: 'FORCE_ALARM',
   CLEAR_ALARM: 'CLEAR_ALARM',
   LED_TEST: 'LED_TEST',

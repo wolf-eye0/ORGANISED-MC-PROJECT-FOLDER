@@ -4,6 +4,10 @@
 #include <cmath>
 #include <cstring>
 #include <cstddef>
+#include "VibeGuardEngine.h"
+
+// Global Deep Research DSP Engine
+VibeGuardEngine g_vibeEngine;
 
 // ============================================================================
 // VIBEGUARD: BENCHMARK LOGGER + AUTOTUNING + SYNCHRONIZED MONITORING
@@ -125,6 +129,12 @@ struct WindowMetrics {
   float crest_factor;
   float unbalance_1x;
   float condition_vrms;
+  float j_val;
+  float j_smooth;
+  float f1_hz;
+  float c_sag;
+  bool shock_rejected;
+  uint8_t stage_4;
   bool valid;
   bool clipped;
 };
@@ -259,6 +269,11 @@ void applyIndicator() {
   if (!g_sensor_ready || g_mode == OperatingMode::SENSOR_FAULT ||
       g_committed_state == ConditionState::SENSOR_FAULT) {
     setRGB(true, false, true);  // Magenta: sensor/acquisition fault
+    return;
+  }
+
+  if (g_vibeEngine.getCalibrationState() != CAL_IDLE) {
+    setRGB(false, false, true); // Blue: 8.0s Median+MAD calibration active
     return;
   }
 
@@ -543,8 +558,23 @@ WindowMetrics sampleWindowMetrics() {
   out.peak_vector = sqrtf(peak_sq);
   out.crest_factor = out.vector_rms > 0.0001f ? out.peak_vector / out.vector_rms : NAN;
 
-  out.unbalance_1x = fmaxf(0.0f, out.rms_y - out.rms_x);
-  out.condition_vrms = out.vector_rms;
+  // Pass raw window buffer to Deep Research Substrate-Invariant DSP Pipeline
+  TelemetryFrame tf = g_vibeEngine.processWindow(x, y, z, g_preferences);
+
+  out.rms_x = tf.rx;
+  out.rms_y = tf.ry;
+  out.rms_z = tf.rz;
+  out.vector_rms = tf.r3d;
+  out.peak_vector = tf.peakVector;
+  out.crest_factor = tf.crestFactor;
+  out.unbalance_1x = tf.rLowXY;
+  out.j_val = tf.rawJ;
+  out.j_smooth = tf.smoothedJ;
+  out.f1_hz = tf.f1Hz;
+  out.c_sag = tf.cSag;
+  out.shock_rejected = tf.shockRejected;
+  out.stage_4 = static_cast<uint8_t>(tf.committedStage);
+  out.condition_vrms = tf.r3d;
   out.valid = !out.clipped && isfinite(out.vector_rms);
   return out;
 }
@@ -568,7 +598,7 @@ void commitState(ConditionState next) {
   applyIndicator();
 }
 
-ConditionState evaluateCondition(float rms, bool valid) {
+ConditionState evaluateCondition(const WindowMetrics& m, bool valid) {
   if (!g_sensor_ready || g_invalid_window_count >= INVALID_WINDOWS_FOR_FAULT) {
     return ConditionState::SENSOR_FAULT;
   }
@@ -580,6 +610,20 @@ ConditionState evaluateCondition(float rms, bool valid) {
   if (!activeMonitoring || !g_profile.approved) return ConditionState::UNKNOWN;
   if (!valid) return g_committed_state;
 
+  // Primary: Substrate-Invariant 4-Stage Hysteresis Engine
+  // Stage 2 (Bolt + 1 Nut) & Stage 3 (Bolt + 2 Nuts) trigger ALARM (Red)
+  // Stage 1 (Bolt Only) triggers WARNING (Yellow)
+  if (m.stage_4 >= 2) {
+    resetConditionCounters();
+    return ConditionState::ALARM;
+  }
+  if (m.stage_4 == 1) {
+    resetConditionCounters();
+    return ConditionState::WARNING;
+  }
+
+  // Fallback: Legacy RMS Threshold Ladder
+  float rms = m.condition_vrms;
   bool alarmEvidence = (rms >= g_profile.alarm_enter);
   bool warningEvidence = (rms >= g_profile.warning_enter);
   bool alarmReleased = (rms < g_profile.alarm_exit);
@@ -997,25 +1041,25 @@ void printTelemetry(const WindowMetrics& m) {
   float alarm = g_profile.approved ? g_profile.alarm_enter : RMS_ALARM_LIMIT;
   const char* state = conditionName(g_committed_state);
 
-  // Existing plotter-style line retained, with the authoritative State appended.
-  Serial.printf(">VRMS:%.5f,Baseline:%.5f,WarnLimit:%.5f,AlarmLimit:%.5f,State:%s\n",
-                m.condition_vrms, baseline, warning, alarm, state);
+  // Plotter-style line (compatible with server.js & web dashboard)
+  Serial.printf(">VRMS:%.5f,Baseline:%.5f,WarnLimit:%.5f,AlarmLimit:%.5f,State:%s,J:%.4f,f1:%.2f,Stage:%u,Shock:%d\n",
+                m.condition_vrms, baseline, warning, alarm, state,
+                m.j_smooth, m.f1_hz, m.stage_4, m.shock_rejected ? 1 : 0);
 
-  // Existing human-readable style retained, now driven by the same committed state as RGB.
-  Serial.printf("[LIVE] VRMS: %7.5f g | Condition: [%-12s] | Mode: %-20s\n",
-                m.condition_vrms, state, modeName(g_mode));
+  // Human-readable live line
+  Serial.printf("[LIVE] VRMS: %7.5f g | J(t): %6.2f | Stage: %u | Condition: [%-12s] | Mode: %-20s\n",
+                m.condition_vrms, m.j_smooth, m.stage_4, state, modeName(g_mode));
 
-  // Machine-readable tagged telemetry for bridge.py.
-  Serial.printf("[DATA] schema=3 seq=%lu device_ms=%lu mode=%s state=%s forced=%d profile=%s approved=%d mass_g=%.2f mean=(%.5f,%.5f,%.5f) rms=(%.5f,%.5f,%.5f) vector=%.5f peak=%.5f crest=",
-                ++g_sequence, millis(), modeName(g_mode), state, g_forced_alarm,
+  // Machine-readable tagged telemetry for bridge.py / server.js
+  Serial.printf("[DATA] schema=3 seq=%lu device_ms=%lu mode=%s state=%s stage4=%u J=%.4f f1=%.2f cSag=%.2f shock=%d forced=%d profile=%s approved=%d mass_g=%.2f mean=(%.5f,%.5f,%.5f) rms=(%.5f,%.5f,%.5f) vector=%.5f peak=%.5f crest=%.4f baseline=%.5f warning=%.5f alarm=%.5f valid=%d clipped=%d\n",
+                ++g_sequence, millis(), modeName(g_mode), state, m.stage_4,
+                m.j_smooth, m.f1_hz, m.c_sag, m.shock_rejected ? 1 : 0,
+                g_forced_alarm,
                 g_profile.approved ? g_profile.profile_id : g_pending_profile_id,
                 g_profile.approved, g_profile.approved ? g_profile.motor_mass_g : g_pending_motor_mass_g,
                 m.mean_x, m.mean_y, m.mean_z,
                 m.rms_x, m.rms_y, m.rms_z,
-                m.vector_rms, m.peak_vector);
-  if (isfinite(m.crest_factor)) Serial.printf("%.4f", m.crest_factor);
-  else Serial.print("null");
-  Serial.printf(" baseline=%.5f warning=%.5f alarm=%.5f valid=%d clipped=%d\n",
+                m.vector_rms, m.peak_vector, m.crest_factor,
                 baseline, warning, alarm, m.valid, m.clipped);
 }
 
@@ -1142,6 +1186,10 @@ void handleCommand(String command) {
   else if (upper == "?" || upper == "H") printHelpMenu();
   else if (upper.startsWith("NAME=")) setPendingName(command.substring(5));
   else if (upper.startsWith("MASS=")) setPendingMass(command.substring(5));
+  else if (upper == "CAL" || upper == "CAL_AUTO" || upper == "CALIBRATE") {
+    g_vibeEngine.startBaselineCalibration();
+    Serial.println("[CAL] Started 8.0s automated baseline calibration (Median + MAD)...");
+  }
   else if (upper == "CAL_OFF") collectStationaryReference();
   else if (upper == "CAL_RUN") collectHealthyRun();
   else if (upper == "PROFILE_APPROVE") approveCandidate();
@@ -1262,6 +1310,12 @@ void setup() {
       g_committed_state = ConditionState::UNKNOWN;
       Serial.println("[PROFILE] loaded=0 action=RUN_AUTOTUNE");
     }
+
+    if (g_vibeEngine.loadFromNVS(g_preferences)) {
+      Serial.println("[DSP_ENGINE] Loaded Deep Research baseline calibration from NVS.");
+    } else {
+      Serial.println("[DSP_ENGINE] Default Deep Research baseline active. Send 'CAL' or press BOOT to autotune.");
+    }
   } else {
     g_sensor_ready = false;
     g_mode = OperatingMode::SENSOR_FAULT;
@@ -1276,6 +1330,13 @@ void setup() {
 
 void loop() {
   processSerialCommands();
+
+  // Hardware BOOT button (GPIO 0) triggers automated calibration
+  if (digitalRead(PIN_BOOT_BUTTON) == LOW && g_vibeEngine.getCalibrationState() == CAL_IDLE) {
+    g_vibeEngine.startBaselineCalibration();
+    Serial.println("[CAL] BOOT button pressed: Started 8.0s automated baseline calibration (Median + MAD)...");
+    delay(250);
+  }
 
   if (!g_sensor_ready) {
     applyIndicator();
@@ -1323,7 +1384,7 @@ void loop() {
     }
   }
 
-  ConditionState next = evaluateCondition(g_smoothed_vrms >= 0.0f ? g_smoothed_vrms : metrics.condition_vrms, metrics.valid);
+  ConditionState next = evaluateCondition(metrics, metrics.valid);
   commitState(next);
 
   uint32_t now = millis();
