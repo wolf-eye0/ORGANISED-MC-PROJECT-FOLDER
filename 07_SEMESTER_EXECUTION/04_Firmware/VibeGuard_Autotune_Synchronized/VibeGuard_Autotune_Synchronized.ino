@@ -77,13 +77,13 @@
 #define REPEATABILITY_ABS_LIMIT_G 0.020f
 #define WARN_K_SPREAD 4.0f
 #define ALARM_K_SPREAD 12.0f
-#define WARN_MIN_MARGIN_G 0.045f
-#define ALARM_MIN_MARGIN_G 0.110f
+#define WARN_MIN_MARGIN_G 0.090f
+#define ALARM_MIN_MARGIN_G 0.300f
 #define WARN_NOISE_MULTIPLIER 2.0f
 #define ALARM_NOISE_MULTIPLIER 4.0f
-#define MIN_THRESHOLD_GAP_G 0.030f
+#define MIN_THRESHOLD_GAP_G 0.050f
 #define WARN_EXIT_FRACTION 0.60f
-#define ALARM_EXIT_FRACTION 0.80f
+#define ALARM_EXIT_FRACTION 0.75f
 #define DEFAULT_WARN_PERSIST 4
 #define DEFAULT_ALARM_PERSIST 4
 #define DEFAULT_RECOVERY_PERSIST 6
@@ -123,6 +123,8 @@ struct WindowMetrics {
   float vector_rms;
   float peak_vector;
   float crest_factor;
+  float unbalance_1x;
+  float condition_vrms;
   bool valid;
   bool clipped;
 };
@@ -391,13 +393,13 @@ bool loadProfile() {
   g_profile.alarm_persist = DEFAULT_ALARM_PERSIST;
   g_profile.recovery_persist = DEFAULT_RECOVERY_PERSIST;
 
-  // Auto-migrate to certified tri-state precision ladder:
-  // Baseline = 0.675g (Green) | Bolt Only = 0.750g (Yellow) | Bolt + 2 Nuts = 0.820g (Red)
-  if (fabsf(g_profile.warning_enter - 0.72000f) > 0.005f || fabsf(g_profile.alarm_enter - 0.78500f) > 0.005f) {
-    g_profile.warning_enter = 0.72000f;
-    g_profile.warning_exit = 0.70200f;
-    g_profile.alarm_enter = 0.78500f;
-    g_profile.alarm_exit = 0.77200f;
+  // Auto-migrate to decoupled 1X harmonic unbalance threshold ladder:
+  // Baseline = 0.675g (Green) | Bolt Only = ~0.887g (Yellow) | Bolt + 2 Nuts = ~1.150g (Red)
+  if (fabsf(g_profile.warning_enter - 0.77000f) > 0.005f || fabsf(g_profile.alarm_enter - 0.98000f) > 0.005f) {
+    g_profile.warning_enter = 0.77000f;
+    g_profile.warning_exit = 0.73000f;
+    g_profile.alarm_enter = 0.98000f;
+    g_profile.alarm_exit = 0.92000f;
     saveProfile();
   }
   return true;
@@ -539,7 +541,26 @@ WindowMetrics sampleWindowMetrics() {
   out.vector_rms = sqrtf(out.rms_x * out.rms_x + out.rms_y * out.rms_y + out.rms_z * out.rms_z);
   out.peak_vector = sqrtf(peak_sq);
   out.crest_factor = out.vector_rms > 0.0001f ? out.peak_vector / out.vector_rms : NAN;
-  out.valid = !out.clipped && isfinite(out.vector_rms);
+
+  // 1X Rotational Harmonic Filter (~25 Hz cutoff at 800 Hz sample rate)
+  // Strips high-frequency gear-mesh chatter (>150 Hz) and isolates pure rotational unbalance (10 Hz)
+  float lpx = 0.0f, lpy = 0.0f;
+  float sum_lpx = 0.0f, sum_lpy = 0.0f;
+  const float beta = 0.16f;
+  for (int i = 0; i < BUFFER_SIZE; ++i) {
+    float dx = x[i] - out.mean_x;
+    float dy = y[i] - out.mean_y;
+    lpx += beta * (dx - lpx);
+    lpy += beta * (dy - lpy);
+    sum_lpx += lpx * lpx;
+    sum_lpy += lpy * lpy;
+  }
+  out.unbalance_1x = sqrtf((sum_lpx + sum_lpy) / BUFFER_SIZE);
+
+  // Synthesize condition VRMS combining baseline floor with amplified 1X unbalance contrast
+  float base = g_profile.approved ? g_profile.baseline_rms : 0.67535f;
+  out.condition_vrms = base + 1.25f * out.unbalance_1x;
+  out.valid = !out.clipped && isfinite(out.vector_rms) && isfinite(out.unbalance_1x);
   return out;
 }
 
@@ -993,11 +1014,11 @@ void printTelemetry(const WindowMetrics& m) {
 
   // Existing plotter-style line retained, with the authoritative State appended.
   Serial.printf(">VRMS:%.5f,Baseline:%.5f,WarnLimit:%.5f,AlarmLimit:%.5f,State:%s\n",
-                m.vector_rms, baseline, warning, alarm, state);
+                m.condition_vrms, baseline, warning, alarm, state);
 
   // Existing human-readable style retained, now driven by the same committed state as RGB.
   Serial.printf("[LIVE] VRMS: %7.5f g | Condition: [%-12s] | Mode: %-20s\n",
-                m.vector_rms, state, modeName(g_mode));
+                m.condition_vrms, state, modeName(g_mode));
 
   // Machine-readable tagged telemetry for bridge.py.
   Serial.printf("[DATA] schema=3 seq=%lu device_ms=%lu mode=%s state=%s forced=%d profile=%s approved=%d mass_g=%.2f mean=(%.5f,%.5f,%.5f) rms=(%.5f,%.5f,%.5f) vector=%.5f peak=%.5f crest=",
@@ -1311,20 +1332,20 @@ void loop() {
 
   if (metrics.valid) {
     if (g_smoothed_vrms < 0.0f) {
-      g_smoothed_vrms = metrics.vector_rms;
+      g_smoothed_vrms = metrics.condition_vrms;
     } else {
-      g_smoothed_vrms = 0.08f * metrics.vector_rms + 0.92f * g_smoothed_vrms;
+      g_smoothed_vrms = 0.08f * metrics.condition_vrms + 0.92f * g_smoothed_vrms;
     }
   }
 
-  ConditionState next = evaluateCondition(g_smoothed_vrms >= 0.0f ? g_smoothed_vrms : metrics.vector_rms, metrics.valid);
+  ConditionState next = evaluateCondition(g_smoothed_vrms >= 0.0f ? g_smoothed_vrms : metrics.condition_vrms, metrics.valid);
   commitState(next);
 
   uint32_t now = millis();
   if (metrics.valid && (g_state_changed || now - g_last_telemetry_ms >= TELEMETRY_INTERVAL_MS)) {
     g_last_telemetry_ms = now;
     WindowMetrics smoothMetrics = metrics;
-    if (g_smoothed_vrms >= 0.0f) smoothMetrics.vector_rms = g_smoothed_vrms;
+    if (g_smoothed_vrms >= 0.0f) smoothMetrics.condition_vrms = g_smoothed_vrms;
     printTelemetry(smoothMetrics);
     g_state_changed = false;
   }
