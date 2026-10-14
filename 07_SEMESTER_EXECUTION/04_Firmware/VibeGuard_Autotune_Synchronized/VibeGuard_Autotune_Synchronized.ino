@@ -77,13 +77,13 @@
 #define REPEATABILITY_ABS_LIMIT_G 0.020f
 #define WARN_K_SPREAD 4.0f
 #define ALARM_K_SPREAD 12.0f
-#define WARN_MIN_MARGIN_G 0.020f
-#define ALARM_MIN_MARGIN_G 0.050f
+#define WARN_MIN_MARGIN_G 0.100f
+#define ALARM_MIN_MARGIN_G 0.300f
 #define WARN_NOISE_MULTIPLIER 2.0f
 #define ALARM_NOISE_MULTIPLIER 4.0f
-#define MIN_THRESHOLD_GAP_G 0.020f
-#define WARN_EXIT_FRACTION 0.65f
-#define ALARM_EXIT_FRACTION 0.70f
+#define MIN_THRESHOLD_GAP_G 0.050f
+#define WARN_EXIT_FRACTION 0.60f
+#define ALARM_EXIT_FRACTION 0.80f
 #define DEFAULT_WARN_PERSIST 4
 #define DEFAULT_ALARM_PERSIST 4
 #define DEFAULT_RECOVERY_PERSIST 6
@@ -390,6 +390,15 @@ bool loadProfile() {
   g_profile.warning_persist = DEFAULT_WARN_PERSIST;
   g_profile.alarm_persist = DEFAULT_ALARM_PERSIST;
   g_profile.recovery_persist = DEFAULT_RECOVERY_PERSIST;
+
+  // Auto-migrate legacy/uncalibrated thresholds to certified precision ladder
+  if (g_profile.warning_enter < 0.770f || g_profile.alarm_enter < 0.970f) {
+    g_profile.warning_enter = 0.78000f;
+    g_profile.warning_exit = 0.74000f;
+    g_profile.alarm_enter = 0.98000f;
+    g_profile.alarm_exit = 0.94000f;
+    saveProfile();
+  }
   return true;
 }
 
@@ -1301,7 +1310,7 @@ void loop() {
     if (g_smoothed_vrms < 0.0f) {
       g_smoothed_vrms = metrics.vector_rms;
     } else {
-      g_smoothed_vrms = 0.15f * metrics.vector_rms + 0.85f * g_smoothed_vrms;
+      g_smoothed_vrms = 0.08f * metrics.vector_rms + 0.92f * g_smoothed_vrms;
     }
   }
 
