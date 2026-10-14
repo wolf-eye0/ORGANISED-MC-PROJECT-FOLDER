@@ -84,11 +84,9 @@
 #define MIN_THRESHOLD_GAP_G 0.020f
 #define WARN_EXIT_FRACTION 0.65f
 #define ALARM_EXIT_FRACTION 0.70f
-#define DEFAULT_WARN_PERSIST 3
-#define DEFAULT_ALARM_PERSIST 2
-#define DEFAULT_RECOVERY_PERSIST 8
-#define PEAK_ALARM_LIMIT_G 7.00f
-#define PEAK_ALARM_EXIT_G  5.50f
+#define DEFAULT_WARN_PERSIST 4
+#define DEFAULT_ALARM_PERSIST 4
+#define DEFAULT_RECOVERY_PERSIST 6
 #define INVALID_WINDOWS_FOR_FAULT 5
 #define CLIP_LIMIT_G 15.5f
 
@@ -389,6 +387,8 @@ bool loadProfile() {
 
   strlcpy(g_pending_profile_id, g_profile.profile_id, sizeof(g_pending_profile_id));
   g_pending_motor_mass_g = g_profile.motor_mass_g;
+  g_profile.warning_persist = DEFAULT_WARN_PERSIST;
+  g_profile.alarm_persist = DEFAULT_ALARM_PERSIST;
   g_profile.recovery_persist = DEFAULT_RECOVERY_PERSIST;
   return true;
 }
@@ -552,7 +552,7 @@ void commitState(ConditionState next) {
   applyIndicator();
 }
 
-ConditionState evaluateCondition(float rms, float peak, bool valid) {
+ConditionState evaluateCondition(float rms, bool valid) {
   if (!g_sensor_ready || g_invalid_window_count >= INVALID_WINDOWS_FOR_FAULT) {
     return ConditionState::SENSOR_FAULT;
   }
@@ -564,13 +564,13 @@ ConditionState evaluateCondition(float rms, float peak, bool valid) {
   if (!activeMonitoring || !g_profile.approved) return ConditionState::UNKNOWN;
   if (!valid) return g_committed_state;
 
-  bool alarmEvidence = (rms >= g_profile.alarm_enter) || (peak >= PEAK_ALARM_LIMIT_G);
+  bool alarmEvidence = (rms >= g_profile.alarm_enter);
   bool warningEvidence = (rms >= g_profile.warning_enter);
-  bool alarmReleased = (rms < g_profile.alarm_exit) && (peak < PEAK_ALARM_EXIT_G);
+  bool alarmReleased = (rms < g_profile.alarm_exit);
   bool warningReleased = (rms < g_profile.warning_exit);
 
-  g_alarm_count = alarmEvidence ? incrementSaturated(g_alarm_count) : decayCounter(g_alarm_count);
-  g_warning_count = warningEvidence ? incrementSaturated(g_warning_count) : decayCounter(g_warning_count);
+  g_alarm_count = alarmEvidence ? incrementSaturated(g_alarm_count, g_profile.alarm_persist) : decayCounter(g_alarm_count);
+  g_warning_count = warningEvidence ? incrementSaturated(g_warning_count, g_profile.warning_persist) : decayCounter(g_warning_count);
 
   switch (g_committed_state) {
     case ConditionState::NORMAL:
@@ -593,7 +593,7 @@ ConditionState evaluateCondition(float rms, float peak, bool valid) {
           return ConditionState::NORMAL;
         }
       } else {
-        g_recovery_count = 0;
+        g_recovery_count = decayCounter(g_recovery_count);
       }
       return ConditionState::WARNING;
 
@@ -611,7 +611,7 @@ ConditionState evaluateCondition(float rms, float peak, bool valid) {
           }
         }
       } else {
-        g_recovery_count = 0;
+        g_recovery_count = decayCounter(g_recovery_count);
       }
       return ConditionState::ALARM;
 
@@ -1301,11 +1301,11 @@ void loop() {
     if (g_smoothed_vrms < 0.0f) {
       g_smoothed_vrms = metrics.vector_rms;
     } else {
-      g_smoothed_vrms = 0.35f * metrics.vector_rms + 0.65f * g_smoothed_vrms;
+      g_smoothed_vrms = 0.15f * metrics.vector_rms + 0.85f * g_smoothed_vrms;
     }
   }
 
-  ConditionState next = evaluateCondition(g_smoothed_vrms >= 0.0f ? g_smoothed_vrms : metrics.vector_rms, metrics.peak_vector, metrics.valid);
+  ConditionState next = evaluateCondition(g_smoothed_vrms >= 0.0f ? g_smoothed_vrms : metrics.vector_rms, metrics.valid);
   commitState(next);
 
   uint32_t now = millis();
