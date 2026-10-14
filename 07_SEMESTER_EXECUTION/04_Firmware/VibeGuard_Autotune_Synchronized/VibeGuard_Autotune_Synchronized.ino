@@ -408,14 +408,14 @@ bool loadProfile() {
   g_profile.alarm_persist = DEFAULT_ALARM_PERSIST;
   g_profile.recovery_persist = DEFAULT_RECOVERY_PERSIST;
 
-  // Auto-migrate to decoupled physical Vector RMS threshold ladder:
-  // Baseline = ~0.675g (Green) | Bolt Only = ~0.792g (Yellow) | Bolt + 2 Nuts = ~0.935g (Red)
-  if (fabsf(g_profile.warning_enter - 0.74000f) > 0.005f || fabsf(g_profile.alarm_enter - 0.84500f) > 0.005f) {
-    g_profile.baseline_rms = 0.67535f;
-    g_profile.warning_enter = 0.74000f;
-    g_profile.warning_exit = 0.71000f;
-    g_profile.alarm_enter = 0.84500f;
-    g_profile.alarm_exit = 0.83000f;
+  // Synchronized physical Vector RMS display thresholds:
+  // Baseline = ~0.745g (Green) | Bolt Only = ~0.800g (Yellow) | Bolt + 1/2 Nuts = ~0.865g (Red)
+  if (fabsf(g_profile.warning_enter - 0.80000f) > 0.005f || fabsf(g_profile.alarm_enter - 0.86500f) > 0.005f) {
+    g_profile.baseline_rms = 0.74500f;
+    g_profile.warning_enter = 0.80000f;
+    g_profile.warning_exit = 0.77000f;
+    g_profile.alarm_enter = 0.86500f;
+    g_profile.alarm_exit = 0.84000f;
     saveProfile();
   }
   return true;
@@ -611,8 +611,10 @@ ConditionState evaluateCondition(const WindowMetrics& m, bool valid) {
   if (!valid) return g_committed_state;
 
   // Primary: Substrate-Invariant 4-Stage Hysteresis Engine
-  // Stage 2 (Bolt + 1 Nut) & Stage 3 (Bolt + 2 Nuts) trigger ALARM (Red)
-  // Stage 1 (Bolt Only) triggers WARNING (Yellow)
+  // Stage 0 (Bare Arm) -> NORMAL (Solid Green)
+  // Stage 1 (Bolt Only) -> WARNING (Solid Yellow)
+  // Stage 2 (Bolt + 1 Nut) -> ALARM (Red)
+  // Stage 3 (Bolt + 2 Nuts) -> ALARM (Red)
   if (m.stage_4 >= 2) {
     resetConditionCounters();
     return ConditionState::ALARM;
@@ -621,65 +623,15 @@ ConditionState evaluateCondition(const WindowMetrics& m, bool valid) {
     resetConditionCounters();
     return ConditionState::WARNING;
   }
-
-  // Fallback: Legacy RMS Threshold Ladder
-  float rms = m.condition_vrms;
-  bool alarmEvidence = (rms >= g_profile.alarm_enter);
-  bool warningEvidence = (rms >= g_profile.warning_enter);
-  bool alarmReleased = (rms < g_profile.alarm_exit);
-  bool warningReleased = (rms < g_profile.warning_exit);
-
-  g_alarm_count = alarmEvidence ? incrementSaturated(g_alarm_count, g_profile.alarm_persist) : decayCounter(g_alarm_count);
-  g_warning_count = warningEvidence ? incrementSaturated(g_warning_count, g_profile.warning_persist) : decayCounter(g_warning_count);
-
-  switch (g_committed_state) {
-    case ConditionState::NORMAL:
-      g_recovery_count = 0;
-      if (g_alarm_count >= g_profile.alarm_persist) return ConditionState::ALARM;
-      if (g_warning_count >= g_profile.warning_persist) return ConditionState::WARNING;
-      return ConditionState::NORMAL;
-
-    case ConditionState::WARNING:
-      if (g_alarm_count >= g_profile.alarm_persist) {
-        g_recovery_count = 0;
-        return ConditionState::ALARM;
-      }
-      if (warningReleased) {
-        g_recovery_count = incrementSaturated(g_recovery_count, g_profile.recovery_persist);
-        if (g_recovery_count >= g_profile.recovery_persist) {
-          g_recovery_count = 0;
-          g_warning_count = 0;
-          g_alarm_count = 0;
-          return ConditionState::NORMAL;
-        }
-      } else {
-        g_recovery_count = decayCounter(g_recovery_count);
-      }
-      return ConditionState::WARNING;
-
-    case ConditionState::ALARM:
-      if (alarmReleased) {
-        g_recovery_count = incrementSaturated(g_recovery_count, g_profile.recovery_persist);
-        if (g_recovery_count >= g_profile.recovery_persist) {
-          g_recovery_count = 0;
-          g_alarm_count = 0;
-          if (rms >= g_profile.warning_exit) {
-            return ConditionState::WARNING;
-          } else {
-            g_warning_count = 0;
-            return ConditionState::NORMAL;
-          }
-        }
-      } else {
-        g_recovery_count = decayCounter(g_recovery_count);
-      }
-      return ConditionState::ALARM;
-
-    default:
-      resetConditionCounters();
-      return ConditionState::NORMAL;
+  if (m.stage_4 == 0) {
+    resetConditionCounters();
+    return ConditionState::NORMAL;
   }
+
+  return ConditionState::NORMAL;
 }
+
+
 
 // ============================================================================
 // AUTOTUNING
