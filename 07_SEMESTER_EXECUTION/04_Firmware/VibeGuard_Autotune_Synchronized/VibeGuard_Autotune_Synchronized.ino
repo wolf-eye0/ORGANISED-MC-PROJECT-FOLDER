@@ -290,8 +290,8 @@ void resetConditionCounters() {
   g_smoothed_vrms = -1.0f;
 }
 
-uint8_t incrementSaturated(uint8_t value) {
-  return value < 250 ? value + 1 : value;
+uint8_t incrementSaturated(uint8_t value, uint8_t max_val = 15) {
+  return value < max_val ? value + 1 : max_val;
 }
 
 uint8_t decayCounter(uint8_t value) {
@@ -585,9 +585,11 @@ ConditionState evaluateCondition(float rms, float peak, bool valid) {
         return ConditionState::ALARM;
       }
       if (warningReleased) {
-        g_recovery_count = incrementSaturated(g_recovery_count);
+        g_recovery_count = incrementSaturated(g_recovery_count, g_profile.recovery_persist);
         if (g_recovery_count >= g_profile.recovery_persist) {
           g_recovery_count = 0;
+          g_warning_count = 0;
+          g_alarm_count = 0;
           return ConditionState::NORMAL;
         }
       } else {
@@ -597,10 +599,16 @@ ConditionState evaluateCondition(float rms, float peak, bool valid) {
 
     case ConditionState::ALARM:
       if (alarmReleased) {
-        g_recovery_count = incrementSaturated(g_recovery_count);
+        g_recovery_count = incrementSaturated(g_recovery_count, g_profile.recovery_persist);
         if (g_recovery_count >= g_profile.recovery_persist) {
           g_recovery_count = 0;
-          return rms >= g_profile.warning_exit ? ConditionState::WARNING : ConditionState::NORMAL;
+          g_alarm_count = 0;
+          if (rms >= g_profile.warning_exit) {
+            return ConditionState::WARNING;
+          } else {
+            g_warning_count = 0;
+            return ConditionState::NORMAL;
+          }
         }
       } else {
         g_recovery_count = 0;
