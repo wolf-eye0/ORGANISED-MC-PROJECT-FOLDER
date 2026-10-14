@@ -77,11 +77,11 @@
 #define REPEATABILITY_ABS_LIMIT_G 0.020f
 #define WARN_K_SPREAD 4.0f
 #define ALARM_K_SPREAD 12.0f
-#define WARN_MIN_MARGIN_G 0.100f
-#define ALARM_MIN_MARGIN_G 0.300f
+#define WARN_MIN_MARGIN_G 0.045f
+#define ALARM_MIN_MARGIN_G 0.110f
 #define WARN_NOISE_MULTIPLIER 2.0f
 #define ALARM_NOISE_MULTIPLIER 4.0f
-#define MIN_THRESHOLD_GAP_G 0.050f
+#define MIN_THRESHOLD_GAP_G 0.030f
 #define WARN_EXIT_FRACTION 0.60f
 #define ALARM_EXIT_FRACTION 0.80f
 #define DEFAULT_WARN_PERSIST 4
@@ -391,12 +391,13 @@ bool loadProfile() {
   g_profile.alarm_persist = DEFAULT_ALARM_PERSIST;
   g_profile.recovery_persist = DEFAULT_RECOVERY_PERSIST;
 
-  // Auto-migrate legacy/uncalibrated thresholds to certified precision ladder
-  if (g_profile.warning_enter < 0.770f || g_profile.alarm_enter < 0.970f) {
-    g_profile.warning_enter = 0.78000f;
-    g_profile.warning_exit = 0.74000f;
-    g_profile.alarm_enter = 0.98000f;
-    g_profile.alarm_exit = 0.94000f;
+  // Auto-migrate to certified tri-state precision ladder:
+  // Baseline = 0.675g (Green) | Bolt Only = 0.750g (Yellow) | Bolt + 2 Nuts = 0.820g (Red)
+  if (fabsf(g_profile.warning_enter - 0.72000f) > 0.005f || fabsf(g_profile.alarm_enter - 0.78500f) > 0.005f) {
+    g_profile.warning_enter = 0.72000f;
+    g_profile.warning_exit = 0.70200f;
+    g_profile.alarm_enter = 0.78500f;
+    g_profile.alarm_exit = 0.77200f;
     saveProfile();
   }
   return true;
@@ -1145,15 +1146,17 @@ void handleCommand(String command) {
     float a = command.substring(10).toFloat();
     setCustomAlarm(a);
   }
-  else if (upper.startsWith("SET_THRESHOLDS=")) {
+  else if (upper.startsWith("SET_THRESHOLDS=") || upper.startsWith("SET_THRESHOLDS ")) {
     String args = command.substring(15);
-    int comma = args.indexOf(',');
-    if (comma > 0) {
-      float w = args.substring(0, comma).toFloat();
-      float a = args.substring(comma + 1).toFloat();
+    args.trim();
+    int sep = args.indexOf(',');
+    if (sep < 0) sep = args.indexOf(' ');
+    if (sep > 0) {
+      float w = args.substring(0, sep).toFloat();
+      float a = args.substring(sep + 1).toFloat();
       setCustomThresholds(w, a);
     } else {
-      Serial.println("[COMMAND] ack=SET_THRESHOLDS ok=0 reason=EXPECTED_WARN_COMMA_ALARM");
+      Serial.println("[COMMAND] ack=SET_THRESHOLDS ok=0 reason=EXPECTED_TWO_VALUES");
     }
   }
   else if (upper == "TEST_ON") {
