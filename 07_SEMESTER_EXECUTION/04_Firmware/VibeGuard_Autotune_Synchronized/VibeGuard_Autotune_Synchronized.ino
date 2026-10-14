@@ -393,13 +393,13 @@ bool loadProfile() {
   g_profile.alarm_persist = DEFAULT_ALARM_PERSIST;
   g_profile.recovery_persist = DEFAULT_RECOVERY_PERSIST;
 
-  // Auto-migrate to decoupled 1X harmonic unbalance threshold ladder:
-  // Baseline = 0.675g (Green) | Bolt Only = ~0.887g (Yellow) | Bolt + 2 Nuts = ~1.150g (Red)
-  if (fabsf(g_profile.warning_enter - 0.77000f) > 0.005f || fabsf(g_profile.alarm_enter - 0.98000f) > 0.005f) {
-    g_profile.warning_enter = 0.77000f;
-    g_profile.warning_exit = 0.73000f;
-    g_profile.alarm_enter = 0.98000f;
-    g_profile.alarm_exit = 0.92000f;
+  // Auto-migrate to decoupled Planar Asymmetry Demodulation threshold ladder:
+  // Baseline = ~0.675g - 0.691g (Green) | Bolt Only = ~0.919g (Yellow) | Bolt + 2 Nuts = ~1.089g (Red)
+  if (fabsf(g_profile.warning_enter - 0.78000f) > 0.005f || fabsf(g_profile.alarm_enter - 1.00000f) > 0.005f) {
+    g_profile.warning_enter = 0.78000f;
+    g_profile.warning_exit = 0.74000f;
+    g_profile.alarm_enter = 1.00000f;
+    g_profile.alarm_exit = 0.96000f;
     saveProfile();
   }
   return true;
@@ -542,25 +542,14 @@ WindowMetrics sampleWindowMetrics() {
   out.peak_vector = sqrtf(peak_sq);
   out.crest_factor = out.vector_rms > 0.0001f ? out.peak_vector / out.vector_rms : NAN;
 
-  // 1X Rotational Harmonic Filter (~25 Hz cutoff at 800 Hz sample rate)
-  // Strips high-frequency gear-mesh chatter (>150 Hz) and isolates pure rotational unbalance (10 Hz)
-  float lpx = 0.0f, lpy = 0.0f;
-  float sum_lpx = 0.0f, sum_lpy = 0.0f;
-  const float beta = 0.16f;
-  for (int i = 0; i < BUFFER_SIZE; ++i) {
-    float dx = x[i] - out.mean_x;
-    float dy = y[i] - out.mean_y;
-    lpx += beta * (dx - lpx);
-    lpy += beta * (dy - lpy);
-    sum_lpx += lpx * lpx;
-    sum_lpy += lpy * lpy;
-  }
-  out.unbalance_1x = sqrtf((sum_lpx + sum_lpy) / BUFFER_SIZE);
-
-  // Synthesize condition VRMS combining baseline floor with amplified 1X unbalance contrast
-  float base = g_profile.approved ? g_profile.baseline_rms : 0.67535f;
-  out.condition_vrms = base + 1.25f * out.unbalance_1x;
-  out.valid = !out.clipped && isfinite(out.vector_rms) && isfinite(out.unbalance_1x);
+  // Planar Asymmetry Demodulation:
+  // Eccentric unbalance causes vertical rocking deflection (Y-axis), whereas high-frequency
+  // gear-mesh chatter is evenly distributed across both transverse axes (X & Y).
+  // Subtracting transverse noise (rms_x) cancels gear chatter and isolates the unbalance rocking couple.
+  float planar_asymmetry = fmaxf(0.0f, out.rms_y - out.rms_x);
+  out.unbalance_1x = planar_asymmetry;
+  out.condition_vrms = out.vector_rms + 0.80f * planar_asymmetry;
+  out.valid = !out.clipped && isfinite(out.vector_rms) && isfinite(out.condition_vrms);
   return out;
 }
 
