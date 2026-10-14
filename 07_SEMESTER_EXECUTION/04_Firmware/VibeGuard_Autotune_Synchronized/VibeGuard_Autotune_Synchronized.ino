@@ -76,7 +76,7 @@
 #define REPEATABILITY_REL_LIMIT 0.25f
 #define REPEATABILITY_ABS_LIMIT_G 0.020f
 #define WARN_K_SPREAD 4.0f
-#define ALARM_K_SPREAD 8.0f
+#define ALARM_K_SPREAD 12.0f
 #define WARN_MIN_MARGIN_G 0.020f
 #define ALARM_MIN_MARGIN_G 0.050f
 #define WARN_NOISE_MULTIPLIER 2.0f
@@ -1057,6 +1057,44 @@ void setPendingMass(const String& value) {
   Serial.printf("[COMMAND] ack=MASS ok=1 value_g=%.2f revalidation_required=1\n", mass);
 }
 
+void setCustomThresholds(float warnVal, float alarmVal) {
+  if (!g_profile.approved) {
+    Serial.println("[COMMAND] ack=SET_THRESHOLDS ok=0 reason=NO_APPROVED_PROFILE");
+    return;
+  }
+  if (warnVal <= g_profile.baseline_rms || alarmVal <= warnVal) {
+    Serial.println("[COMMAND] ack=SET_THRESHOLDS ok=0 reason=INVALID_THRESHOLDS");
+    return;
+  }
+  g_profile.warning_enter = warnVal;
+  g_profile.warning_exit = g_profile.baseline_rms + WARN_EXIT_FRACTION * (g_profile.warning_enter - g_profile.baseline_rms);
+  g_profile.alarm_enter = alarmVal;
+  g_profile.alarm_exit = g_profile.warning_enter + ALARM_EXIT_FRACTION * (g_profile.alarm_enter - g_profile.warning_enter);
+  saveProfile();
+  resetConditionCounters();
+  commitState(ConditionState::NORMAL);
+  Serial.printf("[COMMAND] ack=SET_THRESHOLDS ok=1 warn_enter=%.5f warn_exit=%.5f alarm_enter=%.5f alarm_exit=%.5f\n",
+                g_profile.warning_enter, g_profile.warning_exit, g_profile.alarm_enter, g_profile.alarm_exit);
+}
+
+void setCustomAlarm(float alarmVal) {
+  if (!g_profile.approved) {
+    Serial.println("[COMMAND] ack=SET_ALARM ok=0 reason=NO_APPROVED_PROFILE");
+    return;
+  }
+  if (alarmVal <= g_profile.warning_enter) {
+    Serial.println("[COMMAND] ack=SET_ALARM ok=0 reason=ALARM_MUST_BE_GREATER_THAN_WARN");
+    return;
+  }
+  g_profile.alarm_enter = alarmVal;
+  g_profile.alarm_exit = g_profile.warning_enter + ALARM_EXIT_FRACTION * (g_profile.alarm_enter - g_profile.warning_enter);
+  saveProfile();
+  resetConditionCounters();
+  commitState(ConditionState::NORMAL);
+  Serial.printf("[COMMAND] ack=SET_ALARM ok=1 alarm_enter=%.5f alarm_exit=%.5f\n",
+                g_profile.alarm_enter, g_profile.alarm_exit);
+}
+
 void handleCommand(String command) {
   command.trim();
   if (command.length() == 0) return;
@@ -1083,6 +1121,21 @@ void handleCommand(String command) {
   else if (upper == "CAL_CANCEL") cancelCalibration();
   else if (upper == "PROFILE_CLEAR") eraseSavedProfile();
   else if (upper == "STATUS") printStatus();
+  else if (upper.startsWith("SET_ALARM=")) {
+    float a = command.substring(10).toFloat();
+    setCustomAlarm(a);
+  }
+  else if (upper.startsWith("SET_THRESHOLDS=")) {
+    String args = command.substring(15);
+    int comma = args.indexOf(',');
+    if (comma > 0) {
+      float w = args.substring(0, comma).toFloat();
+      float a = args.substring(comma + 1).toFloat();
+      setCustomThresholds(w, a);
+    } else {
+      Serial.println("[COMMAND] ack=SET_THRESHOLDS ok=0 reason=EXPECTED_WARN_COMMA_ALARM");
+    }
+  }
   else if (upper == "TEST_ON") {
     if (!g_profile.approved) {
       Serial.println("[COMMAND] ack=TEST_ON ok=0 reason=NO_APPROVED_PROFILE");
