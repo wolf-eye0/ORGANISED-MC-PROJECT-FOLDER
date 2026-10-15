@@ -106,11 +106,11 @@ public:
         cal_.f1_0      = 10.20f;
         cal_.sigma_j0  = 0.055f;
         cal_.t01_enter = 1.40f;
-        cal_.t10_exit  = 0.95f;
-        cal_.t12_enter = 4.25f;
-        cal_.t21_exit  = 3.65f;
-        cal_.t23_enter = 6.90f;
-        cal_.t32_exit  = 6.05f;
+        cal_.t10_exit  = 0.90f;
+        cal_.t12_enter = 2.60f;
+        cal_.t21_exit  = 2.30f;
+        cal_.t23_enter = 4.60f;
+        cal_.t32_exit  = 4.10f;
     }
 
     void resetStateEngine() {
@@ -146,13 +146,14 @@ public:
             return false;
         }
         cal_ = temp;
-        // Deep Research Section 3 Hysteresis Threshold Ladder
+        // Calibrated Hardware Hysteresis Threshold Ladder:
+        // S0 (<1.40) -> S1 Warning (1.40-2.60) -> S2 Moderate Alarm (2.60-4.60) -> S3 Critical (>4.60)
         cal_.t01_enter = 1.40f;
-        cal_.t10_exit  = 0.95f;
-        cal_.t12_enter = 4.25f;
-        cal_.t21_exit  = 3.65f;
-        cal_.t23_enter = 6.90f;
-        cal_.t32_exit  = 6.05f;
+        cal_.t10_exit  = 0.90f;
+        cal_.t12_enter = 2.60f;
+        cal_.t21_exit  = 2.30f;
+        cal_.t23_enter = 4.60f;
+        cal_.t32_exit  = 4.10f;
         f1TrackerHz_ = cal_.f1_0;
         return true;
     }
@@ -467,13 +468,13 @@ private:
             const float muJ2 = 5.70f;
             const float muJ3 = 8.90f;
 
-            // Deep Research Section 3 Hysteresis Threshold Ladder
+            // Calibrated Hardware Hysteresis Threshold Ladder
             cal_.t01_enter = 1.40f;
-            cal_.t10_exit  = 0.95f;
-            cal_.t12_enter = 4.25f;
-            cal_.t21_exit  = 3.65f;
-            cal_.t23_enter = 6.90f;
-            cal_.t32_exit  = 6.05f;
+            cal_.t10_exit  = 0.90f;
+            cal_.t12_enter = 2.60f;
+            cal_.t21_exit  = 2.30f;
+            cal_.t23_enter = 4.60f;
+            cal_.t32_exit  = 4.10f;
 
             saveToNVS(prefs);
             Serial.printf("[CAL] COMPLETE! Baseline: rx0=%.5f ry0=%.5f rz0=%.5f cf0=%.3f exyLF0=%.5f f1=%.2fHz sigmaJ0=%.4f\n",
