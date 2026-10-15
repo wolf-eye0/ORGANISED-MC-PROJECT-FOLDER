@@ -146,6 +146,13 @@ public:
             return false;
         }
         cal_ = temp;
+        // Deep Research Section 3 Hysteresis Threshold Ladder
+        cal_.t01_enter = 1.40f;
+        cal_.t10_exit  = 0.95f;
+        cal_.t12_enter = 4.25f;
+        cal_.t21_exit  = 3.65f;
+        cal_.t23_enter = 6.90f;
+        cal_.t32_exit  = 6.05f;
         f1TrackerHz_ = cal_.f1_0;
         return true;
     }
@@ -460,13 +467,13 @@ private:
             const float muJ2 = 5.70f;
             const float muJ3 = 8.90f;
 
-            const float minT01 = medJ0 + 8.0f * sigmaJ0;
-            cal_.t01_enter = (minT01 > 0.42f * muJ1) ? minT01 : (0.42f * muJ1);
-            cal_.t10_exit  = 0.68f * cal_.t01_enter;
-            cal_.t12_enter = muJ1 + 0.38f * (muJ2 - muJ1);
-            cal_.t21_exit  = muJ1 + 0.12f * (muJ2 - muJ1);
-            cal_.t23_enter = muJ2 + 0.38f * (muJ3 - muJ2);
-            cal_.t32_exit  = muJ2 + 0.12f * (muJ3 - muJ2);
+            // Deep Research Section 3 Hysteresis Threshold Ladder
+            cal_.t01_enter = 1.40f;
+            cal_.t10_exit  = 0.95f;
+            cal_.t12_enter = 4.25f;
+            cal_.t21_exit  = 3.65f;
+            cal_.t23_enter = 6.90f;
+            cal_.t32_exit  = 6.05f;
 
             saveToNVS(prefs);
             Serial.printf("[CAL] COMPLETE! Baseline: rx0=%.5f ry0=%.5f rz0=%.5f cf0=%.3f exyLF0=%.5f f1=%.2fHz sigmaJ0=%.4f\n",
