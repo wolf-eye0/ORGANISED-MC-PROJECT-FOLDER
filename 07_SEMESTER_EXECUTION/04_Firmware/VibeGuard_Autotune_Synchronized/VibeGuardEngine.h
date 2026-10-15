@@ -107,10 +107,10 @@ public:
         cal_.sigma_j0  = 0.055f;
         cal_.t01_enter = 1.40f;
         cal_.t10_exit  = 0.90f;
-        cal_.t12_enter = 2.60f;
-        cal_.t21_exit  = 2.30f;
-        cal_.t23_enter = 4.60f;
-        cal_.t32_exit  = 4.10f;
+        cal_.t12_enter = 4.60f;
+        cal_.t21_exit  = 4.00f;
+        cal_.t23_enter = 8.50f;
+        cal_.t32_exit  = 7.80f;
     }
 
     void resetStateEngine() {
@@ -147,13 +147,13 @@ public:
         }
         cal_ = temp;
         // Calibrated Hardware Hysteresis Threshold Ladder:
-        // S0 (<1.40) -> S1 Warning (1.40-2.60) -> S2 Moderate Alarm (2.60-4.60) -> S3 Critical (>4.60)
+        // S0 (<1.40) -> S1 Warning (1.40-4.60) -> S2 Moderate Alarm (4.60-8.50) -> S3 Critical (>8.50)
         cal_.t01_enter = 1.40f;
         cal_.t10_exit  = 0.90f;
-        cal_.t12_enter = 2.60f;
-        cal_.t21_exit  = 2.30f;
-        cal_.t23_enter = 4.60f;
-        cal_.t32_exit  = 4.10f;
+        cal_.t12_enter = 4.60f;
+        cal_.t21_exit  = 4.00f;
+        cal_.t23_enter = 8.50f;
+        cal_.t32_exit  = 7.80f;
         f1TrackerHz_ = cal_.f1_0;
         return true;
     }
@@ -364,7 +364,8 @@ private:
         const float lfRatio = (cal_.exy_lf0 > 1e-5f) ? ((exyLF / cal_.exy_lf0) - 1.0f) : 0.0f;
         const float rxR = (cal_.rx0 > 1e-3f) ? (rx / cal_.rx0) : 1.0f;
         const float ryR = (cal_.ry0 > 1e-3f) ? (ry / cal_.ry0) : 1.0f;
-        const float cfR = (cal_.cf0 > 1e-3f) ? (cf / cal_.cf0) : 1.0f;
+        float cfR = (cal_.cf0 > 1e-3f) ? (cf / cal_.cf0) : 1.0f;
+        if (cfR > 1.25f) cfR = 1.25f; // Clamp crest factor ratio so spur gear spikes cannot artificially inflate J(t)
         const float structTerm = (rxR * ryR * cfR) - 1.0f;
         return cSag * (0.55f * lfRatio + 0.45f * structTerm);
     }
@@ -471,10 +472,10 @@ private:
             // Calibrated Hardware Hysteresis Threshold Ladder
             cal_.t01_enter = 1.40f;
             cal_.t10_exit  = 0.90f;
-            cal_.t12_enter = 2.60f;
-            cal_.t21_exit  = 2.30f;
-            cal_.t23_enter = 4.60f;
-            cal_.t32_exit  = 4.10f;
+            cal_.t12_enter = 4.60f;
+            cal_.t21_exit  = 4.00f;
+            cal_.t23_enter = 8.50f;
+            cal_.t32_exit  = 7.80f;
 
             saveToNVS(prefs);
             Serial.printf("[CAL] COMPLETE! Baseline: rx0=%.5f ry0=%.5f rz0=%.5f cf0=%.3f exyLF0=%.5f f1=%.2fHz sigmaJ0=%.4f\n",
