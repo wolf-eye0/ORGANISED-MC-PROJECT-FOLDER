@@ -7,7 +7,7 @@ export const CONFIG = Object.freeze({
     pins: { cs: 21, sck: 18, miso: 19, mosi: 23, int1: 4, ledGreen: 25, ledBlue: 26, ledRed: 27, bootButton: 0 },
     motor: { type: 'N20 geared DC motor', supplyV: 12, measuredSpeedAvailable: false }
   },
-  thresholds: { mode: 'AUTO', baselineRmsG: 0.745, warningRmsG: 0.800, alarmRmsG: 0.865, source: 'CALIBRATED' },
+  thresholds: { mode: 'AUTO', baselineRmsG: 0.745, warningRmsG: 0.800, alarmRmsG: 0.900, source: 'CALIBRATED' },
   ui: { theme: 'dark', timeRangeMs: 60000, displayPaused: false, presentationMode: false, liveFollow: true, tableLimit: 20, maxSessionSamples: 18000, chartFps: 10 },
   websocketUrl: `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/ws`
 });

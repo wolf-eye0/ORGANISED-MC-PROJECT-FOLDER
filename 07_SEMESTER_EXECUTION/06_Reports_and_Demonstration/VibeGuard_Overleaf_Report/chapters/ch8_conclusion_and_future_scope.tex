@@ -1,0 +1,46 @@
+\chapter{CONCLUSION AND FUTURE SCOPE}
+\label{ch:conclusion_future}
+
+\section{Summary of Project Achievements}
+In this micro project, \textbf{VibeGuard: An Embedded Vibration Condition Monitoring System} was successfully conceptualized, engineered, assembled, and experimentally validated. Designed to bridge the gap between expensive commercial vibration analyzers ($>\$1,000$) and fragile, bandwidth-heavy cloud IoT monitors, VibeGuard establishes an ultra-low-cost (\rupee 2,124.00 / $\approx$\$25), self-contained, and cyber-resilient edge condition monitoring platform.
+
+The principal technical achievements of the project include:
+\begin{enumerate}
+    \item \textbf{High-Speed Deterministic Sensor Interfacing:} Successfully interfaced the Analog Devices ADXL345 triaxial digital accelerometer with the 32-bit dual-core 7Semi ESP32-DEVKIT-E microcontroller over a dedicated 4-wire VSPI bus operating at 5.0\,MHz. Operating in Full-Resolution Mode ($\pm 4g$) with an 800\,Hz Output Data Rate (ODR), the system sustains continuous 400\,Hz Nyquist measurement bandwidth with zero dropped samples.
+    \item \textbf{Robust Hardware and Power Isolation Design:} Implemented complete electrical domain separation between the 12\,V N20 motor drive loop and the 3.3\,V/5.0\,V digital logic rails. Reverse-biased 1N4007 flyback diodes, a 1A fast-acting inline fuse, and a dual-capacitor decoupling network (100\,$\mu$F bulk + 100\,nF ceramic) eliminated motor back-EMF spikes and prevented microcontroller brownout resets. Remapping Chip Select to GPIO21 permanently eliminated ESP32 bootloader strapping pin conflicts.
+    \item \textbf{Precision Mechanical Testbed Fabrication:} Fabricated a rigid 10\,mm thick laminated optical acrylic baseplate (150\,mm $\times$ 150\,mm) using a certified dual-datum drilling coordinate matrix. Custom monolithic 3D-printed solid models---including a shrinkage-compensated D-shaft rotor cam arm (FAB-01), an ultra-rigid gusseted sensor L-bracket (FAB-02), and an acoustic motor cradle shim (FAB-03)---resolved earlier structural separation failures and provided calibrated, repeatable unbalance anomalies.
+    \item \textbf{Real-Time Digital Signal Processing Pipeline:} Implemented a modular C++ DSP pipeline executing in-place zero-mean DC gravity cancellation, single-axis RMS, and rotationally invariant triaxial Vector RMS ($a_{\mathrm{vec}}$) across rolling 256-sample windows (320\,ms duration) using a zero-copy Ping-Pong memory scheme.
+    \item \textbf{Glitch-Immune Decision Logic and Spectral Support:} Integrated a temporal $K$-of-$M$ persistence filter ($K=4, M=5$) that demonstrated 100\% immunity to transient external mechanical shocks (zero false alarms) while asserting abnormal alarm states within a rapid, deterministic alert latency of $1.28$\,seconds. An on-demand 256-point Cooley-Tukey Radix-2 FFT with Hann windowing verified dominant $1X$ harmonic peak frequencies at 10.0\,Hz with 3.125\,Hz resolution, while consuming less than 0.43\% total CPU utilization.
+\end{enumerate}
+
+\section{Attainment of Course Outcomes and Sustainable Development Goals}
+\subsection{Course Outcome (CO) Attainment}
+The VibeGuard micro project directly satisfies all Course Outcomes defined for \textbf{PBCST504 -- Microcontrollers}:
+\begin{itemize}
+    \item \textbf{CO1 (Microcontroller Architecture):} Leveraged the dual-core 32-bit Xtensa LX6 architecture, configuring internal hardware timers, flash memory, and peripheral buses.
+    \item \textbf{CO2 (Device Interfacing and I/O):} Interfaced external triaxial MEMS sensors (ADXL345), power disconnect switches, and common-cathode RGB LED status indicators using current-limiting drive circuits.
+    \item \textbf{CO3 (Communication Protocols):} Implemented high-speed 4-wire SPI (Mode 3, 5\,MHz) for real-time sensor burst reads and structured asynchronous UART ($115200$\,baud) for telemetry logging.
+    \item \textbf{CO4 (Real-Time Principles):} Utilized FreeRTOS non-blocking task structures, hardware timer interrupts, double-buffered memory management, and deterministic execution budgeting.
+    \item \textbf{CO5 (Security and Tamper/Condition Monitoring):} Applied embedded condition monitoring to detect physical tampering, rotor unbalance, and mechanical deterioration on rotating assets.
+\end{itemize}
+
+\subsection{Sustainable Development Goal (SDG) Alignment}
+The project actively addresses three United Nations Sustainable Development Goals:
+\begin{itemize}
+    \item \textbf{SDG 9 (Industry, Innovation, and Infrastructure):} Upgrades industrial workshop infrastructure by providing an affordable, open-source predictive maintenance tool that prevents catastrophic machinery breakdowns.
+    \item \textbf{SDG 12 (Responsible Consumption and Production):} Shifts maintenance from wasteful run-to-failure or premature calendar replacement to condition-based intervention, extending rotating asset lifespan and reducing industrial electrical scrap.
+    \item \textbf{SDG 8 (Decent Work and Economic Growth):} Improves workplace safety by detecting abnormal mechanical vibrations before dangerous structural disintegration occurs, protecting industrial operators.
+\end{itemize}
+
+\section{Future Scope and Research Extensions}
+While the semester architecture establishes a robust, self-contained baseline, several promising research trajectories can extend the system:
+
+\begin{enumerate}
+    \item \textbf{Long-Range Low-Power Wireless Telemetry (LoRaWAN / ESP-NOW):} For large industrial manufacturing plants spanning multiple buildings, the telemetry layer can be augmented with LoRaWAN or ESP-NOW protocols. Transmitting distilled condition packets (Vector RMS and peak harmonic frequency) once per minute allows battery-powered operation across several kilometers without Wi-Fi infrastructure.
+    \item \textbf{On-Device Machine Learning (TinyML Anomaly Detection):} Incorporating a lightweight autoencoder or 1D-Convolutional Neural Network (1D-CNN) using TensorFlow Lite for Microcontrollers could enable multi-class fault classification, distinguishing subtle differences between bearing spalling, shaft misalignment, and gear tooth pitting.
+    \item \textbf{Multi-Sensor Spatial Attribution (PIRG Trajectory):} Expanding the testbed to include a second accelerometer or ultrasonic acoustic emission sensor would permit structural vibration propagation modeling, enabling spatial localization of vibration sources along complex shaft assemblies.
+    \item \textbf{Vibration Energy Harvesting:} Integrating a piezoelectric cantilever beam or thermoelectric generator (TEG) on the motor housing could scavenge ambient waste energy, enabling truly autonomous, perpetual edge sensing nodes.
+\end{enumerate}
+
+\section{Concluding Remarks}
+VibeGuard demonstrates that robust, industrial-grade vibration monitoring does not inherently require multi-thousand-dollar instrumentation or fragile cloud streaming infrastructure. By grounding system design in first-principles physical mechanics, deterministic digital signal processing, clean electrical isolation, and rigorous session-level validation, modern 32-bit microcontrollers can deliver reliable, explainable, and autonomous machine protection at the extreme edge.

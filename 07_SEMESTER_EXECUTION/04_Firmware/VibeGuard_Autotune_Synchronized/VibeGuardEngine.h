@@ -98,19 +98,19 @@ public:
 
     void loadDefaultCalibration() {
         cal_.magic     = 0x56473236UL; // 'VG26'
-        cal_.rx0       = 0.244f;
-        cal_.ry0       = 0.587f;
-        cal_.rz0       = 0.236f;
-        cal_.cf0       = 2.600f;
+        cal_.rx0       = 0.447f;
+        cal_.ry0       = 0.509f;
+        cal_.rz0       = 0.327f;
+        cal_.cf0       = 2.368f;
         cal_.exy_lf0   = 0.0385f;      // (0.196 g)^2 low-pass baseline energy
-        cal_.f1_0      = 10.20f;
+        cal_.f1_0      = 10.31f;
         cal_.sigma_j0  = 0.055f;
-        cal_.t01_enter = 1.40f;
-        cal_.t10_exit  = 0.90f;
-        cal_.t12_enter = 4.60f;
-        cal_.t21_exit  = 4.00f;
-        cal_.t23_enter = 8.50f;
-        cal_.t32_exit  = 7.80f;
+        cal_.t01_enter = 0.80f;
+        cal_.t10_exit  = 0.40f;
+        cal_.t12_enter = 2.10f;
+        cal_.t21_exit  = 1.70f;
+        cal_.t23_enter = 6.00f;
+        cal_.t32_exit  = 5.00f;
     }
 
     void resetStateEngine() {
@@ -146,15 +146,16 @@ public:
             return false;
         }
         cal_ = temp;
-        // Calibrated Hardware Hysteresis Threshold Ladder:
-        // S0 (<1.40) -> S1 Warning (1.40-4.60) -> S2 Moderate Alarm (4.60-8.50) -> S3 Critical (>8.50)
-        cal_.t01_enter = 1.40f;
-        cal_.t10_exit  = 0.90f;
-        cal_.t12_enter = 4.60f;
-        cal_.t21_exit  = 4.00f;
-        cal_.t23_enter = 8.50f;
-        cal_.t32_exit  = 7.80f;
+        // Substrate-Invariant Rotordynamic Threshold Ladder:
+        // S0 (<0.80) -> S1 Warning (0.80-2.10) -> S2 Moderate Alarm (2.10-6.00) -> S3 Critical Alarm (>6.00)
+        cal_.t01_enter = 0.80f;
+        cal_.t10_exit  = 0.40f;
+        cal_.t12_enter = 2.10f;
+        cal_.t21_exit  = 1.70f;
+        cal_.t23_enter = 6.00f;
+        cal_.t32_exit  = 5.00f;
         f1TrackerHz_ = cal_.f1_0;
+        saveToNVS(prefs);
         return true;
     }
 
@@ -285,20 +286,20 @@ public:
         if (out.cSag < 0.75f) out.cSag = 0.75f;
         if (out.cSag > 1.45f) out.cSag = 1.45f;
 
-        // STAGE 4: Compute Dimensionless Condition Metric J(t)
-        out.rawJ = computeConditionMetric(out.rx, out.ry, out.crestFactor, exyLF, out.cSag);
+        // STAGE 4: Compute Substrate-Invariant Condition Metric J(t)
+        out.rawJ = computeConditionMetric(out.ry, out.r3d, out.cSag);
 
         // Handle Active Automated Calibration if Triggered
         if (calState_ != CAL_IDLE) {
-            handleCalibrationStep(out.rx, out.ry, out.rz, out.crestFactor, exyLF, out.f1Hz, coherence, prefs);
+            handleCalibrationStep(out.rx, out.ry, out.rz, out.r3d, out.crestFactor, exyLF, out.f1Hz, coherence, prefs);
         }
 
         // STAGE 5: Spike Rejection Filter & 4-Stage Hysteresis State Machine
         const float innov = out.rawJ - jHat_;
         const float rzRatio = (cal_.rz0 > 1e-3f) ? (out.rz / cal_.rz0) : 1.0f;
-        const bool isShock = (out.crestFactor > 6.2f) ||
+        const bool isShock = (out.crestFactor > 4.80f) ||
                              (rzRatio > 1.85f) ||
-                             ((fabsf(innov) > 4.5f) && (coherence < 0.22f));
+                             ((fabsf(innov) > 3.50f) && (coherence < 0.22f));
 
         float jGated = out.rawJ;
         if (isShock && spikeCount_ < 2) {
@@ -309,8 +310,8 @@ public:
             if (!isShock) spikeCount_ = 0;
             out.shockRejected = false;
 
-            // Huber Saturation Limiter (delta_Huber = 3.20)
-            static constexpr float HUBER_DELTA = 3.20f;
+            // Huber Saturation Limiter (delta_Huber = 2.20)
+            static constexpr float HUBER_DELTA = 2.20f;
             if (innov > HUBER_DELTA)       jGated = jHat_ + HUBER_DELTA;
             else if (innov < -HUBER_DELTA) jGated = jHat_ - HUBER_DELTA;
             else                           jGated = out.rawJ;
@@ -322,7 +323,7 @@ public:
         out.medJ = medianOf3(medBuf_[0], medBuf_[1], medBuf_[2]);
 
         // Dual-Rate Asymmetric Exponential Moving Average
-        const float alphaEMA = (out.medJ >= jHat_) ? 0.45f : 0.25f;
+        const float alphaEMA = (out.medJ >= jHat_) ? 0.22f : 0.18f;
         jHat_ = jHat_ + alphaEMA * (out.medJ - jHat_);
         out.smoothedJ = jHat_;
 
@@ -355,19 +356,20 @@ private:
     float calRx_[VG_CAL_CAPTURE_WINDOWS];
     float calRy_[VG_CAL_CAPTURE_WINDOWS];
     float calRz_[VG_CAL_CAPTURE_WINDOWS];
+    float calR3D_[VG_CAL_CAPTURE_WINDOWS];
     float calCF_[VG_CAL_CAPTURE_WINDOWS];
     float calExyLF_[VG_CAL_CAPTURE_WINDOWS];
     float calF1_[VG_CAL_CAPTURE_WINDOWS];
     float calJ0_[VG_CAL_CAPTURE_WINDOWS];
 
-    inline float computeConditionMetric(float rx, float ry, float cf, float exyLF, float cSag) const {
-        const float lfRatio = (cal_.exy_lf0 > 1e-5f) ? ((exyLF / cal_.exy_lf0) - 1.0f) : 0.0f;
-        const float rxR = (cal_.rx0 > 1e-3f) ? (rx / cal_.rx0) : 1.0f;
-        const float ryR = (cal_.ry0 > 1e-3f) ? (ry / cal_.ry0) : 1.0f;
-        float cfR = (cal_.cf0 > 1e-3f) ? (cf / cal_.cf0) : 1.0f;
-        if (cfR > 1.25f) cfR = 1.25f; // Clamp crest factor ratio so spur gear spikes cannot artificially inflate J(t)
-        const float structTerm = (rxR * ryR * cfR) - 1.0f;
-        return cSag * (0.55f * lfRatio + 0.45f * structTerm);
+    inline float computeConditionMetric(float ry, float r3d, float cSag) const {
+        const float r3d0 = sqrtf(cal_.rx0 * cal_.rx0 + cal_.ry0 * cal_.ry0 + cal_.rz0 * cal_.rz0);
+        if (r3d0 < 1e-3f) return 0.0f;
+        const float ratio3D = r3d / r3d0;
+        // Rotordynamic kinetic energy growth: E_rel = (R_3D / R_3D,0)^2 - 1
+        const float eRel = (ratio3D * ratio3D) - 1.0f;
+        const float metric = 5.0f * (eRel > -0.5f ? eRel : -0.5f);
+        return cSag * metric;
     }
 
     static inline float medianOf3(float a, float b, float c) {
@@ -402,7 +404,7 @@ private:
         return 1.4826f * computeArrayMedian(dev, n);
     }
 
-    void handleCalibrationStep(float rx, float ry, float rz, float cf, float exyLF, float f1, float coh, Preferences& prefs) {
+    void handleCalibrationStep(float rx, float ry, float rz, float r3d, float cf, float exyLF, float f1, float coh, Preferences& prefs) {
         if (calState_ == CAL_SETTLING_S0) {
             calCollected_++;
             if (calCollected_ >= VG_CAL_SETTLE_WINDOWS) {
@@ -423,6 +425,7 @@ private:
             calRx_[calCollected_]    = rx;
             calRy_[calCollected_]    = ry;
             calRz_[calCollected_]    = rz;
+            calR3D_[calCollected_]   = r3d;
             calCF_[calCollected_]    = cf;
             calExyLF_[calCollected_] = exyLF;
             calF1_[calCollected_]    = f1;
@@ -440,12 +443,9 @@ private:
 
         if (calState_ == CAL_COMPUTING) {
             // Preserve raw copies before in-place median sorting
-            float rxCopy[VG_CAL_CAPTURE_WINDOWS], ryCopy[VG_CAL_CAPTURE_WINDOWS];
-            float cfCopy[VG_CAL_CAPTURE_WINDOWS], lfCopy[VG_CAL_CAPTURE_WINDOWS];
-            memcpy(rxCopy, calRx_, sizeof(calRx_));
+            float ryCopy[VG_CAL_CAPTURE_WINDOWS], r3dCopy[VG_CAL_CAPTURE_WINDOWS];
             memcpy(ryCopy, calRy_, sizeof(calRy_));
-            memcpy(cfCopy, calCF_, sizeof(calCF_));
-            memcpy(lfCopy, calExyLF_, sizeof(calExyLF_));
+            memcpy(r3dCopy, calR3D_, sizeof(calR3D_));
 
             cal_.rx0     = computeArrayMedian(calRx_, VG_CAL_CAPTURE_WINDOWS);
             cal_.ry0     = computeArrayMedian(calRy_, VG_CAL_CAPTURE_WINDOWS);
@@ -457,25 +457,20 @@ private:
 
             // Compute baseline J[m] series and MAD dispersion
             for (size_t m = 0; m < VG_CAL_CAPTURE_WINDOWS; ++m) {
-                calJ0_[m] = computeConditionMetric(rxCopy[m], ryCopy[m], cfCopy[m], lfCopy[m], 1.0f);
+                calJ0_[m] = computeConditionMetric(ryCopy[m], r3dCopy[m], 1.0f);
             }
             const float medJ0 = computeArrayMedian(calJ0_, VG_CAL_CAPTURE_WINDOWS);
             float sigmaJ0 = computeMADSigma(calJ0_, VG_CAL_CAPTURE_WINDOWS, medJ0);
             if (sigmaJ0 < 0.045f) sigmaJ0 = 0.045f;
             cal_.sigma_j0 = sigmaJ0;
 
-            // Synthesize adaptive threshold ladder
-            const float muJ1 = 3.38f;
-            const float muJ2 = 5.70f;
-            const float muJ3 = 8.90f;
-
-            // Calibrated Hardware Hysteresis Threshold Ladder
-            cal_.t01_enter = 1.40f;
-            cal_.t10_exit  = 0.90f;
-            cal_.t12_enter = 4.60f;
-            cal_.t21_exit  = 4.00f;
-            cal_.t23_enter = 8.50f;
-            cal_.t32_exit  = 7.80f;
+            // Substrate-Invariant Rotordynamic Threshold Ladder
+            cal_.t01_enter = 0.80f;
+            cal_.t10_exit  = 0.40f;
+            cal_.t12_enter = 2.10f;
+            cal_.t21_exit  = 1.70f;
+            cal_.t23_enter = 6.00f;
+            cal_.t32_exit  = 5.00f;
 
             saveToNVS(prefs);
             Serial.printf("[CAL] COMPLETE! Baseline: rx0=%.5f ry0=%.5f rz0=%.5f cf0=%.3f exyLF0=%.5f f1=%.2fHz sigmaJ0=%.4f\n",
@@ -488,7 +483,7 @@ private:
     }
 
     void updateHysteresisState(float jVal) {
-        static constexpr uint8_t PERSIST_ENTER = 3; // 480 ms escalation persistence
+        static constexpr uint8_t PERSIST_ENTER = 5; // 800 ms escalation persistence
         static constexpr uint8_t PERSIST_EXIT  = 5; // 800 ms de-escalation persistence
 
         VibeStage targetUp   = currentStage_;

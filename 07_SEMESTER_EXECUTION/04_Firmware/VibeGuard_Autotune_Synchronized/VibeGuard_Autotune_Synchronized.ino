@@ -291,9 +291,14 @@ void applyIndicator() {
   }
 
   switch (g_committed_state) {
-    case ConditionState::ALARM: setRGB(true, false, false); break;
-    case ConditionState::WARNING: setRGB(true, true, false); break;
-    case ConditionState::NORMAL: setRGB(false, true, false); break;
+    case ConditionState::ALARM: {
+      // Fast Red Strobe (6.25 Hz: 80 ms ON / 80 ms OFF) for ALARM condition
+      bool strobe = (millis() % 160) < 80;
+      setRGB(strobe, false, false);
+      break;
+    }
+    case ConditionState::WARNING: setRGB(true, true, false); break; // Solid Yellow
+    case ConditionState::NORMAL:  setRGB(false, true, false); break; // Solid Green
     default: setRGB(false, false, true); break;
   }
 }
@@ -409,13 +414,13 @@ bool loadProfile() {
   g_profile.recovery_persist = DEFAULT_RECOVERY_PERSIST;
 
   // Synchronized physical Vector RMS display thresholds:
-  // Baseline = ~0.745g (Green) | Bolt Only = ~0.800g (Yellow) | Bolt + 1/2 Nuts = ~0.865g (Red)
-  if (fabsf(g_profile.warning_enter - 0.80000f) > 0.005f || fabsf(g_profile.alarm_enter - 0.86500f) > 0.005f) {
+  // Baseline = ~0.745g (Green) | Bolt Only = ~0.800g (Yellow) | Bolt + 1/2 Nuts = ~0.900g (Red)
+  if (fabsf(g_profile.warning_enter - 0.80000f) > 0.005f || fabsf(g_profile.alarm_enter - 0.90000f) > 0.005f) {
     g_profile.baseline_rms = 0.74500f;
     g_profile.warning_enter = 0.80000f;
     g_profile.warning_exit = 0.77000f;
-    g_profile.alarm_enter = 0.86500f;
-    g_profile.alarm_exit = 0.84000f;
+    g_profile.alarm_enter = 0.90000f;
+    g_profile.alarm_exit = 0.86000f;
     saveProfile();
   }
   return true;
@@ -522,6 +527,9 @@ WindowMetrics sampleWindowMetrics() {
     out.mean_x += x[i];
     out.mean_y += y[i];
     out.mean_z += z[i];
+    if ((i & 0x0F) == 0 && g_committed_state == ConditionState::ALARM) {
+      applyIndicator();
+    }
     while (static_cast<uint32_t>(micros() - started) < SAMPLE_PERIOD_US) { yield(); }
   }
 
@@ -530,8 +538,11 @@ WindowMetrics sampleWindowMetrics() {
   out.mean_z /= BUFFER_SIZE;
 
   float static_g = sqrtf(out.mean_x * out.mean_x + out.mean_y * out.mean_y + out.mean_z * out.mean_z);
-  if (static_g < 0.25f || static_g > 2.0f) {
-    g_sensor_ready = false;
+  if (static_g < 0.10f || static_g > 3.0f) {
+    // Window has abnormal DC offset or incomplete cycle integration under extreme vibration.
+    // Mark this window invalid; DO NOT immediately declare hardware disconnection.
+    // Persistent faults are debounced by g_invalid_window_count >= INVALID_WINDOWS_FOR_FAULT.
+    out.valid = false;
     return out;
   }
 
@@ -1321,9 +1332,11 @@ void loop() {
   if (!g_sensor_ready || g_invalid_window_count >= INVALID_WINDOWS_FOR_FAULT) {
     if (g_mode != OperatingMode::SENSOR_FAULT) g_mode_before_fault = g_mode;
     g_mode = OperatingMode::SENSOR_FAULT;
+    g_sensor_ready = false;
+    g_last_sensor_retry_ms = millis();
     commitState(ConditionState::SENSOR_FAULT);
     Serial.printf("[FAULT] reason=%s invalid_windows=%u\n",
-                  g_sensor_ready ? "INVALID_WINDOWS" : "SENSOR_DISCONNECTED",
+                  g_invalid_window_count >= INVALID_WINDOWS_FOR_FAULT ? "INVALID_WINDOWS" : "SENSOR_DISCONNECTED",
                   g_invalid_window_count);
     return;
   }
@@ -1338,6 +1351,7 @@ void loop() {
 
   ConditionState next = evaluateCondition(metrics, metrics.valid);
   commitState(next);
+  applyIndicator();
 
   uint32_t now = millis();
   if (metrics.valid && (g_state_changed || now - g_last_telemetry_ms >= TELEMETRY_INTERVAL_MS)) {

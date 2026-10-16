@@ -1,0 +1,56 @@
+\chapter{INTRODUCTION}
+\label{ch:introduction}
+
+\section{Overview}
+\hspace{2em}Rotating machines produce vibration as a natural consequence of motion, balance, mounting, load, and dynamic structural interaction. When an electromechanical operating condition deteriorates due to mechanical imbalance, misalignment, or fastener looseness, the characteristic vibration pattern changes. VibeGuard is an autonomous, edge-resident vibration condition monitoring system engineered to transform triaxial accelerometer signals from a rotating mechanical testbed into an explainable, real-time health assessment directly on a low-cost embedded microcontroller.
+
+\hspace{2em}The system interfaces an Analog Devices ADXL345 3-axis digital MEMS accelerometer with a 32-bit dual-core 7Semi ESP32-DEVKIT-E microcontroller over a high-speed 5\,MHz SPI bus operating at an 800\,Hz Output Data Rate (ODR). The onboard firmware executes continuous in-place zero-mean DC gravity cancellation, statistical Vector Root Mean Square ($V_{\mathrm{RMS}}$) feature extraction, and a deterministic $K$-of-$M$ temporal persistence filter. A triggered 256-point Hann-windowed Fast Fourier Transform (FFT) provides harmonic spectral verification, while a common-cathode RGB status LED and a host-side serial/WebSocket web dashboard provide immediate local visual alerting and real-time telemetry streaming \cite{vibeguardprimer}.
+
+\section{Motivation}
+\hspace{2em}The motivation behind the VibeGuard project originates from critical practical challenges identified in industrial asset maintenance and embedded systems education:
+\begin{enumerate}
+    \item \textbf{Cost and Accessibility Barriers:} Commercial industrial vibration-monitoring instruments often cost hundreds to thousands of dollars per channel, placing automated condition monitoring out of reach for small workshops, light industrial machinery, and undergraduate engineering laboratories.
+    \item \textbf{Need for Quantitative, Measurable Awareness:} Vibrations represent the earliest physical symptom of rotating mechanical degradation. Having continuous, objective mathematical measurements allows maintenance teams to intercept minor issues before they escalate into structural failure.
+    \item \textbf{Limitations of Subjective Manual Inspection:} Traditional tactile or acoustic checks (listening with a mechanic's screwdriver or stethoscope) are subjective, dangerous around high-speed machinery, and fail to provide timestamped quantitative records for predictive trending.
+    \item \textbf{The Edge Computing Opportunity:} Modern low-cost microcontrollers such as the ESP32 possess sufficient dual-core processing power to execute real-time digital filtering, windowed statistics, and spectral transforms locally, enabling self-contained, cloud-free condition monitors.
+\end{enumerate}
+
+\section{Objective}
+\hspace{2em}The primary objective of VibeGuard is to design, implement, and empirically validate an autonomous embedded vibration monitoring testbed capable of establishing a healthy operating baseline and reliably distinguishing between normal operation, moderate unbalance warnings, and severe unbalance alarms. The core technical objectives are:
+
+\begin{enumerate}
+    \item To acquire deterministic triaxial acceleration data at 800\,Hz from the ADXL345 accelerometer via a dedicated 4-wire SPI bus.
+    \item To execute in-place zero-mean DC offset removal to eliminate static gravitational vectors from dynamic vibration analysis.
+    \item To extract 3-axis composite Vector RMS ($V_{\mathrm{RMS}}$) and implement an adaptive autotuning threshold ladder (Median + $k \times \mathrm{MAD}$).
+    \item To apply a temporal persistence filter ($K=4$ violations out of $M=5$ consecutive 320\,ms windows) to eliminate false alarms caused by transient mechanical shocks.
+    \item To integrate an on-demand 256-point Hann-windowed FFT pipeline for verifying synchronous 1X mechanical unbalance harmonics ($10.0$\,Hz).
+    \item To provide clear, multi-state visual alerts via an RGB LED (Solid Green, Solid Yellow, Fast Red Strobe, Solid Blue, Purple) and live telemetry to an interactive web dashboard.
+    \item To evaluate the system under controlled laboratory conditions across three physical stages (Bare Arm, Bolt Only, and Bolt + Nut unbalance).
+\end{enumerate}
+
+\section{Problem Statement}
+\hspace{2em}In industrial manufacturing, rotating equipment such as induction motors, blowers, and pumps are vulnerable to sudden dynamic unbalance, leading to catastrophic equipment failure, unscheduled production stoppages, and severe economic losses. Conventional industrial condition monitoring systems typically rely on expensive piezoelectric accelerometers ($>\$500$), proprietary high-end data acquisition hardware, or continuous high-bandwidth cloud streaming architectures that suffer from network latency and high recurring subscription costs. 
+
+\hspace{2em}Conversely, simple edge thresholding approaches often suffer from frequent false alarms caused by static gravity tilt or non-critical transient mechanical jolts. VibeGuard addresses this engineering challenge by delivering an entirely edge-resident, explainable, and cost-effective monitoring platform that achieves sub-1.3\,second detection latency, eliminates external cloud dependencies, and delivers robust false-alarm rejection.
+
+\section{Scope of the Project}
+\hspace{2em}The scope of this micro project encompasses:
+\begin{itemize}
+    \item A single rigidly mounted ADXL345 digital accelerometer interfaced to a 7Semi ESP32-DEVKIT-E microcontroller via 5\,MHz SPI.
+    \item A dedicated 12\,V DC micro metal gear motor testbed running at 600\,RPM (10.0\,Hz rotational frequency) with an eccentric 3D-printed rotor arm.
+    \item Fully edge-resident C++ firmware executing real-time digital signal processing, windowed statistics, persistence filtering, and FFT spectral extraction.
+    \item Multi-stage visual state alerting via an onboard RGB LED and real-time browser dashboard visualization over USB/WebSocket.
+\end{itemize}
+\hspace{2em}The project deliberately excludes distributed multi-sensor spatial localization, bearing race defect spall certification, cloud-dependent machine learning pipelines, and permanent remaining-useful-life (RUL) prognosis, ensuring that all claims remain proportional to empirical experimental evidence.
+
+\section{Organisation of the Report}
+\hspace{2em}This report is organized into seven subsequent chapters:
+\begin{itemize}
+    \item \textbf{Chapter 2 (Literature Review):} Reviews the historical progression of machinery condition monitoring, MEMS vibration sensing, embedded edge signal processing, and time-domain vs.\ frequency-domain feature extraction.
+    \item \textbf{Chapter 3 (Design and Implementation):} Details the system architecture, mathematical formulations for zero-mean DC cancellation, Vector RMS extraction, adaptive threshold calibration, and the $K$-of-$M$ persistence state machine.
+    \item \textbf{Chapter 4 (Hardware and Software Specification):} Outlines the bill of materials, circuit schematic, physical breadboard wiring, electrical isolation, firmware architecture, and host dashboard software.
+    \item \textbf{Chapter 5 (Results and Discussion):} Documents empirical laboratory validation, photographic testbed evidence, multi-stage unbalance results, live dashboard transitions, FFT spectral energy distribution, RGB alert behavior, and benchmarking against alternative approaches.
+    \item \textbf{Chapter 6 (Conclusion and Future Scope):} Summarizes project contributions, performance milestones, and outlines future enhancements.
+    \item \textbf{Chapter 7 (Code):} Presents the core C++ DSP firmware implementation.
+\end{itemize}
+\clearpage

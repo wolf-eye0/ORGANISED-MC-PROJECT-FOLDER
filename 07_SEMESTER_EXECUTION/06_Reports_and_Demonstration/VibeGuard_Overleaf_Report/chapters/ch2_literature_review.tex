@@ -1,0 +1,154 @@
+\chapter{LITERATURE REVIEW AND THEORETICAL BACKGROUND}
+\label{ch:lit_review}
+
+\section{Evolution of Machine Condition Monitoring}
+Industrial maintenance paradigms have undergone three major evolutionary phases over the past century:
+\begin{enumerate}
+    \item \textbf{Reactive (Run-to-Failure) Maintenance:} Equipment operates until complete physical breakdown occurs. While requiring zero upfront monitoring expenditure, this strategy results in unpredictable production halts, catastrophic structural damage, and severe operator safety hazards.
+    \item \textbf{Preventive (Calendar-Based) Maintenance:} Maintenance interventions, component replacements, and lubrication are executed at predetermined operating intervals (e.g., every 2,000 running hours). Although reducing unexpected breakdowns, calendar-based maintenance frequently replaces components with substantial remaining useful life, inflating operating expenditure and introducing human error during unnecessary reassembly.
+    \item \textbf{Condition-Based and Predictive Maintenance (CBM/PdM):} Maintenance is scheduled strictly when real-time operational parameters indicate physical deterioration. By continuously or periodically tracking physical indicators---such as acoustic emission, thermal radiation, lubricant contamination, and mechanical vibration---CBM maximizes machine uptime while preventing catastrophic failures~\cite{randall2011vibration}.
+\end{enumerate}
+
+Among all observable condition indicators, mechanical vibration is widely recognized as the most sensitive and direct physical indicator of rotating machinery health. Because oscillatory motion originates directly from internal dynamic forces, changes in balance, alignment, bearing raceway geometry, or gear tooth meshing manifest immediately as altered vibration waveforms long before temperature rises or acoustic changes become audible.
+
+\section{Vibration Analysis Fundamentals and ISO Standards}
+\subsection{Dynamics of Rotating Unbalance}
+Mass unbalance is the most prevalent source of mechanical vibration in industrial rotating equipment. When the center of mass of a rotor does not coincide exactly with its geometric axis of rotation by an eccentricity distance $r$, rotation at angular velocity $\omega = 2\pi f_{\mathrm{shaft}}$ induces a rotating centrifugal force $F_{\mathrm{unbalance}}$:
+\begin{equation}
+F_{\mathrm{unbalance}} = m \cdot r \cdot \omega^2 = m \cdot r \cdot (2\pi f_{\mathrm{shaft}})^2
+\label{eq:unbalance_force}
+\end{equation}
+where $m$ represents the eccentric mass. This centrifugal force rotates synchronously with the shaft, generating an oscillatory dynamic force that acts orthogonally against the shaft bearings and support housing. In the time domain, rotating unbalance produces a pure sinusoidal acceleration waveform at the fundamental shaft rotational frequency, commonly designated as the $1X$ harmonic component:
+\begin{equation}
+a(t) = A_0 \sin(2\pi f_{\mathrm{shaft}} t + \phi)
+\end{equation}
+Higher harmonics ($2X, 3X$) typically emerge when secondary non-linearities, mechanical looseness, or shaft misalignments interact with the rotating unbalance vector~\cite{randall2011vibration}.
+
+\subsection{ISO Vibration Severity Standards}
+To standardize the evaluation of machinery vibration across industries, the International Organization for Standardization established guidelines under the ISO~10816 and updated ISO~20816 series~\cite{iso10816_3, iso20816_1}. These standards evaluate vibration severity measured on non-rotating parts (bearing housings and machine frames) over a standard frequency range of 10\,Hz to 1,000\,Hz.
+
+ISO~10816-3 classifies industrial machines into four operational groups based on machine size, mounting foundation rigidity (rigid vs. flexible), and drive power. Vibration severity is categorized into four standardized evaluation zones:
+\begin{itemize}
+    \item \textbf{Zone A (Newly Commissioned):} Vibration of newly put-into-service machines; represents optimal dynamic balance.
+    \item \textbf{Zone B (Unrestricted Long-Term Operation):} Acceptable for unrestricted continuous industrial service without maintenance intervention.
+    \item \textbf{Zone C (Alert / Unsatisfactory):} Vibration indicates incipient mechanical deterioration; machine may operate temporarily until maintenance can be scheduled.
+    \item \textbf{Zone D (Danger / Unacceptable):} Vibration severity is sufficient to cause rapid catastrophic damage; machine must be tripped or shut down immediately.
+\end{itemize}
+Table~\ref{tab:iso10816} summarizes typical ISO~10816-3 severity thresholds for small-to-medium industrial rotating machinery on rigid foundations.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Machine Class} & \textbf{Zone A (Good)} & \textbf{Zone B (Acceptable)} & \textbf{Zone C (Alert)} & \textbf{Zone D (Danger)} \\
+\hline
+Class I (Small Machines $<15$\,kW) & $<0.71$\,mm/s & $0.71 - 1.80$\,mm/s & $1.80 - 4.50$\,mm/s & $>4.50$\,mm/s \\
+Class II (Medium Machines $15-75$\,kW) & $<1.12$\,mm/s & $1.12 - 2.80$\,mm/s & $2.80 - 7.10$\,mm/s & $>7.10$\,mm/s \\
+Class III (Large Machines, Rigid) & $<1.80$\,mm/s & $1.80 - 4.50$\,mm/s & $4.50 - 11.2$\,mm/s & $>11.2$\,mm/s \\
+Class IV (Large Machines, Flexible) & $<2.80$\,mm/s & $2.80 - 7.10$\,mm/s & $7.10 - 18.0$\,mm/s & $>18.0$\,mm/s \\
+\hline
+\end{tabular}
+\caption{ISO 10816-3 vibration severity velocity RMS boundaries}
+\label{tab:iso10816}
+\end{table}
+
+\section{MEMS Digital Accelerometers vs. Piezoelectric Transducers}
+The sensor transducer is the critical link converting physical mechanical oscillation into an electrical signal. Historically, industrial vibration monitoring relied almost exclusively on piezoelectric accelerometers utilizing lead zirconate titanate (PZT) ceramic elements. While piezoelectric transducers offer excellent high-frequency response ($>10$\,kHz) and wide dynamic range, they possess fundamental drawbacks for distributed embedded applications:
+\begin{itemize}
+    \item \textbf{High Transducer and Conditioning Cost:} Commercial piezoelectric sensors cost upwards of \$300 to \$1,000 per axis. Furthermore, they output high-impedance charge signals requiring precision analog charge amplifiers and external analog-to-digital converters (ADCs).
+    \item \textbf{Susceptibility to Low-Frequency Drift:} Piezoelectric crystals cannot measure true DC acceleration, complicating low-speed rotation tracking and static orientation verification.
+\end{itemize}
+
+In contrast, capacitive Micro-Electro-Mechanical Systems (MEMS) accelerometers have transformed condition monitoring through semiconductor fabrication techniques. A MEMS accelerometer incorporates a micro-machined silicon proof mass suspended by polysilicon compliant springs between stationary differential capacitive plates. Mechanical acceleration deflects the proof mass, inducing a differential capacitance change proportional to acceleration:
+\begin{equation}
+\Delta C = C_1 - C_2 = 2 \epsilon_0 \frac{A \cdot x}{d^2 - x^2} \propto a(t)
+\end{equation}
+The Analog Devices ADXL345 utilized in VibeGuard integrates this capacitive sensing core alongside an on-chip switched-capacitor charge amplifier, low-pass anti-aliasing filter, and a high-resolution 13-bit $\Sigma\Delta$ ADC into a compact $3\,\text{mm} \times 5\,\text{mm} \times 1\,\text{mm}$ package~\cite{adxl345_datasheet}. 
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Specification Parameter} & \textbf{Industrial Piezoelectric} & \textbf{ADXL345 MEMS (VibeGuard)} \\
+\hline
+Sensor Cost per Axis & \$150 -- \$500 & \rupee 150 -- \rupee 250 ($\approx$\$2.50) \\
+Signal Interface & Analog Charge / IEPE & Digital SPI / $\mathrm{I^2C}$ (Direct to MCU) \\
+Sampling Frequency Bandwidth & 0.5\,Hz to 15\,kHz & 0.1\,Hz to 1.6\,kHz (at 3200\,Hz ODR) \\
+DC / Gravitational Tracking & No (AC-coupled only) & Yes (True DC acceleration) \\
+Operating Current Consumption & 2 -- 10\,mA (IEPE power) & 40 -- 145\,$\mu$A \\
+Shock Survivability & 5,000\,$g$ & 10,000\,$g$ \\
+Integrated Signal Processing & None (Pure analog) & Digital FIFO, Thresholds, Interrupts \\
+\hline
+\end{tabular}
+\caption{Comparative evaluation: Industrial Piezoelectric vs. ADXL345 MEMS}
+\label{tab:sensor_comp}
+\end{table}
+
+\section{SPI Bus Architecture and Real-Time Bus Timing}
+Digital sensor communication commonly employs either the Inter-Integrated Circuit ($\mathrm{I^2C}$) or Serial Peripheral Interface (SPI) protocol. In embedded vibration monitoring, bus bandwidth and latency predictability are critical engineering constraints.
+\begin{itemize}
+    \item \textbf{$\mathrm{I^2C}$ Limitations:} The $\mathrm{I^2C}$ bus operates over an open-drain two-wire interface limited to standard mode (100\,kHz) or fast mode (400\,kHz). Each 6-byte triaxial sample read requires transmitting start conditions, slave address bytes, register pointers, acknowledgment clock pulses, and repeated starts. At 400\,kHz, reading one 6-byte register block consumes approximately $230\,\mu\text{s}$. At an 800\,Hz sampling rate (1.25\,ms sample interval), $\mathrm{I^2C}$ transactions consume over 18\% of total available processor time, leaving minimal headroom for digital signal processing and risking severe buffer overruns if bus capacitance degrades edge transitions.
+    \item \textbf{SPI Advantages:} The SPI bus is a synchronous, push-pull, 4-wire interface comprising Serial Clock (SCLK), Master Out Slave In (MOSI), Master In Slave Out (MISO), and active-low Chip Select (CS). Operating in full-duplex mode at clock frequencies up to 5\,MHz on the ADXL345, burst-reading all 6 acceleration registers (\texttt{DATAX0} through \texttt{DATAZ1}) requires transferring only 7 bytes (1 command address byte + 6 data bytes), executing in just $11.2\,\mu\text{s}$. This represents less than 0.9\% of the 1.25\,ms sampling period, guaranteeing deterministic, low-jitter real-time acquisition~\cite{vibeguard_primer2026, esp32_trm}.
+\end{itemize}
+
+\section{Time-Domain Vibration Metrics}
+\subsection{DC Gravity Component Removal}
+Triaxial accelerometers simultaneously measure dynamic oscillatory motion and Earth's static $1g$ gravitational acceleration ($g = 9.80665\,\text{m/s}^2$). Furthermore, physical mounting tilts introduce static projection vectors along each orthogonal measurement axis ($x, y, z$). If uncompensated, these static offsets inflate signal magnitude metrics, completely obscuring subtle vibration anomalies.
+
+For a discrete analysis window of $N$ samples ($x_1, x_2, \dots, x_N$), the mean static acceleration $\bar{x}$ is computed as:
+\begin{equation}
+\bar{x} = \frac{1}{N} \sum_{i=1}^{N} x_i
+\label{eq:mean_removal}
+\end{equation}
+The zero-mean, dynamic dynamic vibration component $x'_i$ is obtained via in-place subtraction:
+\begin{equation}
+x'_i = x_i - \bar{x}, \quad \forall i \in \{1, 2, \dots, N\}
+\label{eq:dc_subtraction}
+\end{equation}
+This operation isolates mechanical vibration while remaining entirely invariant to the spatial orientation at which the sensor is anchored.
+
+\subsection{Root-Mean-Square (RMS) and Triaxial Vector RMS}
+The Root-Mean-Square (RMS) value is the single most important statistical descriptor in vibration monitoring because it directly reflects the total dynamic mechanical energy dissipated by the vibrating structure~\cite{randall2011vibration}:
+\begin{equation}
+\mathrm{RMS}_x = \sqrt{\frac{1}{N} \sum_{i=1}^{N} (x'_i)^2}
+\label{eq:rms_single}
+\end{equation}
+Because real-world machinery vibrates multi-directionally in 3D space, evaluating single axes independently can miss oblique unbalance forces. VibeGuard synthesizes the orthogonal components into a composite scalar index termed \textbf{Vector RMS} ($a_{\mathrm{vec}}$):
+\begin{equation}
+a_{\mathrm{vec}} = \sqrt{\mathrm{RMS}_x^2 + \mathrm{RMS}_y^2 + \mathrm{RMS}_z^2}
+\label{eq:vector_rms}
+\end{equation}
+This scalar metric provides a rotationally invariant descriptor of total dynamic vibration intensity across the machine frame.
+
+\section{Discrete Fourier Transform and Spectral Windowing}
+\subsection{Cooley-Tukey Radix-2 Fast Fourier Transform}
+While time-domain RMS quantifies total vibration severity, it cannot pinpoint the physical root cause of an anomaly (e.g., distinguishing 10\,Hz unbalance from 100\,Hz bearing spalling). Frequency-domain analysis maps the discrete time-domain signal $x'(n)$ into its discrete frequency spectrum $X(k)$ via the Discrete Fourier Transform (DFT):
+\begin{equation}
+X(k) = \sum_{n=0}^{N-1} x'(n) \cdot e^{-j \frac{2\pi}{N} k n}, \quad k = 0, 1, \dots, N-1
+\label{eq:dft}
+\end{equation}
+Direct evaluation of Eq.~\ref{eq:dft} requires $N^2$ complex multiplications. The Cooley-Tukey Radix-2 Decimation-in-Time (DIT) Fast Fourier Transform (FFT) recursively decomposes an $N$-point transform ($N = 2^m$) into two interleaved $(N/2)$-point transforms, reducing computational complexity from $O(N^2)$ to $O(N \log_2 N)$~\cite{cooley1965algorithm}. For $N = 256$, the operation count drops from 65,536 to 2,048 complex operations, allowing real-time execution on embedded microcontrollers.
+
+\subsection{Spectral Leakage and Hann Windowing}
+The discrete Fourier transform assumes that the finite-duration analysis window repeats periodically across all time ($-\infty$ to $+\infty$). If the acquired window contains a non-integer number of vibration cycles, sharp discontinuities occur at the window boundaries. These boundary discontinuities spread energy across adjacent spectral bins, an artifact known as \textbf{spectral leakage}~\cite{harris1978use}.
+
+To eliminate spectral leakage, the zero-mean signal is multiplied by a smooth taper function that gracefully forces the signal to zero at the window edges. VibeGuard utilizes the classic \textbf{Hann window} $w(n)$:
+\begin{equation}
+w(n) = 0.5 \left[ 1 - \cos\left(\frac{2\pi n}{N - 1}\right) \right] = \sin^2\left(\frac{\pi n}{N - 1}\right), \quad n = 0, 1, \dots, N-1
+\label{eq:hann}
+\end{equation}
+The Hann window exhibits an asymptotic side-lobe fall-off rate of $-31.5$\,dB, attenuating spurious side-lobe energy and ensuring sharp, accurate resolution of harmonic peak frequencies.
+
+\section{Leakage-Resistant Validation and Traceability}
+A persistent methodological flaw in academic machine learning and condition monitoring literature is \textbf{temporal data leakage}. In typical rotating machinery experiments, vibration data are recorded in continuous multi-minute runs. When researchers partition analysis windows into training and testing sets using random uniform shuffling, contiguous windows from the same physical run end up in both subsets. Because contiguous windows share near-identical operating temperatures, bearing contact conditions, and motor loads, the classifier merely memorizes run-specific artifacts, yielding artificially high accuracy ($>99\%$) that collapses when evaluated on a fresh physical machine~\cite{vibeguard_playbook2026}.
+
+To prevent data leakage, VibeGuard enforces \textbf{session-level isolation}:
+\begin{itemize}
+    \item All analysis windows belonging to a contiguous physical session remain strictly within the same data split.
+    \item Baseline calibration is performed exclusively on early reference sessions.
+    \item Final validation is performed strictly on fully held-out test sessions recorded on separate days or after complete physical remounting of the sensor fixture.
+\end{itemize}
+Furthermore, every recorded experimental dataset is linked to an explicit alphanumeric configuration identifier ($\mathrm{CFG}\text{-}\#\#\#$) that documents the exact hardware carrier, firmware commit hash, sampling parameters, and mechanical mounting state.
+
+\section{Summary}
+This chapter established the theoretical and physical foundations of VibeGuard. Starting from the physics of rotating unbalance and ISO~10816 standards, the rationale for selecting the ADXL345 MEMS accelerometer over expensive piezoelectric sensors was demonstrated. High-speed 4-wire SPI was shown to be necessary to sustain deterministic 800\,Hz acquisition without processor starvation. The mathematical formulations for in-place DC removal, triaxial Vector RMS, and Hann-windowed Radix-2 FFT were defined. Finally, session-level data separation was established as an essential methodological requirement for defensible validation.

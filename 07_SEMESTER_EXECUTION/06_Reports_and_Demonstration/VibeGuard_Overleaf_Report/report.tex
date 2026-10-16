@@ -1,0 +1,178 @@
+\documentclass[a4paper,12pt,oneside]{report}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{anysize}
+\usepackage{color}
+\usepackage{epsfig}
+\usepackage{epstopdf}
+\usepackage{multirow}
+\usepackage{mathptmx}
+\usepackage{tikz}
+\usepackage{pgfkeys}
+\usetikzlibrary{shapes,arrows,positioning,fit,calc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amstext}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{subfigure}
+\usepackage{eso-pic}
+\usepackage{everypage}
+\usepackage{fancyhdr}
+\usepackage{url}
+\usepackage[subfigure]{tocloft}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{ragged2e}
+\usepackage{alltt}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage[T1]{fontenc}
+\usepackage{pdfpages}
+\usepackage{wrapfig}
+\usepackage{multicol}
+\usepackage{pdflscape}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{graphicx}
+
+\hypersetup{colorlinks,citecolor=black,filecolor=black,linkcolor=black,urlcolor=black}
+\providecommand{\rupee}{Rs.\ }
+
+\lstset{
+    language=C++,
+    basicstyle=\footnotesize\ttfamily,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt,
+    backgroundcolor=\color{black!3},
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    rulecolor=\color{black!20},
+    tabsize=2,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false
+}
+
+\renewcommand{\chaptername}{CHAPTER}
+\renewcommand{\bibname}{REFERENCES}
+\renewcommand*\listfigurename{\textbf{\fontsize{16}{32}\selectfont \hfill List of Figures \hfill}}
+\renewcommand*\listtablename{\textbf{\fontsize{16}{32}\selectfont \hfill List of Tables \hfill}}
+\renewcommand{\figurename}{\bfseries\fontsize{10}{20}\selectfont \textbf{Figure } }
+\renewcommand{\tablename}{\bfseries\fontsize{10}{20}\selectfont \textbf{Table } }
+
+\titleformat{\chapter}[display]
+  {\centering\bfseries \fontsize{14}{28}\selectfont }
+  {\chaptertitlename\  \thechapter}{-20pt}{ \fontsize{16}{32}\selectfont }
+\titlespacing{\chapter}{0pt}{0pt}{0pt}
+\titleformat{\section}{\bfseries \fontsize{14}{28}\selectfont}{\thesection}{1em}{}
+\titleformat{\subsection}{\bfseries \fontsize{12}{24}\selectfont}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\bfseries \fontsize{12}{24}\selectfont}{\thesubsubsection}{1em}{}
+
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.85}
+
+\renewcommand{\cftchapfont}{\fontsize{14}{28}\selectfont}
+\renewcommand{\contentsname}{\textbf{ \fontsize{16}{32}\selectfont  \begin{center}CONTENTS\end{center}}}
+\setlength{\cftbeforetoctitleskip}{0in}
+\setlength{\cftaftertoctitleskip}{.5in}
+
+\hoffset 0.25in
+\textwidth 6.27in
+\voffset -.5in
+\textheight 10.69 in
+
+\renewcommand{\theenumii}{\arabic{enumii}}
+\renewcommand{\labelenumii}{\theenumi.\theenumii}
+
+\begin{document}
+\setlength{\parindent}{4em}
+\linespread{1}
+\textheight 9.29 in
+\headsep .4in
+\footskip 40pt
+
+\include{contents/title_page}
+\justifying
+\include{contents/cert}
+\phantomsection
+\pagenumbering{roman}
+\setcounter{page}{3}
+\include{contents/nba}
+\phantomsection
+\addcontentsline{toc}{chapter}{\normalsize \hspace*{.2in}\textbf{ACKNOWLEDGEMENT}}
+\clearpage
+\include{contents/ack}
+\phantomsection
+\clearpage
+\include{contents/sdg}
+\phantomsection
+\addcontentsline{toc}{chapter}{\normalsize \hspace*{.2in}\textbf{ABSTRACT}}
+\clearpage
+\include{contents/abst}
+\phantomsection
+\clearpage
+\addcontentsline{toc}{chapter}{\normalsize \hspace*{.2in}\textbf{CONTENTS}}
+\setcounter{tocdepth}{0}
+\tableofcontents
+\setcounter{tocdepth}{2}
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{\normalsize \hspace*{.2in}\textbf{LIST OF TABLES}}
+\listoftables
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{\normalsize \hspace*{.2in}\textbf{LIST OF FIGURES}}
+\listoffigures
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{\normalsize \hspace*{.2in}\textbf{LIST OF ABBREVIATIONS}}
+\include{contents/abb}
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{\normalsize \hspace*{.2in}\textbf{LIST OF NOTATIONS}}
+\include{contents/sym}
+\clearpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\setlength{\headheight}{20pt}
+\pagestyle{fancyplain}
+\fancypagestyle{plain}{
+\lhead{\fontsize{10}{20}\selectfont \textit{VibeGuard: An Embedded Vibration Condition Monitoring System}}
+\rhead{\fontsize{10}{20}\selectfont \textit{\thepage}}
+\lfoot{\fontsize{10}{20}\selectfont \textit{Jyothi Engineering College(Autonomous), Cheruthuruthy}}
+\rfoot{\fontsize{10}{20}\selectfont \textit{Dept. of CSE(CY), October 2026}}
+\cfoot{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\footruleskip}{2mm}}
+\lhead{\fontsize{10}{20}\selectfont \textit{VibeGuard: An Embedded Vibration Condition Monitoring System}}
+\rhead{\fontsize{10}{20}\selectfont \textit{\thepage}}
+\lfoot{\fontsize{10}{20}\selectfont \textit{Jyothi Engineering College(Autonomous), Cheruthuruthy}}
+\rfoot{\fontsize{10}{20}\selectfont \textit{Dept. of CSE(CY), October 2026}}
+\cfoot{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\footruleskip}{2mm}
+
+\include{contents/chapter1}
+\include{contents/chapter2}
+\include{contents/chapter3}
+\include{contents/chapter4}
+\include{contents/chapter5}
+\include{contents/chapter6}
+\include{contents/chapter7}
+\include{contents/references}
+
+\end{document}

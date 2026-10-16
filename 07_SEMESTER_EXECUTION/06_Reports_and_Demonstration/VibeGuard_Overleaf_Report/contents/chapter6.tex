@@ -1,0 +1,28 @@
+\chapter{CONCLUSION AND FUTURE SCOPE}
+\label{ch:conclusion_future_scope}
+
+\section{Conclusion}
+\hspace{2em}This micro project presented the design, implementation, and empirical validation of \textbf{VibeGuard}, a low-cost, edge-resident vibration condition monitoring system engineered for rotating machinery. By integrating an Analog Devices ADXL345 3-axis digital MEMS accelerometer with a 32-bit dual-core 7Semi ESP32-DEVKIT-E microcontroller via a deterministic 5\,MHz 4-wire SPI bus, the system successfully executes real-time data acquisition at an 800\,Hz Output Data Rate (ODR).
+
+\hspace{2em}The edge firmware pipeline resolves real-world vibration sensing challenges directly on the embedded microcontroller without relying on remote cloud connectivity:
+\begin{itemize}
+    \item Gravitational bias and static mounting tilt are eliminated through in-place zero-mean DC cancellation across rolling 256-sample ($320$\,ms) analysis windows.
+    \item Omnidirectional vibration magnitude is extracted using a true triaxial Vector Root-Mean-Square formulation ($V_{\mathrm{RMS}}$), supplemented by an adaptive autotune threshold ladder (Median + $k \times \mathrm{MAD}$).
+    \item Benign transient mechanical jolts and quantization noise are successfully filtered out using a $K$-of-$M$ persistence filter ($K = 4, M = 5$), achieving 100\% false-alarm rejection during impulse shock testing.
+    \item Physical operational states are reliably differentiated across three distinct regimes: healthy baseline (Stage 0: Solid Green LED, $V_{\mathrm{RMS}} \approx 0.013$--$0.060\,g$), moderate unbalance (Stage 1: Solid Yellow LED, $V_{\mathrm{RMS}} \approx 0.82$--$0.86\,g$), and severe unbalance (Stage 2/3: Fast Red Strobe at 6.25\,Hz, $V_{\mathrm{RMS}} \to 1.079\,g$).
+    \item An alert latency of only $1.28$\,seconds was empirically verified, triggering immediate local visual indication and structured telemetry streaming to an interactive web dashboard.
+    \item When triggered, an embedded 256-point Cooley-Tukey Radix-2 FFT with Hann windowing extracts dominant spectral peaks across the 0--400\,Hz Nyquist band, confirming a 16-fold energy concentration at the 10.0\,Hz synchronous fundamental unbalance frequency.
+\end{itemize}
+
+\hspace{2em}Operating at an ultra-low power consumption of under 1.5\,W, VibeGuard demonstrates that explainable, deterministic machine health protection can be achieved locally on a microcontroller platform, eliminating the high costs, bandwidth demands, and security risks of cloud-streaming architectures.
+
+\section{Future Scope}
+\hspace{2em}While the current semester baseline fulfills all functional and academic deliverables, several future enhancements can be pursued:
+\begin{enumerate}
+    \item \textbf{Multi-Sensor Spatial Fusion:} Future iterations can incorporate secondary accelerometers at driven-end and non-driven-end bearing locations to study structural vibration attenuation and spatial fault localization.
+    \item \textbf{Advanced Edge Spectral Band Features:} The on-demand FFT module can be expanded to automatically track harmonic fault frequency bands associated with bearing inner/outer race pass frequencies (BPFI/BPFO) and gear mesh harmonics.
+    \item \textbf{Onboard Non-Volatile Event Logging:} Integrating an SPI NOR Flash or MicroSD card interface will allow circular logging of raw vibration waveforms during alarm events for forensic engineering analysis.
+    \item \textbf{Industrial Enclosure and Standardized Field Mounts:} Packaging the electronics into an IP65-rated sealed enclosure with magnetic transducer mounts to evaluate performance across industrial machining and HVAC equipment.
+    \item \textbf{BLE / LoRaWAN Edge Telemetry:} Implementing low-power wireless telemetry protocols to transmit periodic summary metrics to plant supervisory control systems.
+\end{enumerate}
+\clearpage

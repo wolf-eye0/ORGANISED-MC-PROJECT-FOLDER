@@ -83,7 +83,7 @@ function parseSerialLine(line) {
   const value = line.trim();
   if (!value) return null;
   try { return JSON.parse(value); } catch { /* tolerate labelled or CSV firmware output */ }
-  const pairs = Object.fromEntries([...value.matchAll(/([A-Za-z_]+)\s*[:=]\s*(-?\d+(?:\.\d+)?|[A-Za-z0-9_-]+)/g)].map(m => [m[1], m[2]]));
+  const pairs = Object.fromEntries([...value.matchAll(/([A-Za-z0-9_]+)\s*[:=]\s*(-?\d+(?:\.\d+)?|[A-Za-z0-9_-]+)/g)].map(m => [m[1], m[2]]));
   const meanMatch = value.match(/mean\s*=\s*\(([-0-9.]+),([-0-9.]+),([-0-9.]+)\)/);
   if (meanMatch) {
     pairs.meanX = meanMatch[1];
@@ -158,8 +158,9 @@ async function connectSerial() {
   let packetCount = 0;
   parser.on('data', line => {
     const trimmed = line.trim();
-    if (trimmed.startsWith('[CAL') || trimmed.startsWith('[STATUS') || trimmed.startsWith('[COMMAND') || trimmed.startsWith('[RESET')) {
+    if (trimmed.startsWith('[CAL') || trimmed.startsWith('[STATUS') || trimmed.startsWith('[COMMAND') || trimmed.startsWith('[RESET') || trimmed.startsWith('[EVENT') || trimmed.startsWith('[LIVE')) {
       console.log(trimmed);
+      return;
     }
     if (trimmed.includes('sensor=OK') || trimmed.includes('[DATA]') || trimmed.startsWith('>VRMS:')) {
       if (serialState.sensor !== 'CONNECTED') {

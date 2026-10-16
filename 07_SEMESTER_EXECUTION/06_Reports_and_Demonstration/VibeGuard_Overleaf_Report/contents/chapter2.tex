@@ -1,0 +1,71 @@
+\chapter{LITERATURE REVIEW}
+\label{ch:literature_review}
+
+\section{Introduction}
+\hspace{2em}Condition monitoring of industrial machinery has evolved from periodic subjective human tactile inspections into continuous, sensor-driven automated diagnostics. In rotating electro-mechanical systems such as motors, blowers, gearboxes, and compressors, dynamic vibration serves as the primary observable physical manifestation of mechanical health. This chapter reviews the theoretical principles of machinery vibration, the development of Micro-Electro-Mechanical Systems (MEMS) accelerometers, embedded signal processing techniques, and benchmarks existing monitoring approaches against the proposed edge-resident VibeGuard architecture.
+
+\section{Evolution of Machine Condition Monitoring}
+\hspace{2em}Early industrial maintenance relied almost exclusively on corrective (run-to-failure) or scheduled preventive maintenance intervals. Corrective approaches led to catastrophic equipment damage and unplanned factory downtimes, while preventive strategies frequently replaced healthy components prematurely. Predictive Maintenance (PdM) emerged as an optimal paradigm, using continuous physical measurement of vibration, thermal dissipation, acoustic emissions, and motor current to evaluate real-time health \cite{randall2011}.
+
+\hspace{2em}Among these physical modalities, vibration analysis remains the most sensitive indicator of mechanical anomalies. Rotor unbalance, shaft misalignment, bearing raceway degradation, and mechanical looseness all produce characteristic periodic force perturbations that propagate through machine casings. By continuously tracking vibration magnitudes and harmonic frequency components, developing mechanical faults can be intercepted long before catastrophic mechanical failure occurs.
+
+\section{MEMS-Based Vibration Sensing Principles}
+\hspace{2em}Traditional industrial condition monitoring relied on bulky, high-cost piezoelectric accelerometers requiring dedicated external charge amplifiers and high-speed data acquisition (DAQ) chassis ($>\$500$). The advent of surface-micromachined capacitive MEMS technology has transformed industrial sensing by integrating capacitive polysilicon proof masses, differential capacitors, and on-chip analog-to-digital converters into low-cost, surface-mount IC packages \cite{adxl345}.
+
+\hspace{2em}The Analog Devices ADXL345 digital accelerometer utilizes a differential capacitor architecture where acceleration deflects an internal proof mass, altering the differential capacitance between fixed plates and moving beams. The sensor incorporates an internal 13-bit analog-to-digital converter (ADC) providing high resolution ($3.9\,\text{mg/LSB}$ in full-resolution mode up to $\pm16\,g$) and supports selectable Output Data Rates (ODR) up to $3200\,\text{Hz}$ via Serial Peripheral Interface (SPI) or Inter-Integrated Circuit ($\mathrm{I}^2\mathrm{C}$) bus protocols. Operating at $3.3\,\text{V}$ with typical active current consumption under $140\,\mu\text{A}$, MEMS accelerometers deliver an ideal balance of mechanical bandwidth, precision, and low power required for compact embedded condition monitors.
+
+\section{Embedded Edge Signal Processing Architectures}
+\hspace{2em}The rapid growth of Industrial IoT initially promoted centralized cloud-streaming architectures, where raw high-frequency sensor streams were transmitted continuously over Wi-Fi or cellular networks to remote cloud servers. However, continuous streaming of multi-axis high-speed vibration data incurs prohibitive bandwidth overhead, network latency, high cloud storage costs, and severe vulnerability to intermittent connectivity drops \cite{esp32devkitc}.
+
+\hspace{2em}Consequently, modern industrial architectures emphasize edge computing, where lightweight microcontrollers execute local signal conditioning, feature extraction, and classification directly adjacent to the sensor. The Espressif ESP32 dual-core Xtensa LX6 microcontroller operating at $240\,\text{MHz}$ provides the computational headroom required to perform deterministic SPI transfers, floating-point statistical filtering, and spectral analysis in real time, making autonomous edge monitoring practical and cost-effective.
+
+\section{Time-Domain Feature Extraction}
+\hspace{2em}Time-domain statistical indicators provide computationally efficient descriptors of vibration signal severity. The Root Mean Square (RMS) value of a zero-mean vibration acceleration waveform reflects the total dynamic energy content of the motion:
+\begin{equation}
+\mathrm{RMS} = \sqrt{\frac{1}{N} \sum_{n=0}^{N-1} (a[n] - \mu)^2}
+\end{equation}
+where $a[n]$ is the discrete acceleration sample, $\mu$ is the window mean, and $N$ is the sample window size. For triaxial systems, the composite Vector RMS ($V_{\mathrm{RMS}}$) combines orthogonal spatial planes:
+\begin{equation}
+V_{\mathrm{RMS}} = \sqrt{\mathrm{RMS}_x^2 + \mathrm{RMS}_y^2 + \mathrm{RMS}_z^2}
+\end{equation}
+Because Vector RMS is spatially invariant, it captures total dynamic excitation regardless of sensor orientation. However, instantaneous RMS values are vulnerable to single-point transient spikes. Modern edge monitoring architectures resolve this vulnerability by integrating temporal persistence filtering ($K$-of-$M$ voting), which mandates that a threshold must be breached across multiple consecutive windows before declaring an abnormal condition.
+
+\section{Frequency-Domain Harmonic Spectral Analysis}
+\hspace{2em}While time-domain RMS indicates the presence and overall severity of an anomaly, frequency-domain analysis identifies the underlying physical nature of the fault. Mechanical rotor unbalance produces a dynamic centrifugal force that rotates synchronously with the shaft, generating an unbalance force:
+\begin{equation}
+F_c = m_{\mathrm{unbalance}} \cdot r \cdot \omega^2
+\end{equation}
+where $m_{\mathrm{unbalance}}$ is the eccentric mass, $r$ is the pitch radius, and $\omega = 2\pi f_{\mathrm{rot}}$ is the rotational angular velocity. This periodic perturbation produces a distinct, prominent spectral harmonic at the fundamental 1X rotational frequency ($f_{\mathrm{rot}}$) in the discrete Fourier spectrum:
+\begin{equation}
+X[k] = \sum_{n=0}^{N-1} x[n] w[n] e^{-j 2\pi k n / N}
+\end{equation}
+where $w[n]$ represents a smoothing window (such as a Hann window) applied to suppress spectral leakage across discrete bins.
+
+\section{Existing Approaches vs. Proposed VibeGuard Architecture}
+\hspace{2em}Table~\ref{tab:lit_comparison} summarizes the structural, operational, and financial trade-offs between traditional monitoring methods and the proposed VibeGuard edge architecture.
+
+\begin{table}[H]
+\centering
+\caption{Comparative analysis of existing condition monitoring paradigms against VibeGuard}
+\label{tab:lit_comparison}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|p{3.2cm}|p{3.4cm}|p{3.4cm}|p{3.6cm}|}
+\hline
+\textbf{Parameter} & \textbf{Manual / Tactile Inspection} & \textbf{Cloud-Streaming IIoT} & \textbf{Embedded Neural Networks} & \textbf{Proposed VibeGuard System} \\
+\hline
+Hardware Cost & Minimal (Handheld tool) & High ($>\$500$ per node) & Medium ($\approx \$100$ MCU/NPU) & \textbf{Low ($<\$30$ total BOM)} \\
+Network Dependency & None & Continuous Wi-Fi / 4G / 5G & Periodic sync & \textbf{Zero (Autonomous Local Edge)} \\
+Detection Latency & Days to Weeks (Periodic) & 5 -- 30 seconds (Network lag) & 1 -- 3 seconds & \textbf{1.28 seconds} \\
+Explainability & Subjective human opinion & Black-box cloud heuristics & Black-box neural weights & \textbf{Transparent Vector RMS + FFT} \\
+False-Alarm Rejection & Inconsistent & Moderate & Moderate (Susceptible to drift) & \textbf{Deterministic $K$-of-$M$ Persistence} \\
+Power Footprint & 0\,W & 3 -- 10\,W & 2 -- 5\,W & \textbf{$<1.5$\,W} \\
+Multi-Stage Alerting & Binary (Good / Fail) & Server dashboard alerts & Soft probability scores & \textbf{Hardware RGB LED + Telemetry} \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+\section{Review Summary}
+\hspace{2em}The literature highlights a distinct need for a deterministic, explainable, and cost-effective condition monitoring architecture that operates autonomously at the edge. By combining high-speed SPI MEMS sensing, in-place DC gravity removal, 3-axis Vector RMS, $K$-of-$M$ persistence filtering, on-demand FFT spectral extraction, and multi-state hardware visual indicators, VibeGuard establishes a robust bridge between low-cost embedded hardware and rigorous industrial predictive maintenance principles.
+\clearpage

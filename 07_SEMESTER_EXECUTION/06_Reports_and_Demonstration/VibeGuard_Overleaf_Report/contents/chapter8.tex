@@ -1,0 +1,31 @@
+\chapter{FUTURE SCOPE}
+
+\section{Completion of Locked Validation}
+\hspace{2em}The immediate future scope is to complete the remaining project gates defined by the execution package. This includes confirming the as-built hardware and mounting arrangement, freezing firmware and parameters, completing regression checks, running the held-out evaluation and producing the final evidence package without post-result tuning \cite{vibeguardplaybook}.
+
+\section{Larger Independent Datasets}
+\hspace{2em}A larger collection of independent normal and abnormal sessions could improve confidence in the baseline parameters. Future data collection should continue to keep physical sessions together during validation so that increasing the dataset does not introduce leakage. Additional days, remounts and controlled operating variations could be used to characterize the stability of the learned baseline.
+
+\section{Improved Spectral Features}
+\hspace{2em}The triggered FFT can be extended with carefully selected frequency-band features once their usefulness and computational cost have been demonstrated. Such extensions should remain subordinate to acquisition integrity and should be frozen before final testing. More complex frequency-domain interpretation should not be presented as a diagnosis unless the corresponding evidence exists.
+
+\section{Optional Statistical Comparison}
+\hspace{2em}Mahalanobis distance or another multivariate anomaly score can be evaluated as an optional parallel comparator if sufficient independent normal data are available. The repository already treats this as optional and recommends removing it when it does not provide a clear benefit relative to schedule and validation risk \cite{vibeguardplaybook}.
+
+\section{Multi-Sensor Extensions}
+\hspace{2em}A later research version could investigate a second sensor or multiple measurement locations for spatial comparison. Any such extension should use a new configuration and a new validation plan so that the evidence for the one-sensor semester baseline remains unambiguous. The additional sensor could also support experiments on structural isolation and sensor-placement sensitivity.
+
+\section{Host-Side Visualization}
+\hspace{2em}Future versions could add a host-side dashboard that visualizes time-domain vibration, RMS trends, FFT bands and state transitions. Such a visualization layer would complement rather than replace the local decision path. The archived raw data and configuration identifiers should remain the authoritative evidence source.
+
+\section{Improved Mechanical Packaging}
+\hspace{2em}The physical platform could be developed with a more rigid enclosure, improved cable strain relief, a standardized accelerometer mount and a better documented abnormal-condition fixture. These improvements would reduce uncontrolled variation and make repeated demonstrations easier while retaining the low-voltage safety boundary.
+
+\section{Broader Operating Conditions}
+\hspace{2em}A future research project could examine changes caused by different speeds, loads or controlled mechanical conditions. Such experiments would require new hypotheses and careful control of operating variables because a baseline learned under one operating condition should not automatically be treated as universal.
+
+\section{Toward a Research Platform}
+\hspace{2em}Longer-term research may investigate richer condition descriptors, multi-sensor fusion, automatic experiment manifests, uncertainty analysis or other ideas related to the deferred PIRG concept. The repository emphasizes that such work should be developed as a separate branch with its own hypothesis, safety review, data-independence plan and disclosure record rather than silently extending the semester VibeGuard claim \cite{vibeguardprimer}.
+
+\section{Scope Preservation}
+\hspace{2em}The most important future-scope principle is to preserve the distinction between measured results and future hypotheses. New features should receive a new configuration identity and their own validation evidence. This keeps the original semester report reproducible while allowing the project to evolve into a more capable embedded condition-monitoring platform.

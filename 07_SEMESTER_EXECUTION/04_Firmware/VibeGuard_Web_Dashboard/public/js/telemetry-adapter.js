@@ -9,7 +9,7 @@ const pick = (object, ...paths) => {
   return null;
 };
 const normalizedState = value => {
-  const candidate = String(value || 'UNKNOWN').trim().toUpperCase().replaceAll(' ','_');
+  const candidate = String(value || 'UNKNOWN').replace(/[\[\]]/g, '').trim().toUpperCase().replaceAll(' ','_');
   if (candidate === 'SENSORFAULT' || candidate === 'FAULT') return 'SENSOR_FAULT';
   return STATES.includes(candidate) ? candidate : 'UNKNOWN';
 };
@@ -21,7 +21,7 @@ export function normalizePacket(packet, source='LIVE', bridgeTsMs=null) {
   let xG = finite(value('rms.xG','rmsX','xRms','x','X'));
   let yG = finite(value('rms.yG','rmsY','yRms','y','Y'));
   let zG = finite(value('rms.zG','rmsZ','zRms','z','Z'));
-  let vectorG = finite(value('rms.vectorG','vectorRmsG','vectorRms','rms','RMS','vrms','VRMS','vector_rms'));
+  let vectorG = finite(value('rms.vectorG','vectorRmsG','vectorRms','rms','RMS','vrms','VRMS','vector_rms','vector'));
   if (vectorG === null && [xG,yG,zG].every(Number.isFinite)) vectorG = Math.hypot(xG,yG,zG);
   if (vectorG !== null && (!Number.isFinite(xG) || !Number.isFinite(yG) || !Number.isFinite(zG))) {
     xG = vectorG * 0.577;
@@ -34,7 +34,7 @@ export function normalizePacket(packet, source='LIVE', bridgeTsMs=null) {
   const baselineRmsG = finite(value('baselineRmsG','baseline','BASELINE','Baseline')) ?? CONFIG.thresholds.baselineRmsG;
   const warningRmsG = finite(value('warningRmsG','warning','WARN','WarnLimit','warning_thr')) ?? CONFIG.thresholds.warningRmsG;
   const alarmRmsG = finite(value('alarmRmsG','alarm','ALARM','AlarmLimit','alarm_thr')) ?? CONFIG.thresholds.alarmRmsG;
-  let state = normalizedState(value('state','condition','STATE'));
+  let state = normalizedState(value('state','State','condition','Condition','STATE'));
   if (state === 'UNKNOWN' && vectorG !== null) {
     state = (vectorG >= alarmRmsG) ? 'ALARM' : ((vectorG >= warningRmsG) ? 'WARNING' : 'NORMAL');
   }
@@ -48,7 +48,10 @@ export function normalizePacket(packet, source='LIVE', bridgeTsMs=null) {
     state: sensorOk ? state : 'SENSOR_FAULT', sensorOk, faultCode:value('faultCode','fault') || null,
     rms:{ xG,yG,zG,vectorG }, mean:{ xG:finite(value('mean.xG','meanX')), yG:finite(value('mean.yG','meanY')), zG:finite(value('mean.zG','meanZ')) },
     peakVectorG, crestFactor, baselineRmsG, warningRmsG, alarmRmsG,
-    led:{ color:String(value('led.color','ledColor') || (state === 'NORMAL' ? 'GREEN' : state === 'WARNING' || state === 'ALARM' ? 'RED' : 'BLUE')).toUpperCase(), mode:String(value('led.mode','ledMode') || 'SOLID').toUpperCase() },
+    stage: finite(value('stage_4','stage','Stage','stage4')),
+    jVal: finite(value('j_val','j_smooth','j','J')),
+    f1Hz: finite(value('f1_hz','f1','F1')),
+    led:{ color:String(value('led.color','ledColor') || (state === 'NORMAL' ? 'GREEN' : state === 'WARNING' ? 'YELLOW' : state === 'ALARM' ? 'RED' : 'BLUE')).toUpperCase(), mode:String(value('led.mode','ledMode') || (state === 'ALARM' ? 'STROBE' : 'SOLID')).toUpperCase() },
     quality:{ valid, dataReadyTimeouts:finite(value('quality.dataReadyTimeouts','timeouts')) || 0, stale:false },
     flags:{ demo:Boolean(value('flags.demo','demo')), forcedAlarm:Boolean(value('flags.forcedAlarm','forcedAlarm')), calibrating:state === 'CALIBRATING' }
   };

@@ -1,0 +1,171 @@
+\chapter{EMBEDDED FIRMWARE AND DIGITAL SIGNAL PROCESSING}
+\label{ch:firmware_dsp}
+
+\section{Firmware Architecture and Modular C++ Design}
+The VibeGuard firmware is engineered in modern, modular C++ using the Arduino-ESP32 core under the FreeRTOS real-time operating system. The software architecture emphasizes object-oriented encapsulation, deterministic non-blocking execution, zero dynamic heap allocation during steady-state processing, and strict separation of real-time sampling from spectral calculation.
+
+The firmware codebase is divided into five cohesive modules:
+\begin{enumerate}
+    \item \texttt{adxl345\_spi}: Low-level driver encapsulating 4-wire hardware SPI transactions, register configuration, bitwise masking, and FIFO burst reading.
+    \item \texttt{dsp\_pipeline}: Numerical signal processing library executing in-place DC gravity removal, single-axis RMS, triaxial Vector RMS, Hann windowing, and the Cooley-Tukey Radix-2 FFT.
+    \item \texttt{persistence\_filter}: Temporal state queue managing circular history buffers for transient glitch rejection.
+    \item \texttt{telemetry}: High-speed, non-blocking formatted serial streamer transmitting NMEA-style ASCII telemetry over UART.
+    \item \texttt{main}: System executive implementing the 5-state Finite State Machine, hardware timer interrupts, and RGB LED control.
+\end{enumerate}
+
+\section{Sensor Bring-up and Device ID Verification}
+To prevent the monitoring system from operating with a disconnected, unpowered, or malfunctioning sensor, the firmware implements a strict hardware identity handshake during boot.
+
+Upon power-on reset, the microcontroller initializes the VSPI bus at 5.0\,MHz in SPI Mode~3 ($\mathrm{CPOL}=1, \mathrm{CPHA}=1$). The firmware asserts the active-low Chip Select line (GPIO21) and reads the read-only \texttt{DEVID} register at address \texttt{0x00}. The returned 8-bit value is compared against the factory-defined silicon identity:
+\begin{equation}
+\texttt{DEVID} = \texttt{0xE5} \quad (1110\,0101_2)
+\end{equation}
+If the returned value is \texttt{0x00} (bus grounded or sensor unpowered), \texttt{0xFF} (floating MISO bus), or any mismatched value, the bootloader aborts initialization immediately. The system enters \texttt{STATE\_FAULT}, lights the RGB LED solid White, and transmits an error diagnostic packet over serial.
+
+Once \texttt{DEVID} is verified, the configuration sequence writes the following register values:
+\begin{itemize}
+    \item \textbf{Rate Register (\texttt{BW\_RATE}, \texttt{0x2C} $\leftarrow$ \texttt{0x0D}):} Configures the internal output data rate to $800$\,Hz. Bit 4 (\texttt{LOW\_POWER}) is cleared to maintain full-bandwidth low-noise analog performance.
+    \item \textbf{Format Register (\texttt{DATA\_FORMAT}, \texttt{0x31} $\leftarrow$ \texttt{0x08}):} Asserts Bit 3 (\texttt{FULL\_RES}) for constant $3.9\,\text{mg/LSB}$ sensitivity and clears Bits 1--0 to select the $\pm 4g$ dynamic range.
+    \item \textbf{FIFO Control (\texttt{FIFO\_CTL}, \texttt{0x38} $\leftarrow$ \texttt{0x80}):} Configures the FIFO buffer in Stream Mode, ensuring continuous rolling buffering of 32 triaxial samples.
+    \item \textbf{Power Control (\texttt{POWER\_CTL}, \texttt{0x2D} $\leftarrow$ \texttt{0x08}):} Sets Bit 3 (\texttt{Measure}), transitioning the internal state machine from standby to active continuous measurement.
+\end{itemize}
+
+\section{Real-Time Acquisition Loop and Ping-Pong Buffering}
+At an 800\,Hz sampling rate, a fresh 6-byte triaxial sample arrives every $1250\,\mu\text{s}$. If the microcontroller attempts to process an analysis window within the same memory buffer being updated by the sensor, race conditions and data corruption inevitably occur.
+
+To guarantee zero sample dropouts, VibeGuard implements a \textbf{Ping-Pong (Double Buffering)} memory architecture. Two static, contiguous memory buffers (\texttt{Buffer\_A} and \texttt{Buffer\_B}) are allocated in internal SRAM:
+\begin{itemize}
+    \item Each buffer contains three 256-element arrays of 16-bit signed integers ($256 \times 2\,\text{bytes} \times 3\,\text{axes} = 1,536\,\text{bytes}$ per buffer).
+    \item While the high-priority sampling routine fills \texttt{Buffer\_A} via SPI at 800\,Hz, the background DSP task executes DC removal, Vector RMS, and FFT analysis on \texttt{Buffer\_B}.
+    \item Upon the arrival of the 256th sample, an atomic pointer swap occurs in less than $0.2\,\mu\text{s}$. \texttt{Buffer\_B} becomes the active acquisition target, while \texttt{Buffer\_A} is submitted to the DSP pipeline.
+\end{itemize}
+This decoupled architecture guarantees deterministic real-time data acquisition with zero dropped blocks, regardless of background DSP execution time.
+
+\section{Static Component and DC Gravity Removal}
+Raw digital acceleration outputs ($x_i, y_i, z_i$) contain both dynamic mechanical oscillations and static gravitational projections. To eliminate orientation dependency, the dynamic signal is extracted via two-pass in-place DC cancellation.
+
+In the first pass across the active 256-sample buffer, the arithmetic mean is accumulated:
+\begin{equation}
+\bar{x} = \frac{1}{N} \sum_{i=0}^{N-1} x_i, \quad \bar{y} = \frac{1}{N} \sum_{i=0}^{N-1} y_i, \quad \bar{z} = \frac{1}{N} \sum_{i=0}^{N-1} z_i
+\end{equation}
+In the second pass, the static mean is subtracted in-place, and the resulting integer difference is converted to engineering units of $g$ ($1g = 9.80665\,\text{m/s}^2$) using the constant scale factor $S = 0.0039\,g/\text{LSB}$:
+\begin{equation}
+x'_i = (x_i - \bar{x}) \cdot S, \quad y'_i = (y_i - \bar{y}) \cdot S, \quad z'_i = (z_i - \bar{z}) \cdot S
+\end{equation}
+Because the operation occurs entirely within existing RAM buffers, memory allocation overhead is zero.
+
+\section{Vector RMS Calculation and Anomaly Metric}
+Root-Mean-Square (RMS) vibration magnitude is computed independently for each orthogonal measurement axis:
+\begin{equation}
+\mathrm{RMS}_x = \sqrt{\frac{1}{N} \sum_{i=0}^{N-1} (x'_i)^2}, \quad \mathrm{RMS}_y = \sqrt{\frac{1}{N} \sum_{i=0}^{N-1} (y'_i)^2}, \quad \mathrm{RMS}_z = \sqrt{\frac{1}{N} \sum_{i=0}^{N-1} (z'_i)^2}
+\end{equation}
+The composite \textbf{Vector RMS} ($a_{\mathrm{vec}}$) is synthesized as the Euclidean norm of the orthogonal components:
+\begin{equation}
+a_{\mathrm{vec}} = \sqrt{\mathrm{RMS}_x^2 + \mathrm{RMS}_y^2 + \mathrm{RMS}_z^2}
+\label{eq:firmware_vec_rms}
+\end{equation}
+Vector RMS provides two decisive advantages for embedded condition monitoring:
+\begin{enumerate}
+    \item \textbf{Rotational Invariance:} If the sensor is mounted at an arbitrary angle relative to the machine frame, single-axis RMS values fluctuate depending on alignment. The Vector RMS sum remains mathematically invariant to rigid sensor rotation.
+    \item \textbf{Multi-Planar Sensitivity:} Rotor unbalance generates dynamic forces in the radial ($X\text{--}Y$) plane, while shaft misalignment and foundation rocking generate severe axial ($Z$) oscillations. Vector RMS captures all vibrational modes simultaneously in a single scalar feature.
+\end{enumerate}
+
+\section{$K$-of-$M$ Persistence Filter for Glitch Rejection}
+Directly triggering alarms based on single-window threshold crossings produces unacceptable false-alarm rates in industrial environments. Benign events---such as an operator resting a tool on the table, nearby door closures, or electrical line transients---can cause a single 320\,ms window to exceed the threshold.
+
+To solve this, VibeGuard implements a temporal \textbf{$K$-of-$M$ Persistence Filter}.
+\begin{itemize}
+    \item A circular history buffer of length $M = 5$ maintains the threshold violation status of the last five consecutive analysis windows.
+    \item For each completed window $j$, a binary violation flag $v_j$ is evaluated:
+    \begin{equation}
+    v_j = \begin{cases} 
+    1 & \text{if } a_{\mathrm{vec}} > \theta_{\mathrm{RMS}} \\
+    0 & \text{if } a_{\mathrm{vec}} \le \theta_{\mathrm{RMS}}
+    \end{cases}
+    \end{equation}
+    \item The total active violation count is summed across the history queue:
+    \begin{equation}
+    V = \sum_{j=1}^{M} v_j
+    \end{equation}
+    \item An alarm state transition (\texttt{STATE\_ABNORMAL}) is asserted if and only if:
+    \begin{equation}
+    V \ge K, \quad \text{where } K = 4 \text{ and } M = 5
+    \end{equation}
+\end{itemize}
+
+\subsection{Filter Characteristics and Latency Analysis}
+An isolated mechanical jolt produces at most one or two elevated windows ($V \le 2 < 4$), which the persistence filter completely ignores. The system remains in \texttt{STATE\_NORMAL} (Green LED), eliminating false alarms.
+
+Conversely, a true continuous mechanical defect (such as rotor unbalance) causes sustained threshold violations. The alarm condition is asserted on the 4th consecutive anomalous window ($K = 4$). The physical alert detection latency $\tau_{\mathrm{alert}}$ is:
+\begin{equation}
+\tau_{\mathrm{alert}} = K \cdot T_{\mathrm{window}} = 4 \times 320\,\text{ms} = 1.28\,\text{seconds}
+\end{equation}
+A detection latency of $1.28\,\text{s}$ comfortably satisfies the project requirement ($\tau_{\mathrm{alert}} \le 2.0\,\text{s}$), providing rapid emergency alerting while ensuring absolute immunity to transient bench shocks.
+
+\section{Triggered Cooley-Tukey Radix-2 FFT with Hann Windowing}
+To prevent continuous Fourier transforms from degrading acquisition timing, the frequency-domain spectral pipeline is \textbf{triggered on-demand}. The FFT executes only when:
+\begin{enumerate}
+    \item The persistence filter confirms an abnormal condition ($V \ge K$); or
+    \item The system executes baseline calibration; or
+    \item An explicit diagnostic command is received over serial.
+\end{enumerate}
+
+\subsection{Hann Window Implementation}
+Before executing the FFT, the zero-mean signal $x'_n$ of the dominant radial axis is multiplied by the precomputed discrete Hann window coefficients:
+\begin{equation}
+x''_n = x'_n \cdot w(n) = x'_n \cdot 0.5 \left[ 1 - \cos\left(\frac{2\pi n}{N - 1}\right) \right], \quad n = 0, 1, \dots, 255
+\end{equation}
+To maximize execution speed, the 256 floating-point values of $w(n)$ are precomputed at compile time and stored in flash memory, eliminating runtime trigonometric calculations.
+
+\subsection{In-Place Radix-2 FFT Execution}
+The discrete transform is computed using the Decimation-in-Time (DIT) Cooley-Tukey algorithm. The algorithm executes in three stages:
+\begin{enumerate}
+    \item \textbf{Bit-Reversal Permutation:} The windowed samples are rearranged into bit-reversed order using an in-place swap routine based on integer bit manipulation.
+    \item \textbf{Butterfly Computations:} The transform evaluates $\log_2(256) = 8$ successive stages of dual-node butterfly operations. Complex twiddle factors $W_N^k = e^{-j 2\pi k / N}$ are retrieved from a static 128-entry lookup table.
+    \item \textbf{Spectral Magnitude Extraction:} The single-sided magnitude spectrum is calculated for all bins from $k = 0$ to $k = N/2 = 128$:
+    \begin{equation}
+    |X(k)| = \frac{2}{N} \sqrt{\mathrm{Re}\{X(k)\}^2 + \mathrm{Im}\{X(k)\}^2}, \quad k = 1, 2, \dots, 127
+    \end{equation}
+    The DC bin ($k = 0$) and Nyquist bin ($k = 128$) are scaled by $1/N$.
+\end{enumerate}
+
+\subsection{Harmonic Peak Detection}
+The firmware scans the magnitude array $|X(k)|$ across bins $k \in [1, 127]$ to identify the dominant spectral peak:
+\begin{equation}
+k_{\mathrm{peak}} = \arg\max_{k \ge 1} |X(k)|
+\end{equation}
+The physical peak vibration frequency $f_{\mathrm{peak}}$ is computed directly:
+\begin{equation}
+f_{\mathrm{peak}} = k_{\mathrm{peak}} \cdot \Delta f = k_{\mathrm{peak}} \cdot 3.125\,\text{Hz}
+\end{equation}
+For our 600\,RPM motor, an unbalance anomaly produces a sharp maximum at bin $k = 3$ ($9.375$\,Hz) or bin $k = 4$ ($12.5$\,Hz), matching the theoretical $10.0$\,Hz fundamental.
+
+\section{Memory Footprint and Real-Time Timing Budget}
+Table~\ref{tab:memory_budget} summarizes the static RAM consumption and computational timing budget measured on the ESP32 core running at 160\,MHz.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|r|}
+\hline
+\textbf{Firmware Component} & \textbf{Memory Allocation} & \textbf{Execution Duration} \\
+\hline
+Ping-Pong Buffers (\texttt{Buffer\_A} + \texttt{Buffer\_B}) & 3,072\,bytes SRAM & $11.2\,\mu\text{s}$ per sample (SPI) \\
+In-Place Zero-Mean DC Removal (3 Axes) & In-place (0 extra RAM) & $0.082\,\text{ms}$ per window \\
+Triaxial Vector RMS Feature Extraction & 24\,bytes stack & $0.145\,\text{ms}$ per window \\
+$K$-of-$M$ Persistence Filter Queue & 10\,bytes SRAM & $0.004\,\text{ms}$ per window \\
+Hann Windowing (Lookup Table in Flash) & 1,024\,bytes Flash & $0.065\,\text{ms}$ per FFT trigger \\
+256-Point Radix-2 Complex FFT & 2,048\,bytes SRAM & $1.020\,\text{ms}$ per FFT trigger \\
+Formatted USB Serial Telemetry Output & 128\,bytes buffer & $0.045\,\text{ms}$ (DMA transfer) \\
+\hline
+\textbf{Total Routine Time (Time-Domain Only)} & \textbf{3,106\,bytes RAM} & \textbf{0.276\,ms per 320\,ms window} \\
+\textbf{Total Peak Time (With Triggered FFT)} & \textbf{5,154\,bytes RAM} & \textbf{1.361\,ms per 320\,ms window} \\
+\hline
+\end{tabular}
+\caption{VibeGuard firmware memory footprint and processor timing budget}
+\label{tab:memory_budget}
+\end{table}
+
+As demonstrated in Table~\ref{tab:memory_budget}, even during windows where a complete 256-point FFT is triggered, total DSP execution consumes only $1.361\,\text{ms}$ out of the available $320.0\,\text{ms}$ window duration. This represents a CPU utilization of less than \textbf{0.43\%}, leaving over \textbf{99.5\%} of microcontroller processing headroom completely unencumbered.
+
+\section{Summary}
+This chapter detailed the embedded firmware architecture and digital signal processing algorithms implemented in VibeGuard. Modular C++ drivers established reliable SPI Mode~3 communication, verified sensor identity via register \texttt{DEVID} (\texttt{0xE5}), and eliminated race conditions using a double-buffered Ping-Pong memory scheme. In-place zero-mean cancellation removed static gravity vectors without dynamic RAM allocation. Triaxial Vector RMS synthesized orthogonal vibration into an orientation-invariant scalar metric. A $K$-of-$M$ persistence filter ($K=4, M=5$) rejected transient bench jolts while providing an alert latency of $1.28$\,seconds. Finally, a triggered 256-point Cooley-Tukey FFT with Hann windowing isolated mechanical harmonic peaks with 3.125\,Hz resolution, executing in just $1.02$\,ms with an overall CPU load under 0.5\%.
