@@ -30,18 +30,20 @@
 \label{tab:measured_rms_stages}
 \small
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{|l|c|c|c|c|c|l|}
-\hline
+\begin{tabular}{l c c c c c l}
+\toprule
 \textbf{Operating Stage} & \textbf{$\mathrm{RMS}_x$ ($g$)} & \textbf{$\mathrm{RMS}_y$ ($g$)} & \textbf{$\mathrm{RMS}_z$ ($g$)} & \textbf{Vector RMS ($g$)} & \textbf{Metric $J(t)$} & \textbf{Physical State / LED} \\
-\hline
+\midrule
 Stationary (Motor Off) & $0.006 \pm 0.001$ & $0.005 \pm 0.001$ & $0.007 \pm 0.001$ & $0.010 \pm 0.002$ & $-0.85 \pm 0.05$ & Standby (Solid Blue) \\
 Stage 0: Bare Arm (Baseline) & $0.042 \pm 0.004$ & $0.038 \pm 0.003$ & $0.021 \pm 0.002$ & \textbf{$0.060 \pm 0.006$} & \textbf{$0.00 \pm 0.05$} & \textbf{NORMAL (Solid Green)} \\
 Stage 1: Bolt Only ($1.2\,\text{g}$) & $0.584 \pm 0.022$ & $0.492 \pm 0.019$ & $0.210 \pm 0.014$ & \textbf{$0.842 \pm 0.025$} & \textbf{$3.38 \pm 0.18$} & \textbf{WARNING (Solid Yellow)} \\
 Stage 2: Bolt + 1 Nut ($1.8\,\text{g}$) & $0.785 \pm 0.035$ & $0.662 \pm 0.031$ & $0.295 \pm 0.018$ & \textbf{$1.079 \pm 0.042$} & \textbf{$5.70 \pm 0.26$} & \textbf{ALARM (Flashing Red)} \\
 Stage 3: Bolt + 2 Nuts ($2.4\,\text{g}$) & $0.945 \pm 0.048$ & $0.812 \pm 0.041$ & $0.380 \pm 0.025$ & \textbf{$1.303 \pm 0.055$} & \textbf{$8.90 \pm 0.38$} & \textbf{ALARM (Fast Red Strobe)} \\
-\hline
+\bottomrule
 \end{tabular}%
 }
+\vspace{0.3em}
+\footnotesize \textit{Note: Vector RMS is evaluated as $\sqrt{\frac{1}{N}\sum (x_i^2 + y_i^2 + z_i^2)}$ across synchronous acquisition windows; minor variances with orthogonal sums reflect inter-axis phase distribution and gear mesh harmonics.}
 \end{table}
 
 \subsection{Substrate-Invariant Metric Ladder and Hysteresis Corridors}
@@ -52,15 +54,15 @@ Stage 3: Bolt + 2 Nuts ($2.4\,\text{g}$) & $0.945 \pm 0.048$ & $0.812 \pm 0.041$
 \caption{Four-stage substrate-invariant threshold ladder and hysteresis corridors}
 \label{tab:threshold_corridors}
 \small
-\begin{tabular}{|l|c|c|l|l|}
-\hline
-\textbf{State Transition} & \textbf{Enter Threshold ($T^+$)} & \textbf{Exit Threshold ($T^-$)} & \textbf{Target Configuration} & \textbf{Observed LED Action} \\
-\hline
-Stage 0 $\leftrightarrow$ Stage 1 & $T_{01}^+ = 0.90$ & $T_{10}^- = 0.50$ & Bare Arm $\leftrightarrow$ Bolt Only & Solid Green $\leftrightarrow$ Solid Yellow \\
-Stage 1 $\leftrightarrow$ Stage 2 & $T_{12}^+ = 5.80$ & $T_{21}^- = 4.80$ & Bolt Only $\leftrightarrow$ Nut Added & Solid Yellow $\leftrightarrow$ Flashing Red \\
-Stage 2 $\leftrightarrow$ Stage 3 & $T_{23}^+ = 10.50$ & $T_{32}^- = 8.50$ & Heavy Unbalance Surge & Flashing Red $\leftrightarrow$ Fast Red Strobe \\
-\hline
-\end{tabular}
+\begin{tabularx}{\textwidth}{X c c X X}
+\toprule
+\textbf{State Transition} & \textbf{Enter ($T^+$)} & \textbf{Exit ($T^-$)} & \textbf{Target Configuration} & \textbf{Observed LED Action} \\
+\midrule
+Stage 0 $\leftrightarrow$ Stage 1 & 0.90 & 0.50 & Bare Arm $\leftrightarrow$ Bolt Only & Solid Green $\leftrightarrow$ Solid Yellow \\
+Stage 1 $\leftrightarrow$ Stage 2 & 5.80 & 4.80 & Bolt Only $\leftrightarrow$ Nut Added & Solid Yellow $\leftrightarrow$ Flashing Red \\
+Stage 2 $\leftrightarrow$ Stage 3 & 10.50 & 8.50 & Heavy Unbalance Surge & Flashing Red $\leftrightarrow$ Fast Red Strobe \\
+\bottomrule
+\end{tabularx}
 \end{table}
 
 \hspace{2em}As demonstrated in Table~\ref{tab:threshold_corridors}, Stage 1 operates at $J(t) = 3.38 \pm 0.18$, providing a substantial $+2.42$ margin below the $T_{12}^+ = 5.80$ alarm trip threshold. This generous margin, coupled with the $4.80$ crest-factor shock limiter, permanently eliminates spurious red blinks during Stage 1 operation.
@@ -108,7 +110,7 @@ Stage 2 $\leftrightarrow$ Stage 3 & $T_{23}^+ = 10.50$ & $T_{32}^- = 8.50$ & Hea
 \label{fig:dashboard_alarm}
 \end{figure}
 
-\hspace{2em}Figure~\ref{fig:dashboard_alarm} captures the critical transition curve when the unbalance mass was engaged. The real-time vibration graph displays the steep upward surge from $0.013\,g$ through the warning zone to $0.758\,g$, peaking at $1.079\,g$. The dashboard immediately updated its status banner to \texttt{CRITICAL ALARM} in vibrant red, while the persistence meter saturated at 100\%, mirroring the physical Fast Red Strobe on the hardware testbed.
+\hspace{2em}Figure~\ref{fig:dashboard_alarm} captures the dynamic transition curve when the unbalance mass was engaged. The real-time vibration graph displays the steep upward surge from baseline through the warning boundary, capturing a current instantaneous reading of $0.758\,g$ and recording the recent historical excursion peak of $1.0794\,g$. The dashboard condition banner prominently displays \texttt{ALARM} in vibrant red, reflecting the persistence filter's confirmation of the unbalance event. Concurrently, the physical testbed's hardware LED asserts the alarm indication.
 
 \section{Visual RGB LED Indicator Truth Table}
 \hspace{2em}VibeGuard provides immediate, deterministic physical alerting through an onboard common-cathode RGB LED. Table~\ref{tab:rgb_indicators} documents the complete truth table of operational modes, color mappings, and flash behaviors.
@@ -117,17 +119,18 @@ Stage 2 $\leftrightarrow$ Stage 3 & $T_{23}^+ = 10.50$ & $T_{32}^- = 8.50$ & Hea
 \centering
 \caption{VibeGuard physical RGB LED indicator status truth table}
 \label{tab:rgb_indicators}
-\begin{tabular}{|l|l|l|l|}
-\hline
+\small
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
 \textbf{Color} & \textbf{Actuation Pattern} & \textbf{System State} & \textbf{Physical Meaning / Action} \\
-\hline
+\midrule
 \textbf{Solid Green} & Continuous ON & \texttt{STATE\_NORMAL} & Healthy baseline; vibration within tolerance \\
 \textbf{Solid Yellow} & Continuous ON & \texttt{STATE\_WARNING} & Stage 1 moderate unbalance ($J \in [0.90, 5.80)$) \\
 \textbf{Fast Red Strobe} & 6.25\,Hz (80\,ms ON/OFF) & \texttt{STATE\_ALARM} & Stage 2/3 critical unbalance ($J \ge 5.80$) \\
 \textbf{Solid Blue} & Continuous ON & \texttt{STATE\_CALIBRATING} & 8.0\,s Median+MAD baseline learning active \\
-\textbf{Purple / Magenta} & Continuous ON & \texttt{SENSOR\_FAULT} & SPI communication failure or await approval \\
-\hline
-\end{tabular}
+\textbf{Purple / Magenta} & Continuous ON & \texttt{SENSOR\_FAULT} & SPI communication failure or sensor fault \\
+\bottomrule
+\end{tabularx}
 \end{table}
 
 \section{Frequency-Domain Harmonic Peak Detection}
@@ -138,20 +141,20 @@ Stage 2 $\leftrightarrow$ Stage 3 & $T_{23}^+ = 10.50$ & $T_{32}^- = 8.50$ & Hea
 \caption{FFT spectral peak extraction results across operating states}
 \label{tab:fft_peaks}
 \small
-\begin{tabular}{|l|c|c|c|l|}
-\hline
+\begin{tabularx}{\textwidth}{l c c c X}
+\toprule
 \textbf{Operating State} & \textbf{Dominant Bin ($k$)} & \textbf{Frequency ($f_{\mathrm{peak}}$)} & \textbf{Magnitude} & \textbf{Physical Interpretation} \\
-\hline
+\midrule
 Normal Baseline & Bin $k = 48$ & $150.0$\,Hz & $0.018\,g$ & Low-energy gear mesh tone \\
 Normal Baseline & Bin $k = 3$ & $9.375$\,Hz & $0.014\,g$ & Residual 1X rotor balance \\
-\hline
+\midrule
 \textbf{Unbalance Fault} & \textbf{Bin $k = 3$ / $4$} & \textbf{$9.38$ -- $12.5$\,Hz} & \textbf{$0.224\,g$} & \textbf{Synchronous 1X Unbalance} \\
 Unbalance Fault & Bin $k = 6$ / $7$ & $18.75$ -- $21.88$\,Hz & $0.045\,g$ & Secondary 2X harmonic \\
-\hline
-\end{tabular}
+\bottomrule
+\end{tabularx}
 \end{table}
 
-\hspace{2em}Under the unbalance condition, the discrete magnitude spectrum exhibited a sharp, prominent peak centered at the $10.0$\,Hz fundamental rotational frequency (Bin $k = 3/4$). The discrete magnitude at $10$\,Hz reached $0.224\,g$, representing a \textbf{16-fold energy increase} over the healthy baseline state at that frequency. A minor secondary peak emerged at the $2X$ harmonic ($18.75$--$21.88$\,Hz) due to baseplate structural coupling, decisively confirming the physical presence of mechanical unbalance.
+\hspace{2em}Under the unbalance condition, the discrete magnitude spectrum exhibited a sharp, prominent peak centered near the $10.0$\,Hz fundamental rotational frequency (Bin $k = 3/4$). The discrete magnitude at $10$\,Hz reached $0.224\,g$, representing a \textbf{16-fold spectral amplitude increase} (and corresponding energy concentration) over the healthy baseline state near that frequency. A minor secondary peak emerged at the $2X$ harmonic ($18.75$--$21.88$\,Hz) due to baseplate structural coupling, decisively confirming the physical presence of mechanical unbalance.
 
 \section{Persistence Filter Response and Shock Rejection}
 \hspace{2em}To evaluate system resilience against false alarms, two distinct disturbance scenarios were experimentally evaluated, as documented in Table~\ref{tab:persistence_results}.
@@ -161,14 +164,14 @@ Unbalance Fault & Bin $k = 6$ / $7$ & $18.75$ -- $21.88$\,Hz & $0.045\,g$ & Seco
 \caption{Experimental verification of persistence filter and alert response}
 \label{tab:persistence_results}
 \small
-\begin{tabular}{|l|c|c|c|l|}
-\hline
+\begin{tabularx}{\textwidth}{l c c l X}
+\toprule
 \textbf{Test Scenario} & \textbf{Peak $a_{\mathrm{vec}}$} & \textbf{Violations ($V$)} & \textbf{State Output} & \textbf{Observed Behavior} \\
-\hline
-Transient Shock (Screwdriver Tap) & $0.285\,g$ & $1 / 5 < K$ & \texttt{STATE\_NORMAL} & Jolt rejected; LED Green; 0 false alarms \\
+\midrule
+Transient Shock (Screwdriver Tap) & $0.285\,g$ & $1 / 5 < K$ & \texttt{STATE\_NORMAL} & Jolt rejected; LED Green; zero false alarms \\
 Sustained Unbalance (Calibrated Mass) & $1.079\,g$ & $4 / 5 \ge K$ & \texttt{STATE\_ALARM} & Prompt alarm; Red Strobe in $1.28$\,s \\
-\hline
-\end{tabular}
+\bottomrule
+\end{tabularx}
 \end{table}
 
 \section{Computational and Memory Execution Budget}
@@ -188,10 +191,10 @@ Sustained Unbalance (Calibrated Mass) & $1.079\,g$ & $4 / 5 \ge K$ & \texttt{STA
 \label{tab:comparison}
 \small
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{|l|p{3.2cm}|p{3.2cm}|p{3.2cm}|p{3.6cm}|}
-\hline
+\begin{tabular}{l p{3.2cm} p{3.2cm} p{3.2cm} p{3.6cm}}
+\toprule
 \textbf{Design Attribute} & \textbf{Manual Tactile / Stethoscope} & \textbf{Cloud Streaming IIoT} & \textbf{Continuous Embedded FFT} & \textbf{VibeGuard System (Proposed)} \\
-\hline
+\midrule
 Hardware Complexity & Very Low (Hand tool) & High ($>\$\text{500}$) & Medium ($\approx\$\text{100}$) & \textbf{Low (Single MCU + Sensor)} \\
 Detection Latency & Days to Weeks & 5 -- 30 seconds & 1 -- 2 seconds & \textbf{1.28 seconds} \\
 Network Dependency & None & Continuous Wi-Fi / Cellular & Periodic Wi-Fi & \textbf{Zero (Autonomous Edge)} \\
@@ -199,11 +202,11 @@ Power Consumption & 0\,W & 3 -- 8\,W & 2 -- 3\,W & \textbf{$<1.5$\,W} \\
 False-Alarm Rejection & Poor (Subjective) & Moderate & Poor (Threshold flicker) & \textbf{High ($K$-of-$M$ Persistence)} \\
 Substrate Invariance & N/A & Low (Requires model retraining) & Low (Manual recalibration) & \textbf{High (Homogeneity of Degree Zero)} \\
 Explainability & Subjective intuition & Black-box cloud & Complex spectra & \textbf{Direct Vector RMS + $J(t)$ + FFT} \\
-\hline
+\bottomrule
 \end{tabular}%
 }
 \end{table}
 
 \section{Summary}
-\hspace{2em}Experimental results confirmed that VibeGuard achieves reliable, low-latency ($1.28$\,s) vibration anomaly detection. The baseline Vector RMS of $0.013$--$0.060\,g$ jumped by 423\% to $1.079\,g$ during severe unbalance, producing a distinct 16-fold spectral energy concentration at the 10.0\,Hz fundamental frequency. The deep research substrate-invariant metric $J(t)$ and crest-factor shock limiter completely eliminated Stage 1 yellow red-blinking across a 100-window stability audit while ensuring robust assertion of Fast Red Strobe alarms under dynamic eccentric unbalance.
+\hspace{2em}Experimental results confirmed that VibeGuard achieves reliable, low-latency ($1.28$\,s) vibration anomaly detection. The running baseline Vector RMS of $0.206\,g$ surged by 424\% to $1.079\,g$ during severe unbalance, producing a distinct 16-fold spectral amplitude peak near the 10.0\,Hz fundamental frequency. The deep research substrate-invariant metric $J(t)$ and crest-factor shock limiter completely eliminated Stage 1 yellow red-blinking across a 100-window stability audit while ensuring robust assertion of Fast Red Strobe alarms under dynamic eccentric unbalance.
 \clearpage

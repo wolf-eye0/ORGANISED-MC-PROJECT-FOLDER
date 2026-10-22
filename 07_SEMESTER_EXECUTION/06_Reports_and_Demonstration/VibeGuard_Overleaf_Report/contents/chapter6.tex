@@ -8,10 +8,10 @@
 \begin{itemize}
     \item Gravitational bias and static mounting tilt are eliminated through in-place zero-mean DC cancellation across rolling 256-sample ($320$\,ms) analysis windows.
     \item Omnidirectional vibration magnitude is extracted using a true triaxial Vector Root-Mean-Square formulation ($V_{\mathrm{RMS}}$), supplemented by an adaptive autotune threshold ladder (Median + $k \times \mathrm{MAD}$).
-    \item Benign transient mechanical jolts and quantization noise are successfully filtered out using a $K$-of-$M$ persistence filter ($K = 4, M = 5$), achieving 100\% false-alarm rejection during impulse shock testing.
+    \item Benign transient mechanical jolts and quantization noise are successfully filtered out using a $K$-of-$M$ persistence filter ($K = 4, M = 5$), achieving complete false-alarm rejection during screwdriver impulse shock testing ($V=1 < 4$).
     \item Physical operational states are reliably differentiated across three distinct regimes: healthy baseline (Stage 0: Solid Green LED, $V_{\mathrm{RMS}} \approx 0.013$--$0.060\,g$), moderate unbalance (Stage 1: Solid Yellow LED, $V_{\mathrm{RMS}} \approx 0.82$--$0.86\,g$), and severe unbalance (Stage 2/3: Fast Red Strobe at 6.25\,Hz, $V_{\mathrm{RMS}} \to 1.079\,g$).
     \item An alert latency of only $1.28$\,seconds was empirically verified, triggering immediate local visual indication and structured telemetry streaming to an interactive web dashboard.
-    \item When triggered, an embedded 256-point Cooley-Tukey Radix-2 FFT with Hann windowing extracts dominant spectral peaks across the 0--400\,Hz Nyquist band, confirming a 16-fold energy concentration at the 10.0\,Hz synchronous fundamental unbalance frequency.
+    \item When triggered, an embedded 256-point Cooley-Tukey Radix-2 FFT with Hann windowing extracts dominant spectral peaks across the 0--400\,Hz Nyquist band, confirming a 16-fold spectral amplitude concentration near the 10.0\,Hz synchronous fundamental unbalance frequency.
 \end{itemize}
 
 \hspace{2em}Operating at an ultra-low power consumption of under 1.5\,W, VibeGuard demonstrates that explainable, deterministic machine health protection can be achieved locally on a microcontroller platform, eliminating the high costs, bandwidth demands, and security risks of cloud-streaming architectures.

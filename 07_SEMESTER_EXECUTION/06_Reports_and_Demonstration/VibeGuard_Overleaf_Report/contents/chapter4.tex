@@ -9,10 +9,10 @@
 \caption{Hardware and tooling components required for the VibeGuard testbed}
 \label{tab:components_required}
 \small
-\begin{tabular}{|l|p{10.5cm}|}
-\hline
+\begin{tabularx}{\textwidth}{l X}
+\toprule
 \textbf{Component} & \textbf{Functional Purpose in System} \\
-\hline
+\midrule
 ESP32 DevKit (7Semi) & Main controller executing high-speed SPI polling, zero-mean DC cancellation, Vector RMS, autotuning, and persistence filtering. \\
 ADXL345 Accelerometer & 3-axis digital MEMS transducer measuring dynamic vibration up to $\pm 4g$ at 800\,Hz ODR over a 5\,MHz SPI bus. \\
 RGB Status LED & Multi-state visual indicator displaying Normal (Green), Warning (Yellow), Alarm (Fast Red Strobe), Calibration (Blue), and Fault (Purple). \\
@@ -23,8 +23,8 @@ Micro-USB Data Cable & Low-resistance cable providing 5\,V DC power and bi-direc
 12\,V N20 Gear Motor & Micro metal gear motor running at 600\,RPM (10.0\,Hz) providing periodic rotational unbalance excitation. \\
 Custom 3D Mounts (FAB-01/02) & Monolithic PLA eccentric rotor cam arm and rigid gusseted bracket anchoring sensor directly to motor axis. \\
 Host PC / Web Dashboard & Gateway running Node.js serial bridge and WebSocket server for live browser-based waveform and FFT plotting. \\
-\hline
-\end{tabular}
+\bottomrule
+\end{tabularx}
 \end{table}
 
 \subsection{Microcontroller Unit: 7Semi ESP32-DEVKIT-E}
@@ -34,10 +34,11 @@ Host PC / Web Dashboard & Gateway running Node.js serial bridge and WebSocket se
 \centering
 \caption{7Semi ESP32-DEVKIT-E microcontroller technical specifications}
 \label{tab:esp32_specs}
-\begin{tabular}{|l|l|}
-\hline
+\small
+\begin{tabularx}{\textwidth}{l X}
+\toprule
 \textbf{Hardware Feature} & \textbf{Architectural Specification} \\
-\hline
+\midrule
 Core Architecture & 32-bit Dual-Core Xtensa LX6 Microprocessor \\
 Clock Frequency & Up to 240\,MHz (Operated at 160\,MHz for thermal efficiency) \\
 Internal SRAM & 520\,KB On-Chip SRAM \\
@@ -47,8 +48,8 @@ Onboard LDO Regulator & AMS1117-3.3 (800\,mA maximum rating) \\
 General-Purpose Timers & Four 64-bit hardware timers with microsecond resolution \\
 SPI Peripheral & Dedicated VSPI hardware controller \\
 Operating Supply Voltage & 5.0\,V via Micro-USB (Regulated to 3.3\,V on-board) \\
-\hline
-\end{tabular}
+\bottomrule
+\end{tabularx}
 \end{table}
 
 \hspace{2em}The 7Semi board features the standard 38-pin DevKitC V4 physical header layout with a 22.86\,mm (0.90-inch) row pitch. When mounted across the central divider trench of a standard MB102 830-point solderless breadboard, one full row of tie-points remains accessible on either side, permitting direct breadboard jumper connections and diagnostic attachments.
@@ -60,10 +61,11 @@ Operating Supply Voltage & 5.0\,V via Micro-USB (Regulated to 3.3\,V on-board) \
 \centering
 \caption{Analog Devices ADXL345 accelerometer specifications}
 \label{tab:adxl345_specs}
-\begin{tabular}{|l|l|}
-\hline
+\small
+\begin{tabularx}{\textwidth}{l X}
+\toprule
 \textbf{Parameter} & \textbf{Configured Operational Value} \\
-\hline
+\midrule
 Measurement Dynamic Range & Configurable $\pm 2g, \pm 4g, \pm 8g, \pm 16g$ (Selected: $\pm 4g$) \\
 Output Data Rate (ODR) & 800\,Hz (Bandwidth: 400\,Hz) \\
 Digital Resolution & 11-bit Full Resolution Mode ($3.9\,\text{mg/LSB}$) \\
@@ -71,8 +73,8 @@ Communication Interface & 4-Wire SPI (Mode 3: $\text{CPOL}=1, \text{CPHA}=1$) \\
 SPI Bus Speed & 5.0\,MHz Serial Clock \\
 Operating Voltage & 3.3\,V DC (Current consumption: $\approx 140\,\mu\text{A}$) \\
 Package / Mounting Pitch & Robocraze Breakout Board (15.0\,mm mounting hole pitch) \\
-\hline
-\end{tabular}
+\bottomrule
+\end{tabularx}
 \end{table}
 
 \subsection{Drive System and Power Infrastructure}

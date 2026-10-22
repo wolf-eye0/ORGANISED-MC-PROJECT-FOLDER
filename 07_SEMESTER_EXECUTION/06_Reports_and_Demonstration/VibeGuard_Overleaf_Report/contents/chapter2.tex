@@ -50,10 +50,10 @@ where $w[n]$ represents a smoothing window (such as a Hann window) applied to su
 \label{tab:lit_comparison}
 \small
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{|l|p{3.2cm}|p{3.4cm}|p{3.4cm}|p{3.6cm}|}
-\hline
+\begin{tabular}{l p{3.2cm} p{3.4cm} p{3.4cm} p{3.6cm}}
+\toprule
 \textbf{Parameter} & \textbf{Manual / Tactile Inspection} & \textbf{Cloud-Streaming IIoT} & \textbf{Embedded Neural Networks} & \textbf{Proposed VibeGuard System} \\
-\hline
+\midrule
 Hardware Cost & Minimal (Handheld tool) & High ($>\$500$ per node) & Medium ($\approx \$100$ MCU/NPU) & \textbf{Low ($<\$30$ total BOM)} \\
 Network Dependency & None & Continuous Wi-Fi / 4G / 5G & Periodic sync & \textbf{Zero (Autonomous Local Edge)} \\
 Detection Latency & Days to Weeks (Periodic) & 5 -- 30 seconds (Network lag) & 1 -- 3 seconds & \textbf{1.28 seconds} \\
@@ -61,7 +61,7 @@ Explainability & Subjective human opinion & Black-box cloud heuristics & Black-b
 False-Alarm Rejection & Inconsistent & Moderate & Moderate (Susceptible to drift) & \textbf{Deterministic $K$-of-$M$ Persistence} \\
 Power Footprint & 0\,W & 3 -- 10\,W & 2 -- 5\,W & \textbf{$<1.5$\,W} \\
 Multi-Stage Alerting & Binary (Good / Fail) & Server dashboard alerts & Soft probability scores & \textbf{Hardware RGB LED + Telemetry} \\
-\hline
+\bottomrule
 \end{tabular}%
 }
 \end{table}

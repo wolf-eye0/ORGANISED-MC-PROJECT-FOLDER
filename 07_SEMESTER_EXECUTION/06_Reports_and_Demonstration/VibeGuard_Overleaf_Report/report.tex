@@ -35,6 +35,7 @@
 \usepackage{multicol}
 \usepackage{pdflscape}
 \usepackage{booktabs}
+\usepackage{tabularx}
 \usepackage{float}
 \usepackage{graphicx}
 
@@ -172,7 +173,14 @@
 \include{contents/chapter4}
 \include{contents/chapter5}
 \include{contents/chapter6}
-\include{contents/chapter7}
+
+\phantomsection
+\addcontentsline{toc}{chapter}{\normalsize \hspace*{.2in}\textbf{REFERENCES}}
 \include{contents/references}
+
+\appendix
+\phantomsection
+\addcontentsline{toc}{chapter}{\normalsize \hspace*{.2in}\textbf{APPENDIX A: CORE FIRMWARE CODE}}
+\include{contents/appendix}
 
 \end{document}

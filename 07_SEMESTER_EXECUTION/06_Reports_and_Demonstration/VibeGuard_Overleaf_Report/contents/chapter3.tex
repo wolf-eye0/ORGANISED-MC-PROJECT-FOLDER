@@ -44,21 +44,22 @@ Table~\ref{tab:pinout} details the frozen peripheral pin mapping between the 7Se
 \centering
 \caption{VibeGuard hardware peripheral pinout mapping}
 \label{tab:pinout}
-\begin{tabular}{|l|c|l|l|}
-\hline
+\small
+\begin{tabularx}{\textwidth}{l c l X}
+\toprule
 \textbf{Peripheral Signal} & \textbf{ESP32 GPIO} & \textbf{Header Location} & \textbf{Operational Function} \\
-\hline
+\midrule
 ADXL345 SCLK & GPIO18 & VSPI Clock & 5\,MHz SPI Serial Clock \\
-ADXL345 MOSI & GPIO23 & VSPI Data In & Master Out Slave In \\
-ADXL345 MISO & GPIO19 & VSPI Data Out & Master In Slave Out \\
+ADXL345 MOSI & GPIO23 & VSPI Data Out & Master Out Slave In (ESP32 $\to$ Sensor) \\
+ADXL345 MISO & GPIO19 & VSPI Data In & Master In Slave Out (Sensor $\to$ ESP32) \\
 ADXL345 CS & GPIO21 & General Output & Active-Low Chip Select (Non-strapping) \\
 ADXL345 INT1 & GPIO4 & Input (Pull-up) & Data-Ready Hardware Interrupt \\
-\hline
-RGB LED Green & GPIO25 & Output & Normal Healthy State Indicator \\
-RGB LED Blue & GPIO26 & Output & Calibration / Booting Indicator \\
-RGB LED Red & GPIO27 & Output & Abnormal Alarm Indicator \\
-\hline
-\end{tabular}
+\midrule
+RGB LED Green & GPIO25 & Output & Normal Healthy State Indicator (Active HIGH) \\
+RGB LED Blue & GPIO26 & Output & Calibration / Booting Indicator (Active HIGH) \\
+RGB LED Red & GPIO27 & Output & Abnormal Alarm Indicator (Active HIGH) \\
+\bottomrule
+\end{tabularx}
 \end{table}
 
 \hspace{2em}A critical hardware optimization in this design is the formal remapping of the SPI Chip Select (CS) line from the default VSPI pin (GPIO5) to GPIO21. On the ESP32 architecture, GPIO5 is a bootloader strapping pin that controls SDIO bus timing during power-on reset. Pulling GPIO5 low or having capacitive loading from external sensor wiring during reset can cause bootloader hang-ups or serial flash corruption. Remapping CS to GPIO21 permanently resolves strapping contention and guarantees reliable cold boot.
@@ -75,7 +76,7 @@ RGB LED Red & GPIO27 & Output & Abnormal Alarm Indicator \\
 
 As illustrated in Figure~\ref{fig:circuit_schematic}:
 \begin{itemize}
-    \item \textbf{Inductive Flyback Clamping:} A 1N4007 fast recovery diode is placed in antiparallel across the N20 motor terminals. When the motor is switched off, inductive back-EMF spikes (which can exceed 80\,V) are safely clamped, preventing inductive transients from coupling into adjacent signal tracks.
+    \item \textbf{Inductive Flyback Clamping:} A 1N4007 general-purpose silicon rectifier diode is placed in antiparallel across the N20 motor terminals. When the motor is switched off, inductive back-EMF spikes (which can exceed 80\,V) are safely clamped, preventing inductive transients from coupling into adjacent signal tracks.
     \item \textbf{Brownout Protection Network:} A $100\,\mu\text{F}$ 25\,V low-ESR electrolytic capacitor in parallel with a $100\,\text{nF}$ monolithic ceramic capacitor is installed directly across the 3.3\,V and GND rails of the ESP32 carrier board. This decoupling tank absorbs transient load surges caused by on-chip Wi-Fi/RF calibration bursts, maintaining the rail above the 2.7\,V brownout detection threshold.
     \item \textbf{Isolated Grounds:} The 12\,V DC motor power supply loop is physically isolated from the 5\,V USB logic rail, eliminating ground loops.
 \end{itemize}
@@ -141,21 +142,21 @@ With sampling rate $f_s = 800\,\text{Hz}$ and window size $N = 256$, the spectra
 The Nyquist frequency is $f_{\mathrm{Nyq}} = f_s / 2 = 400.0\,\text{Hz}$, easily covering the fundamental 10.0\,Hz vibration and over 30 higher-order mechanical harmonics.
 
 \section{Substrate-Invariant Rotordynamic DSP (Deep Research Architecture)}
-\hspace{2em}A primary limitation of conventional absolute vibration monitoring ($a_{\mathrm{vec}} \ge \text{Threshold}$) is its vulnerability to mounting surface variations: placing the testbed on a wooden bench, metallic table, or acrylic slab alters mechanical transmissibility by a factor $k_{\mathrm{sub}}$, shifting absolute baseline RMS by up to 200\%. To achieve true physical portability, VibeGuard incorporates an advanced **Substrate-Invariant Rotordynamic Calibration** pipeline engineered around **Homogeneity of Degree Zero**.
+\hspace{2em}A primary limitation of conventional absolute vibration monitoring ($a_{\mathrm{vec}} \ge \text{Threshold}$) is its vulnerability to mounting surface variations: placing the testbed on a wooden bench, metallic table, or acrylic slab alters mechanical transmissibility by a factor $k_{\mathrm{sub}}$, shifting absolute baseline RMS by up to 200\%. To achieve true physical portability, VibeGuard incorporates an advanced \textbf{Substrate-Invariant Rotordynamic Calibration} pipeline engineered around \textbf{Homogeneity of Degree Zero}.
 
 \subsection{4th-Order Butterworth Biquad Low-Pass Filter}
 \hspace{2em}In small gear motors such as the N20, high-frequency spur gear tooth mesh impacts ($150\text{--}350\,\text{Hz}$) generate substantial high-crest impulse energy that pollutes unbalance detection. VibeGuard routes the raw zero-mean acceleration stream through a cascaded 4th-order Butterworth Direct Form II biquad low-pass filter with a sharp $25.0\,\text{Hz}$ cut-off:
 \begin{equation}
 H(z) = \prod_{k=1}^{2} \frac{b_{0,k} + b_{1,k} z^{-1} + b_{2,k} z^{-2}}{1 + a_{1,k} z^{-1} + a_{2,k} z^{-2}}
 \end{equation}
-This filter attenuates gear mesh harmonics by over $36\,\text{dB}$ while preserving the fundamental synchronous unbalance frequency ($f_{\mathrm{rot}} \approx 10.0\,\text{Hz}$) with zero passband distortion.
+This filter attenuates gear mesh harmonics by over $36\,\text{dB}$ while preserving the fundamental synchronous unbalance frequency ($f_{\mathrm{rot}} \approx 10.0\,\text{Hz}$) with minimal passband attenuation ($<0.5$\,dB) across the fundamental operational shaft speed band.
 
 \subsection{Sensorless Shaft Speed Tracking and Speed-Sag Compensation}
 \hspace{2em}Under heavy physical unbalance, motor torque demand increases, causing the motor shaft speed to droop (sag) from $10.5\,\text{Hz}$ to $9.2\,\text{Hz}$. Because centrifugal force scales quadratically with speed ($F_c \propto \omega^2$), a drop in RPM artificially diminishes measured unbalance acceleration. VibeGuard implements a lightweight sensorless tachometer via bounded-lag autocorrelation:
 \begin{equation}
 R_{xx}[k] = \sum_{n=0}^{N-k-1} x'[n] x'[n+k], \quad k \in [55, 105] \quad (7.5\text{--}14.0\,\text{Hz})
 \end{equation}
-Using a 3-point parabolic interpolation on the maximum autocorrelation lag $k_{\mathrm{max}}$, the instantaneous shaft frequency $\hat{f}_1(t)$ is estimated in under $40\,\mu\text{s}$ ($51$ MAC operations). The speed-sag compensation factor is formulated as:
+Using a 3-point parabolic interpolation on the maximum autocorrelation lag $k_{\mathrm{max}}$, the instantaneous shaft frequency $\hat{f}_1(t)$ is estimated across 51 candidate lags ($k \in [55, 105]$) in under $2.8\,\text{ms}$ on the 160\,MHz Xtensa core. The speed-sag compensation factor is formulated as:
 \begin{equation}
 C_{\mathrm{sag}} = \left(\frac{f_{1,0}}{\hat{f}_1(t)}\right)^2
 \end{equation}
@@ -171,7 +172,7 @@ J(t) = C_{\mathrm{sag}} \left[ 0.55 \left(\frac{E_{xy,\mathrm{LF}}}{E_{xy,\mathr
 \begin{equation}
 \frac{k_{\mathrm{sub}}^2 \cdot E_{xy,\mathrm{LF}}}{k_{\mathrm{sub}}^2 \cdot E_{xy,\mathrm{LF},0}} = \frac{E_{xy,\mathrm{LF}}}{E_{xy,\mathrm{LF},0}}, \quad \frac{k_{\mathrm{sub}} \cdot R_x}{k_{\mathrm{sub}} \cdot R_{x,0}} = \frac{R_x}{R_{x,0}}, \quad \frac{\mathrm{CF}}{\mathrm{CF}_0} \text{ (scale-invariant)}
 \end{equation}
-Because every constituent term is a dimensionless quotient of current vs.\ baseline quantities, $k_{\mathrm{sub}}$ cancels identically ($k_{\mathrm{sub}}^0 = 1$). Consequently, $J(t)$ possesses mathematical homogeneity of degree zero, guaranteeing identical threshold performance across any mounting substrate without recalibration.
+Because every constituent term is a dimensionless quotient of current vs.\ baseline quantities, $k_{\mathrm{sub}}$ cancels identically ($k_{\mathrm{sub}}^0 = 1$). Consequently, $J(t)$ possesses mathematical homogeneity of degree zero, providing robust mathematical suppression of common-mode substrate compliance scaling under isotropic structural mounting conditions.
 
 \subsection{Crest-Gated Huber Innovation Limiter}
 \hspace{2em}To eliminate false alarms caused by accidental table knocks or gear backlash jolts ($<300\,\text{ms}$), a crest-factor shock gate evaluates raw samples:
@@ -211,8 +212,11 @@ From this empirical baseline dispersion, an automated non-overlapping hysteresis
     \State Compute dimensionless rotordynamic condition metric $J(t)$ using Eq.~\eqref{eq:j_metric}
     \State Apply Huber shock limiter ($\mathrm{CF} > 4.80$ gate, $\Delta_H = 2.20$)
     \State Update circular history queues of depth $M = 5$
-    \If{$J(t) \ge T_{12}$ ($V \ge K$)}
-        \State $\text{State} \gets \texttt{STATE\_ALARM}$; Assert Fast Red Strobe ($6.25$\,Hz)
+    \If{$J(t) \ge T_{23}$ ($V \ge K$)}
+        \State $\text{State} \gets \texttt{STATE\_CRITICAL\_ALARM}$; Assert Fast Red Strobe ($6.25$\,Hz)
+        \State Apply Hann window $w(n)$ to $x'$ and execute Radix-2 FFT; extract $f_{\mathrm{peak}}$
+    \ElsIf{$J(t) \ge T_{12}$ ($V \ge K$)}
+        \State $\text{State} \gets \texttt{STATE\_ALARM}$; Assert Flashing Red LED ($3.12$\,Hz)
         \State Apply Hann window $w(n)$ to $x'$ and execute Radix-2 FFT; extract $f_{\mathrm{peak}}$
     \ElsIf{$J(t) \ge T_{01}$ ($V \ge K$)}
         \State $\text{State} \gets \texttt{STATE\_WARNING}$; Assert Solid Yellow LED
@@ -229,13 +233,13 @@ From this empirical baseline dispersion, an automated non-overlapping hysteresis
 
 \begin{figure}[H]
 \centering
-\resizebox{0.78\textwidth}{!}{%
+\resizebox{!}{0.62\textheight}{%
 \begin{tikzpicture}[
-    node distance=1.3cm and 2.0cm,
+    node distance=0.8cm and 1.6cm,
     every node/.style={font=\small},
-    startstop/.style={draw, rectangle, rounded corners=12pt, minimum width=3.2cm, minimum height=0.8cm, align=center, fill=gray!15, thick},
-    process/.style={draw, rectangle, minimum width=3.4cm, minimum height=0.8cm, align=center, fill=blue!10, thick},
-    decision/.style={draw, diamond, aspect=2, minimum width=3.2cm, minimum height=1.0cm, align=center, fill=orange!15, thick},
+    startstop/.style={draw, rectangle, rounded corners=12pt, minimum width=3.2cm, minimum height=0.75cm, align=center, fill=gray!15, thick},
+    process/.style={draw, rectangle, minimum width=3.4cm, minimum height=0.75cm, align=center, fill=blue!10, thick},
+    decision/.style={draw, diamond, aspect=2, minimum width=3.2cm, minimum height=0.9cm, align=center, fill=orange!15, thick},
     arrow/.style={->, >=stealth, thick}
 ]
 
