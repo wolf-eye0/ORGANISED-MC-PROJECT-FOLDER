@@ -76,6 +76,70 @@
       <article class="metric-cell margin-cell"><span class="metric-label">Threshold margin</span><div><strong id="marginValue">—</strong><span class="unit">g</span></div><div class="threshold-track"><i id="marginTrack"></i><b id="warningTick"></b><b id="alarmTick"></b></div><span class="metric-support" id="marginSupport">Until warning</span></article>
     </section>
 
+    <section class="panel calibration-panel" id="fieldCalPanel" aria-labelledby="fieldCalTitle">
+      <div class="panel-header">
+        <div><p class="eyebrow">RAPID FIELD COMMISSIONING</p><h2 id="fieldCalTitle">Interactive 3-Stage Calibration &amp; Quadrature Tare</h2></div>
+        <div class="cal-status-badge" id="calStatusBadge">IDLE</div>
+      </div>
+      <p class="panel-copy">Calibrate on any classroom table in under 15 seconds. Motor-off tare zeroes the floor; 3-stage recording establishes exact threshold corridors and auto-saves to ESP32 Flash memory.</p>
+
+      <div class="cal-grid">
+        <!-- Card 0: Tare Floor -->
+        <div class="cal-card" id="calCardTare">
+          <div class="cal-card-header">
+            <span class="cal-step-num">0</span>
+            <div><strong>Tare Floor</strong><small>Motor OFF (zero baseline)</small></div>
+          </div>
+          <div class="cal-card-val"><span id="calTareVal">—</span> <span class="unit">g</span></div>
+          <button type="button" class="cal-btn" id="btnTare">Start Tare</button>
+        </div>
+
+        <!-- Card 1: Stage 0 Normal -->
+        <div class="cal-card s0" id="calCardS0">
+          <div class="cal-card-header">
+            <span class="cal-step-num">1</span>
+            <div><strong>Stage 0 (Green)</strong><small>Motor ON, Bare Arm</small></div>
+          </div>
+          <div class="cal-card-val"><span id="calS0Val">—</span> <span class="unit">g</span></div>
+          <button type="button" class="cal-btn" id="btnCalS0">Start Stage 0</button>
+        </div>
+
+        <!-- Card 2: Stage 1 Warning -->
+        <div class="cal-card s1" id="calCardS1">
+          <div class="cal-card-header">
+            <span class="cal-step-num">2</span>
+            <div><strong>Stage 1 (Yellow)</strong><small>Bolt Only (~2.5g)</small></div>
+          </div>
+          <div class="cal-card-val"><span id="calS1Val">—</span> <span class="unit">g</span></div>
+          <button type="button" class="cal-btn" id="btnCalS1">Start Stage 1</button>
+        </div>
+
+        <!-- Card 3: Stage 2 Alarm -->
+        <div class="cal-card s2" id="calCardS2">
+          <div class="cal-card-header">
+            <span class="cal-step-num">3</span>
+            <div><strong>Stage 2 (Red)</strong><small>Bolt + Nut (~3.4g)</small></div>
+          </div>
+          <div class="cal-card-val"><span id="calS2Val">—</span> <span class="unit">g</span></div>
+          <button type="button" class="cal-btn" id="btnCalS2">Start Stage 2</button>
+        </div>
+      </div>
+
+      <!-- Action Footer with Threshold Corridors and Reset -->
+      <div class="cal-footer">
+        <div class="cal-results">
+          <span>Warning: <strong id="calActiveWarn">—</strong> g</span>
+          <span>Alarm: <strong id="calActiveAlarm">—</strong> g</span>
+          <span>Tare: <strong id="calActiveTare">0.00000</strong> g</span>
+        </div>
+        <div class="cal-actions">
+          <button type="button" class="secondary-button" id="btnCalReset">Revert Factory Defaults</button>
+          <button type="button" class="primary-button" id="btnCalCommit" disabled>Save Thresholds to Flash</button>
+        </div>
+      </div>
+      <div id="calFeedback" class="cal-feedback" role="status"></div>
+    </section>
+
     <section class="panel trend-panel" aria-labelledby="trendTitle">
       <div class="panel-header">
         <div><p class="eyebrow">PRIMARY EVIDENCE</p><h2 id="trendTitle">Overall vibration</h2></div>

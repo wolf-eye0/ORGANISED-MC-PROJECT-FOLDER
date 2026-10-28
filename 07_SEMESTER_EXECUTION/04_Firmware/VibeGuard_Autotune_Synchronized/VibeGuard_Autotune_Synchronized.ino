@@ -204,6 +204,23 @@ Preferences g_preferences;
 ProfileData g_profile{};
 CandidateData g_candidate{};
 
+// Rapid Field Calibration & Quadrature Tare globals
+enum CalStreamingMode : int8_t {
+  STREAM_CAL_IDLE = -1,
+  STREAM_CAL_STAGE0 = 0,
+  STREAM_CAL_STAGE1 = 1,
+  STREAM_CAL_STAGE2 = 2,
+  STREAM_CAL_TARE = 99
+};
+
+int8_t g_stream_cal_mode = STREAM_CAL_IDLE;
+uint32_t g_stream_cal_start_ms = 0;
+uint32_t g_stream_cal_count = 0;
+double g_stream_cal_sum = 0.0;
+float g_calibrated_stage_vrms[3] = {0.206f, 0.840f, 1.079f};
+bool g_stage_calibrated[3] = {false, false, false};
+float g_tare_floor_g = 0.0f;
+
 float g_learn_values[MAX_LEARN_WINDOWS];
 float g_scratch[MAX_LEARN_WINDOWS];
 float g_run_medians[REQUIRED_HEALTHY_RUNS] = {0};
@@ -268,7 +285,15 @@ void setRGB(bool r, bool g, bool b) {
 void applyIndicator() {
   if (!g_sensor_ready || g_mode == OperatingMode::SENSOR_FAULT ||
       g_committed_state == ConditionState::SENSOR_FAULT) {
-    setRGB(true, false, true);  // Magenta: sensor/acquisition fault
+    setRGB(true, false, true);  // Solid Magenta: sensor/acquisition fault
+    return;
+  }
+
+  // Active Field Calibration / Tare streaming recording:
+  if (g_stream_cal_mode != STREAM_CAL_IDLE) {
+    // Pulsing Purple (Red + Blue simultaneously at 4 Hz: 125 ms ON / 125 ms OFF)
+    bool pulse = ((millis() / 125) % 2) == 0;
+    setRGB(pulse, false, pulse);
     return;
   }
 
@@ -400,6 +425,13 @@ bool loadProfile() {
   if (stored == sizeof(ProfileData)) {
     g_preferences.getBytes(PROFILE_KEY, &g_profile, sizeof(ProfileData));
   }
+  g_tare_floor_g = g_preferences.getFloat("tare_floor", 0.0f);
+  g_calibrated_stage_vrms[0] = g_preferences.getFloat("s0_vrms", 0.206f);
+  g_calibrated_stage_vrms[1] = g_preferences.getFloat("s1_vrms", 0.840f);
+  g_calibrated_stage_vrms[2] = g_preferences.getFloat("s2_vrms", 1.079f);
+  g_stage_calibrated[0] = g_preferences.getBool("s0_cal", false);
+  g_stage_calibrated[1] = g_preferences.getBool("s1_cal", false);
+  g_stage_calibrated[2] = g_preferences.getBool("s2_cal", false);
   g_preferences.end();
 
   if (!profileStructValid(g_profile)) {
@@ -412,17 +444,6 @@ bool loadProfile() {
   g_profile.warning_persist = DEFAULT_WARN_PERSIST;
   g_profile.alarm_persist = DEFAULT_ALARM_PERSIST;
   g_profile.recovery_persist = DEFAULT_RECOVERY_PERSIST;
-
-  // Synchronized physical Vector RMS display thresholds:
-  // Baseline = ~0.745g (Green) | Bolt Only = ~0.800g (Yellow) | Bolt + 1/2 Nuts = ~0.900g (Red)
-  if (fabsf(g_profile.warning_enter - 0.80000f) > 0.005f || fabsf(g_profile.alarm_enter - 0.90000f) > 0.005f) {
-    g_profile.baseline_rms = 0.74500f;
-    g_profile.warning_enter = 0.80000f;
-    g_profile.warning_exit = 0.77000f;
-    g_profile.alarm_enter = 0.90000f;
-    g_profile.alarm_exit = 0.86000f;
-    saveProfile();
-  }
   return true;
 }
 
@@ -430,6 +451,13 @@ bool saveProfile() {
   g_profile.crc32 = profileCrc(g_profile);
   if (!g_preferences.begin(PROFILE_NAMESPACE, false)) return false;
   size_t written = g_preferences.putBytes(PROFILE_KEY, &g_profile, sizeof(ProfileData));
+  g_preferences.putFloat("tare_floor", g_tare_floor_g);
+  g_preferences.putFloat("s0_vrms", g_calibrated_stage_vrms[0]);
+  g_preferences.putFloat("s1_vrms", g_calibrated_stage_vrms[1]);
+  g_preferences.putFloat("s2_vrms", g_calibrated_stage_vrms[2]);
+  g_preferences.putBool("s0_cal", g_stage_calibrated[0]);
+  g_preferences.putBool("s1_cal", g_stage_calibrated[1]);
+  g_preferences.putBool("s2_cal", g_stage_calibrated[2]);
   g_preferences.end();
   return written == sizeof(ProfileData);
 }
@@ -437,9 +465,20 @@ bool saveProfile() {
 void eraseSavedProfile() {
   if (g_preferences.begin(PROFILE_NAMESPACE, false)) {
     g_preferences.remove(PROFILE_KEY);
+    g_preferences.remove("tare_floor");
+    g_preferences.remove("s0_vrms");
+    g_preferences.remove("s1_vrms");
+    g_preferences.remove("s2_vrms");
+    g_preferences.remove("s0_cal");
+    g_preferences.remove("s1_cal");
+    g_preferences.remove("s2_cal");
     g_preferences.end();
   }
   clearProfileRam();
+  g_tare_floor_g = 0.0f;
+  g_stage_calibrated[0] = false;
+  g_stage_calibrated[1] = false;
+  g_stage_calibrated[2] = false;
   memset(&g_candidate, 0, sizeof(g_candidate));
   resetConditionCounters();
   g_mode = OperatingMode::NO_PROFILE;
@@ -587,6 +626,26 @@ WindowMetrics sampleWindowMetrics() {
   out.stage_4 = static_cast<uint8_t>(tf.committedStage);
   out.condition_vrms = tf.r3d;
   out.valid = !out.clipped && isfinite(out.vector_rms);
+
+  // Quadrature Tare (Root-Difference-of-Squares: V_net = sqrt(V_raw^2 - V_floor^2))
+  if (out.valid && g_tare_floor_g > 0.0005f) {
+    float raw_sq = out.vector_rms * out.vector_rms;
+    float tare_sq = g_tare_floor_g * g_tare_floor_g;
+    float net_sq = raw_sq - tare_sq;
+    out.vector_rms = (net_sq > 0.0f) ? sqrtf(net_sq) : 0.0f;
+    out.condition_vrms = out.vector_rms;
+  }
+
+  // Active Streaming Field Calibration Accumulator
+  if (out.valid && g_stream_cal_mode != STREAM_CAL_IDLE) {
+    g_stream_cal_count++;
+    if (g_stream_cal_mode == STREAM_CAL_TARE) {
+      g_stream_cal_sum += tf.r3d; // Raw floor
+    } else {
+      g_stream_cal_sum += out.vector_rms; // Net RMS
+    }
+  }
+
   return out;
 }
 
@@ -1005,16 +1064,16 @@ void printTelemetry(const WindowMetrics& m) {
   const char* state = conditionName(g_committed_state);
 
   // Plotter-style line (compatible with server.js & web dashboard)
-  Serial.printf(">VRMS:%.5f,Baseline:%.5f,WarnLimit:%.5f,AlarmLimit:%.5f,State:%s,J:%.4f,f1:%.2f,Stage:%u,Shock:%d\n",
+  Serial.printf(">VRMS:%.5f,Baseline:%.5f,WarnLimit:%.5f,AlarmLimit:%.5f,State:%s,J:%.4f,f1:%.2f,Stage:%u,Shock:%d,Tare:%.5f\n",
                 m.condition_vrms, baseline, warning, alarm, state,
-                m.j_smooth, m.f1_hz, m.stage_4, m.shock_rejected ? 1 : 0);
+                m.j_smooth, m.f1_hz, m.stage_4, m.shock_rejected ? 1 : 0, g_tare_floor_g);
 
   // Human-readable live line
   Serial.printf("[LIVE] VRMS: %7.5f g | J(t): %6.2f | Stage: %u | Condition: [%-12s] | Mode: %-20s\n",
                 m.condition_vrms, m.j_smooth, m.stage_4, state, modeName(g_mode));
 
   // Machine-readable tagged telemetry for bridge.py / server.js
-  Serial.printf("[DATA] schema=3 seq=%lu device_ms=%lu mode=%s state=%s stage4=%u J=%.4f f1=%.2f cSag=%.2f shock=%d forced=%d profile=%s approved=%d mass_g=%.2f mean=(%.5f,%.5f,%.5f) rms=(%.5f,%.5f,%.5f) vector=%.5f peak=%.5f crest=%.4f baseline=%.5f warning=%.5f alarm=%.5f valid=%d clipped=%d\n",
+  Serial.printf("[DATA] schema=3 seq=%lu device_ms=%lu mode=%s state=%s stage4=%u J=%.4f f1=%.2f cSag=%.2f shock=%d forced=%d profile=%s approved=%d mass_g=%.2f mean=(%.5f,%.5f,%.5f) rms=(%.5f,%.5f,%.5f) vector=%.5f peak=%.5f crest=%.4f baseline=%.5f warning=%.5f alarm=%.5f valid=%d clipped=%d tare=%.5f calMode=%d calSec=%.1f\n",
                 ++g_sequence, millis(), modeName(g_mode), state, m.stage_4,
                 m.j_smooth, m.f1_hz, m.c_sag, m.shock_rejected ? 1 : 0,
                 g_forced_alarm,
@@ -1023,7 +1082,10 @@ void printTelemetry(const WindowMetrics& m) {
                 m.mean_x, m.mean_y, m.mean_z,
                 m.rms_x, m.rms_y, m.rms_z,
                 m.vector_rms, m.peak_vector, m.crest_factor,
-                baseline, warning, alarm, m.valid, m.clipped);
+                baseline, warning, alarm, m.valid, m.clipped,
+                g_tare_floor_g,
+                static_cast<int>(g_stream_cal_mode),
+                (g_stream_cal_mode != STREAM_CAL_IDLE) ? ((millis() - g_stream_cal_start_ms) / 1000.0f) : 0.0f);
 }
 
 // ============================================================================
@@ -1092,16 +1154,14 @@ void setPendingMass(const String& value) {
 }
 
 void setCustomThresholds(float warnVal, float alarmVal) {
-  if (!g_profile.approved) {
-    Serial.println("[COMMAND] ack=SET_THRESHOLDS ok=0 reason=NO_APPROVED_PROFILE");
-    return;
-  }
-  if (warnVal <= g_profile.baseline_rms || alarmVal <= warnVal) {
+  if (warnVal <= 0.05f || alarmVal <= warnVal) {
     Serial.println("[COMMAND] ack=SET_THRESHOLDS ok=0 reason=INVALID_THRESHOLDS");
     return;
   }
+  g_profile.approved = 1;
   g_profile.warning_enter = warnVal;
-  g_profile.warning_exit = g_profile.baseline_rms + WARN_EXIT_FRACTION * (g_profile.warning_enter - g_profile.baseline_rms);
+  float base = g_profile.baseline_rms > 0.01f ? g_profile.baseline_rms : 0.206f;
+  g_profile.warning_exit = base + WARN_EXIT_FRACTION * (g_profile.warning_enter - base);
   g_profile.alarm_enter = alarmVal;
   g_profile.alarm_exit = g_profile.warning_enter + ALARM_EXIT_FRACTION * (g_profile.alarm_enter - g_profile.warning_enter);
   saveProfile();
@@ -1109,6 +1169,109 @@ void setCustomThresholds(float warnVal, float alarmVal) {
   commitState(ConditionState::NORMAL);
   Serial.printf("[COMMAND] ack=SET_THRESHOLDS ok=1 warn_enter=%.5f warn_exit=%.5f alarm_enter=%.5f alarm_exit=%.5f\n",
                 g_profile.warning_enter, g_profile.warning_exit, g_profile.alarm_enter, g_profile.alarm_exit);
+}
+
+void startStreamingCalibration(int8_t mode) {
+  g_stream_cal_mode = mode;
+  g_stream_cal_start_ms = millis();
+  g_stream_cal_count = 0;
+  g_stream_cal_sum = 0.0;
+  applyIndicator();
+  if (mode == STREAM_CAL_TARE) {
+    Serial.println("[CAL_STREAM] ack=TARE_START ok=1 status=RECORDING_TARE min_duration_s=3");
+  } else {
+    Serial.printf("[CAL_STREAM] ack=CAL_START ok=1 stage=%d status=RECORDING min_duration_s=3\n", mode);
+  }
+}
+
+void stopStreamingCalibration() {
+  if (g_stream_cal_mode == STREAM_CAL_IDLE) {
+    Serial.println("[CAL_STREAM] ack=STOP ok=0 reason=NO_ACTIVE_RECORDING");
+    return;
+  }
+
+  uint32_t elapsed_ms = millis() - g_stream_cal_start_ms;
+  if (elapsed_ms < 3000) {
+    Serial.printf("[CAL_STREAM] ack=STOP ok=0 reason=MIN_3_SECONDS_REQUIRED elapsed_ms=%lu remaining_ms=%lu count=%u\n",
+                  elapsed_ms, 3000 - elapsed_ms, g_stream_cal_count);
+    return;
+  }
+
+  if (g_stream_cal_count == 0) {
+    Serial.println("[CAL_STREAM] ack=STOP ok=0 reason=NO_VALID_SAMPLES_CAPTURED");
+    g_stream_cal_mode = STREAM_CAL_IDLE;
+    applyIndicator();
+    return;
+  }
+
+  float avg = static_cast<float>(g_stream_cal_sum / g_stream_cal_count);
+
+  if (g_stream_cal_mode == STREAM_CAL_TARE) {
+    g_tare_floor_g = avg;
+    g_stream_cal_mode = STREAM_CAL_IDLE;
+    saveProfile();
+    applyIndicator();
+    Serial.printf("[CAL_STREAM] ack=TARE_STOP ok=1 tare_floor_g=%.5f elapsed_s=%.1f samples=%u\n",
+                  g_tare_floor_g, elapsed_ms / 1000.0f, g_stream_cal_count);
+  } else {
+    int stage = g_stream_cal_mode;
+    g_calibrated_stage_vrms[stage] = avg;
+    g_stage_calibrated[stage] = true;
+    g_stream_cal_mode = STREAM_CAL_IDLE;
+    saveProfile();
+    applyIndicator();
+    Serial.printf("[CAL_STREAM] ack=CAL_STOP ok=1 stage=%d avg_vrms=%.5f elapsed_s=%.1f samples=%u\n",
+                  stage, avg, elapsed_ms / 1000.0f, g_stream_cal_count);
+  }
+}
+
+void commitCalibratedThresholds() {
+  float v0 = g_stage_calibrated[0] ? g_calibrated_stage_vrms[0] : 0.206f;
+  float v1 = g_stage_calibrated[1] ? g_calibrated_stage_vrms[1] : (v0 + 0.50f);
+  float v2 = g_stage_calibrated[2] ? g_calibrated_stage_vrms[2] : (v1 + 0.35f);
+
+  if (v1 <= v0) v1 = v0 + 0.20f;
+  if (v2 <= v1) v2 = v1 + 0.25f;
+
+  float warn_enter = v0 + 0.50f * (v1 - v0);
+  float warn_exit  = v0 + 0.25f * (v1 - v0);
+  float alarm_enter = v1 + 0.50f * (v2 - v1);
+  float alarm_exit  = v1 + 0.25f * (v2 - v1);
+
+  g_profile.baseline_rms = v0;
+  g_profile.warning_enter = warn_enter;
+  g_profile.warning_exit = warn_exit;
+  g_profile.alarm_enter = alarm_enter;
+  g_profile.alarm_exit = alarm_exit;
+  g_profile.approved = 1;
+  saveProfile();
+  resetConditionCounters();
+  commitState(ConditionState::NORMAL);
+
+  Serial.printf("[CAL_STREAM] ack=CAL_COMMIT ok=1 v0=%.5f v1=%.5f v2=%.5f warn_enter=%.5f warn_exit=%.5f alarm_enter=%.5f alarm_exit=%.5f tare=%.5f\n",
+                v0, v1, v2, warn_enter, warn_exit, alarm_enter, alarm_exit, g_tare_floor_g);
+}
+
+void resetCalibrationDefaults() {
+  g_tare_floor_g = 0.0f;
+  g_calibrated_stage_vrms[0] = 0.20600f;
+  g_calibrated_stage_vrms[1] = 0.84000f;
+  g_calibrated_stage_vrms[2] = 1.07900f;
+  g_stage_calibrated[0] = false;
+  g_stage_calibrated[1] = false;
+  g_stage_calibrated[2] = false;
+
+  g_profile.baseline_rms = 0.20600f;
+  g_profile.warning_enter = 0.80000f;
+  g_profile.warning_exit = 0.75000f;
+  g_profile.alarm_enter = 0.95000f;
+  g_profile.alarm_exit = 0.88000f;
+  g_profile.approved = 1;
+  saveProfile();
+  resetConditionCounters();
+  commitState(ConditionState::NORMAL);
+
+  Serial.println("[CAL_STREAM] ack=CAL_RESET ok=1 baseline=0.20600 warn=0.80000 alarm=0.95000 tare=0.00000");
 }
 
 void setCustomAlarm(float alarmVal) {
@@ -1159,6 +1322,25 @@ void handleCommand(String command) {
   else if (upper == "CAL_CANCEL") cancelCalibration();
   else if (upper == "PROFILE_CLEAR") eraseSavedProfile();
   else if (upper == "STATUS") printStatus();
+  else if (upper == "TARE_START" || upper == "TARE") startStreamingCalibration(STREAM_CAL_TARE);
+  else if (upper == "TARE_STOP") stopStreamingCalibration();
+  else if (upper.startsWith("CAL_START")) {
+    int stage = 0;
+    String arg = command.substring(9);
+    arg.trim();
+    if (arg.length() > 0) {
+      if (arg.startsWith("=") || arg.startsWith("_") || arg.startsWith(" ")) {
+        arg = arg.substring(1);
+        arg.trim();
+      }
+      stage = arg.toInt();
+    }
+    if (stage < 0 || stage > 2) stage = 0;
+    startStreamingCalibration(static_cast<int8_t>(stage));
+  }
+  else if (upper == "CAL_STOP") stopStreamingCalibration();
+  else if (upper == "CAL_COMMIT" || upper == "CAL_SAVE") commitCalibratedThresholds();
+  else if (upper == "CAL_RESET" || upper == "CAL_DEFAULT") resetCalibrationDefaults();
   else if (upper.startsWith("SET_ALARM=")) {
     float a = command.substring(10).toFloat();
     setCustomAlarm(a);

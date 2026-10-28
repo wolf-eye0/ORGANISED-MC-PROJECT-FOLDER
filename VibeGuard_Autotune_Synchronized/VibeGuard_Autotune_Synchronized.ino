@@ -4,6 +4,10 @@
 #include <cmath>
 #include <cstring>
 #include <cstddef>
+#include "VibeGuardEngine.h"
+
+// Global Deep Research DSP Engine
+VibeGuardEngine g_vibeEngine;
 
 // ============================================================================
 // VIBEGUARD: BENCHMARK LOGGER + AUTOTUNING + SYNCHRONIZED MONITORING
@@ -47,10 +51,10 @@
 #define RMS_WARN_LIMIT 0.35f
 #define RMS_ALARM_LIMIT 0.70f
 
-// Faster than the original 128-sample window while retaining the same 800 Hz loop.
+// 128-sample window (160 ms) covers 1.6 rotations at 600 RPM for smooth cycle integration.
 #define SAMPLE_RATE_HZ 800
 #define SAMPLE_PERIOD_US 1250UL
-#define BUFFER_SIZE 64
+#define BUFFER_SIZE 128
 
 #define PROFILE_MAGIC 0x56474233UL
 #define PROFILE_SCHEMA 3
@@ -76,17 +80,17 @@
 #define REPEATABILITY_REL_LIMIT 0.25f
 #define REPEATABILITY_ABS_LIMIT_G 0.020f
 #define WARN_K_SPREAD 4.0f
-#define ALARM_K_SPREAD 8.0f
-#define WARN_MIN_MARGIN_G 0.020f
-#define ALARM_MIN_MARGIN_G 0.050f
+#define ALARM_K_SPREAD 12.0f
+#define WARN_MIN_MARGIN_G 0.090f
+#define ALARM_MIN_MARGIN_G 0.300f
 #define WARN_NOISE_MULTIPLIER 2.0f
 #define ALARM_NOISE_MULTIPLIER 4.0f
-#define MIN_THRESHOLD_GAP_G 0.020f
-#define WARN_EXIT_FRACTION 0.65f
-#define ALARM_EXIT_FRACTION 0.70f
-#define DEFAULT_WARN_PERSIST 3
-#define DEFAULT_ALARM_PERSIST 2
-#define DEFAULT_RECOVERY_PERSIST 8
+#define MIN_THRESHOLD_GAP_G 0.050f
+#define WARN_EXIT_FRACTION 0.60f
+#define ALARM_EXIT_FRACTION 0.75f
+#define DEFAULT_WARN_PERSIST 4
+#define DEFAULT_ALARM_PERSIST 4
+#define DEFAULT_RECOVERY_PERSIST 6
 #define INVALID_WINDOWS_FOR_FAULT 5
 #define CLIP_LIMIT_G 15.5f
 
@@ -123,6 +127,14 @@ struct WindowMetrics {
   float vector_rms;
   float peak_vector;
   float crest_factor;
+  float unbalance_1x;
+  float condition_vrms;
+  float j_val;
+  float j_smooth;
+  float f1_hz;
+  float c_sag;
+  bool shock_rejected;
+  uint8_t stage_4;
   bool valid;
   bool clipped;
 };
@@ -192,6 +204,23 @@ Preferences g_preferences;
 ProfileData g_profile{};
 CandidateData g_candidate{};
 
+// Rapid Field Calibration & Quadrature Tare globals
+enum CalStreamingMode : int8_t {
+  STREAM_CAL_IDLE = -1,
+  STREAM_CAL_STAGE0 = 0,
+  STREAM_CAL_STAGE1 = 1,
+  STREAM_CAL_STAGE2 = 2,
+  STREAM_CAL_TARE = 99
+};
+
+int8_t g_stream_cal_mode = STREAM_CAL_IDLE;
+uint32_t g_stream_cal_start_ms = 0;
+uint32_t g_stream_cal_count = 0;
+double g_stream_cal_sum = 0.0;
+float g_calibrated_stage_vrms[3] = {0.206f, 0.840f, 1.079f};
+bool g_stage_calibrated[3] = {false, false, false};
+float g_tare_floor_g = 0.0f;
+
 float g_learn_values[MAX_LEARN_WINDOWS];
 float g_scratch[MAX_LEARN_WINDOWS];
 float g_run_medians[REQUIRED_HEALTHY_RUNS] = {0};
@@ -207,6 +236,7 @@ uint8_t g_warning_count = 0;
 uint8_t g_alarm_count = 0;
 uint8_t g_recovery_count = 0;
 uint8_t g_invalid_window_count = 0;
+float g_smoothed_vrms = -1.0f;
 uint32_t g_sequence = 0;
 uint32_t g_last_telemetry_ms = 0;
 uint32_t g_last_status_ms = 0;
@@ -255,7 +285,20 @@ void setRGB(bool r, bool g, bool b) {
 void applyIndicator() {
   if (!g_sensor_ready || g_mode == OperatingMode::SENSOR_FAULT ||
       g_committed_state == ConditionState::SENSOR_FAULT) {
-    setRGB(true, false, true);  // Magenta: sensor/acquisition fault
+    setRGB(true, false, true);  // Solid Magenta: sensor/acquisition fault
+    return;
+  }
+
+  // Active Field Calibration / Tare streaming recording:
+  if (g_stream_cal_mode != STREAM_CAL_IDLE) {
+    // Pulsing Purple (Red + Blue simultaneously at 4 Hz: 125 ms ON / 125 ms OFF)
+    bool pulse = ((millis() / 125) % 2) == 0;
+    setRGB(pulse, false, pulse);
+    return;
+  }
+
+  if (g_vibeEngine.getCalibrationState() != CAL_IDLE) {
+    setRGB(false, false, true); // Blue: 8.0s Median+MAD calibration active
     return;
   }
 
@@ -273,9 +316,14 @@ void applyIndicator() {
   }
 
   switch (g_committed_state) {
-    case ConditionState::ALARM: setRGB(true, false, false); break;
-    case ConditionState::WARNING: setRGB(true, true, false); break;
-    case ConditionState::NORMAL: setRGB(false, true, false); break;
+    case ConditionState::ALARM: {
+      // Fast Red Strobe (6.25 Hz: 80 ms ON / 80 ms OFF) for ALARM condition
+      bool strobe = (millis() % 160) < 80;
+      setRGB(strobe, false, false);
+      break;
+    }
+    case ConditionState::WARNING: setRGB(true, true, false); break; // Solid Yellow
+    case ConditionState::NORMAL:  setRGB(false, true, false); break; // Solid Green
     default: setRGB(false, false, true); break;
   }
 }
@@ -284,10 +332,11 @@ void resetConditionCounters() {
   g_warning_count = 0;
   g_alarm_count = 0;
   g_recovery_count = 0;
+  g_smoothed_vrms = -1.0f;
 }
 
-uint8_t incrementSaturated(uint8_t value) {
-  return value < 250 ? value + 1 : value;
+uint8_t incrementSaturated(uint8_t value, uint8_t max_val = 15) {
+  return value < max_val ? value + 1 : max_val;
 }
 
 uint8_t decayCounter(uint8_t value) {
@@ -376,6 +425,13 @@ bool loadProfile() {
   if (stored == sizeof(ProfileData)) {
     g_preferences.getBytes(PROFILE_KEY, &g_profile, sizeof(ProfileData));
   }
+  g_tare_floor_g = g_preferences.getFloat("tare_floor", 0.0f);
+  g_calibrated_stage_vrms[0] = g_preferences.getFloat("s0_vrms", 0.206f);
+  g_calibrated_stage_vrms[1] = g_preferences.getFloat("s1_vrms", 0.840f);
+  g_calibrated_stage_vrms[2] = g_preferences.getFloat("s2_vrms", 1.079f);
+  g_stage_calibrated[0] = g_preferences.getBool("s0_cal", false);
+  g_stage_calibrated[1] = g_preferences.getBool("s1_cal", false);
+  g_stage_calibrated[2] = g_preferences.getBool("s2_cal", false);
   g_preferences.end();
 
   if (!profileStructValid(g_profile)) {
@@ -385,6 +441,9 @@ bool loadProfile() {
 
   strlcpy(g_pending_profile_id, g_profile.profile_id, sizeof(g_pending_profile_id));
   g_pending_motor_mass_g = g_profile.motor_mass_g;
+  g_profile.warning_persist = DEFAULT_WARN_PERSIST;
+  g_profile.alarm_persist = DEFAULT_ALARM_PERSIST;
+  g_profile.recovery_persist = DEFAULT_RECOVERY_PERSIST;
   return true;
 }
 
@@ -392,6 +451,13 @@ bool saveProfile() {
   g_profile.crc32 = profileCrc(g_profile);
   if (!g_preferences.begin(PROFILE_NAMESPACE, false)) return false;
   size_t written = g_preferences.putBytes(PROFILE_KEY, &g_profile, sizeof(ProfileData));
+  g_preferences.putFloat("tare_floor", g_tare_floor_g);
+  g_preferences.putFloat("s0_vrms", g_calibrated_stage_vrms[0]);
+  g_preferences.putFloat("s1_vrms", g_calibrated_stage_vrms[1]);
+  g_preferences.putFloat("s2_vrms", g_calibrated_stage_vrms[2]);
+  g_preferences.putBool("s0_cal", g_stage_calibrated[0]);
+  g_preferences.putBool("s1_cal", g_stage_calibrated[1]);
+  g_preferences.putBool("s2_cal", g_stage_calibrated[2]);
   g_preferences.end();
   return written == sizeof(ProfileData);
 }
@@ -399,9 +465,20 @@ bool saveProfile() {
 void eraseSavedProfile() {
   if (g_preferences.begin(PROFILE_NAMESPACE, false)) {
     g_preferences.remove(PROFILE_KEY);
+    g_preferences.remove("tare_floor");
+    g_preferences.remove("s0_vrms");
+    g_preferences.remove("s1_vrms");
+    g_preferences.remove("s2_vrms");
+    g_preferences.remove("s0_cal");
+    g_preferences.remove("s1_cal");
+    g_preferences.remove("s2_cal");
     g_preferences.end();
   }
   clearProfileRam();
+  g_tare_floor_g = 0.0f;
+  g_stage_calibrated[0] = false;
+  g_stage_calibrated[1] = false;
+  g_stage_calibrated[2] = false;
   memset(&g_candidate, 0, sizeof(g_candidate));
   resetConditionCounters();
   g_mode = OperatingMode::NO_PROFILE;
@@ -489,6 +566,9 @@ WindowMetrics sampleWindowMetrics() {
     out.mean_x += x[i];
     out.mean_y += y[i];
     out.mean_z += z[i];
+    if ((i & 0x0F) == 0 && g_committed_state == ConditionState::ALARM) {
+      applyIndicator();
+    }
     while (static_cast<uint32_t>(micros() - started) < SAMPLE_PERIOD_US) { yield(); }
   }
 
@@ -497,8 +577,11 @@ WindowMetrics sampleWindowMetrics() {
   out.mean_z /= BUFFER_SIZE;
 
   float static_g = sqrtf(out.mean_x * out.mean_x + out.mean_y * out.mean_y + out.mean_z * out.mean_z);
-  if (static_g < 0.25f || static_g > 2.0f) {
-    g_sensor_ready = false;
+  if (static_g < 0.10f || static_g > 3.0f) {
+    // Window has abnormal DC offset or incomplete cycle integration under extreme vibration.
+    // Mark this window invalid; DO NOT immediately declare hardware disconnection.
+    // Persistent faults are debounced by g_invalid_window_count >= INVALID_WINDOWS_FOR_FAULT.
+    out.valid = false;
     return out;
   }
 
@@ -524,7 +607,45 @@ WindowMetrics sampleWindowMetrics() {
   out.vector_rms = sqrtf(out.rms_x * out.rms_x + out.rms_y * out.rms_y + out.rms_z * out.rms_z);
   out.peak_vector = sqrtf(peak_sq);
   out.crest_factor = out.vector_rms > 0.0001f ? out.peak_vector / out.vector_rms : NAN;
+
+  // Pass raw window buffer to Deep Research Substrate-Invariant DSP Pipeline
+  TelemetryFrame tf = g_vibeEngine.processWindow(x, y, z, g_preferences);
+
+  out.rms_x = tf.rx;
+  out.rms_y = tf.ry;
+  out.rms_z = tf.rz;
+  out.vector_rms = tf.r3d;
+  out.peak_vector = tf.peakVector;
+  out.crest_factor = tf.crestFactor;
+  out.unbalance_1x = tf.rLowXY;
+  out.j_val = tf.rawJ;
+  out.j_smooth = tf.smoothedJ;
+  out.f1_hz = tf.f1Hz;
+  out.c_sag = tf.cSag;
+  out.shock_rejected = tf.shockRejected;
+  out.stage_4 = static_cast<uint8_t>(tf.committedStage);
+  out.condition_vrms = tf.r3d;
   out.valid = !out.clipped && isfinite(out.vector_rms);
+
+  // Quadrature Tare (Root-Difference-of-Squares: V_net = sqrt(V_raw^2 - V_floor^2))
+  if (out.valid && g_tare_floor_g > 0.0005f) {
+    float raw_sq = out.vector_rms * out.vector_rms;
+    float tare_sq = g_tare_floor_g * g_tare_floor_g;
+    float net_sq = raw_sq - tare_sq;
+    out.vector_rms = (net_sq > 0.0f) ? sqrtf(net_sq) : 0.0f;
+    out.condition_vrms = out.vector_rms;
+  }
+
+  // Active Streaming Field Calibration Accumulator
+  if (out.valid && g_stream_cal_mode != STREAM_CAL_IDLE) {
+    g_stream_cal_count++;
+    if (g_stream_cal_mode == STREAM_CAL_TARE) {
+      g_stream_cal_sum += tf.r3d; // Raw floor
+    } else {
+      g_stream_cal_sum += out.vector_rms; // Net RMS
+    }
+  }
+
   return out;
 }
 
@@ -547,7 +668,7 @@ void commitState(ConditionState next) {
   applyIndicator();
 }
 
-ConditionState evaluateCondition(float rms, bool valid) {
+ConditionState evaluateCondition(const WindowMetrics& m, bool valid) {
   if (!g_sensor_ready || g_invalid_window_count >= INVALID_WINDOWS_FOR_FAULT) {
     return ConditionState::SENSOR_FAULT;
   }
@@ -559,54 +680,28 @@ ConditionState evaluateCondition(float rms, bool valid) {
   if (!activeMonitoring || !g_profile.approved) return ConditionState::UNKNOWN;
   if (!valid) return g_committed_state;
 
-  bool alarmEvidence = rms >= g_profile.alarm_enter;
-  bool warningEvidence = rms >= g_profile.warning_enter;
-  bool alarmReleased = rms < g_profile.alarm_exit;
-  bool warningReleased = rms < g_profile.warning_exit;
-
-  g_alarm_count = alarmEvidence ? incrementSaturated(g_alarm_count) : decayCounter(g_alarm_count);
-  g_warning_count = warningEvidence ? incrementSaturated(g_warning_count) : decayCounter(g_warning_count);
-
-  switch (g_committed_state) {
-    case ConditionState::NORMAL:
-      g_recovery_count = 0;
-      if (g_alarm_count >= g_profile.alarm_persist) return ConditionState::ALARM;
-      if (g_warning_count >= g_profile.warning_persist) return ConditionState::WARNING;
-      return ConditionState::NORMAL;
-
-    case ConditionState::WARNING:
-      if (g_alarm_count >= g_profile.alarm_persist) {
-        g_recovery_count = 0;
-        return ConditionState::ALARM;
-      }
-      if (warningReleased) {
-        g_recovery_count = incrementSaturated(g_recovery_count);
-        if (g_recovery_count >= g_profile.recovery_persist) {
-          g_recovery_count = 0;
-          return ConditionState::NORMAL;
-        }
-      } else {
-        g_recovery_count = 0;
-      }
-      return ConditionState::WARNING;
-
-    case ConditionState::ALARM:
-      if (alarmReleased) {
-        g_recovery_count = incrementSaturated(g_recovery_count);
-        if (g_recovery_count >= g_profile.recovery_persist) {
-          g_recovery_count = 0;
-          return rms >= g_profile.warning_exit ? ConditionState::WARNING : ConditionState::NORMAL;
-        }
-      } else {
-        g_recovery_count = 0;
-      }
-      return ConditionState::ALARM;
-
-    default:
-      resetConditionCounters();
-      return ConditionState::NORMAL;
+  // Primary: Substrate-Invariant 4-Stage Hysteresis Engine
+  // Stage 0 (Bare Arm) -> NORMAL (Solid Green)
+  // Stage 1 (Bolt Only) -> WARNING (Solid Yellow)
+  // Stage 2 (Bolt + 1 Nut) -> ALARM (Red)
+  // Stage 3 (Bolt + 2 Nuts) -> ALARM (Red)
+  if (m.stage_4 >= 2) {
+    resetConditionCounters();
+    return ConditionState::ALARM;
   }
+  if (m.stage_4 == 1) {
+    resetConditionCounters();
+    return ConditionState::WARNING;
+  }
+  if (m.stage_4 == 0) {
+    resetConditionCounters();
+    return ConditionState::NORMAL;
+  }
+
+  return ConditionState::NORMAL;
 }
+
+
 
 // ============================================================================
 // AUTOTUNING
@@ -968,26 +1063,29 @@ void printTelemetry(const WindowMetrics& m) {
   float alarm = g_profile.approved ? g_profile.alarm_enter : RMS_ALARM_LIMIT;
   const char* state = conditionName(g_committed_state);
 
-  // Existing plotter-style line retained, with the authoritative State appended.
-  Serial.printf(">VRMS:%.5f,Baseline:%.5f,WarnLimit:%.5f,AlarmLimit:%.5f,State:%s\n",
-                m.vector_rms, baseline, warning, alarm, state);
+  // Plotter-style line (compatible with server.js & web dashboard)
+  Serial.printf(">VRMS:%.5f,Baseline:%.5f,WarnLimit:%.5f,AlarmLimit:%.5f,State:%s,J:%.4f,f1:%.2f,Stage:%u,Shock:%d,Tare:%.5f\n",
+                m.condition_vrms, baseline, warning, alarm, state,
+                m.j_smooth, m.f1_hz, m.stage_4, m.shock_rejected ? 1 : 0, g_tare_floor_g);
 
-  // Existing human-readable style retained, now driven by the same committed state as RGB.
-  Serial.printf("[LIVE] VRMS: %7.5f g | Condition: [%-12s] | Mode: %-20s\n",
-                m.vector_rms, state, modeName(g_mode));
+  // Human-readable live line
+  Serial.printf("[LIVE] VRMS: %7.5f g | J(t): %6.2f | Stage: %u | Condition: [%-12s] | Mode: %-20s\n",
+                m.condition_vrms, m.j_smooth, m.stage_4, state, modeName(g_mode));
 
-  // Machine-readable tagged telemetry for bridge.py.
-  Serial.printf("[DATA] schema=3 seq=%lu device_ms=%lu mode=%s state=%s forced=%d profile=%s approved=%d mass_g=%.2f mean=(%.5f,%.5f,%.5f) rms=(%.5f,%.5f,%.5f) vector=%.5f peak=%.5f crest=",
-                ++g_sequence, millis(), modeName(g_mode), state, g_forced_alarm,
+  // Machine-readable tagged telemetry for bridge.py / server.js
+  Serial.printf("[DATA] schema=3 seq=%lu device_ms=%lu mode=%s state=%s stage4=%u J=%.4f f1=%.2f cSag=%.2f shock=%d forced=%d profile=%s approved=%d mass_g=%.2f mean=(%.5f,%.5f,%.5f) rms=(%.5f,%.5f,%.5f) vector=%.5f peak=%.5f crest=%.4f baseline=%.5f warning=%.5f alarm=%.5f valid=%d clipped=%d tare=%.5f calMode=%d calSec=%.1f\n",
+                ++g_sequence, millis(), modeName(g_mode), state, m.stage_4,
+                m.j_smooth, m.f1_hz, m.c_sag, m.shock_rejected ? 1 : 0,
+                g_forced_alarm,
                 g_profile.approved ? g_profile.profile_id : g_pending_profile_id,
                 g_profile.approved, g_profile.approved ? g_profile.motor_mass_g : g_pending_motor_mass_g,
                 m.mean_x, m.mean_y, m.mean_z,
                 m.rms_x, m.rms_y, m.rms_z,
-                m.vector_rms, m.peak_vector);
-  if (isfinite(m.crest_factor)) Serial.printf("%.4f", m.crest_factor);
-  else Serial.print("null");
-  Serial.printf(" baseline=%.5f warning=%.5f alarm=%.5f valid=%d clipped=%d\n",
-                baseline, warning, alarm, m.valid, m.clipped);
+                m.vector_rms, m.peak_vector, m.crest_factor,
+                baseline, warning, alarm, m.valid, m.clipped,
+                g_tare_floor_g,
+                static_cast<int>(g_stream_cal_mode),
+                (g_stream_cal_mode != STREAM_CAL_IDLE) ? ((millis() - g_stream_cal_start_ms) / 1000.0f) : 0.0f);
 }
 
 // ============================================================================
@@ -1055,6 +1153,145 @@ void setPendingMass(const String& value) {
   Serial.printf("[COMMAND] ack=MASS ok=1 value_g=%.2f revalidation_required=1\n", mass);
 }
 
+void setCustomThresholds(float warnVal, float alarmVal) {
+  if (warnVal <= 0.05f || alarmVal <= warnVal) {
+    Serial.println("[COMMAND] ack=SET_THRESHOLDS ok=0 reason=INVALID_THRESHOLDS");
+    return;
+  }
+  g_profile.approved = 1;
+  g_profile.warning_enter = warnVal;
+  float base = g_profile.baseline_rms > 0.01f ? g_profile.baseline_rms : 0.206f;
+  g_profile.warning_exit = base + WARN_EXIT_FRACTION * (g_profile.warning_enter - base);
+  g_profile.alarm_enter = alarmVal;
+  g_profile.alarm_exit = g_profile.warning_enter + ALARM_EXIT_FRACTION * (g_profile.alarm_enter - g_profile.warning_enter);
+  saveProfile();
+  resetConditionCounters();
+  commitState(ConditionState::NORMAL);
+  Serial.printf("[COMMAND] ack=SET_THRESHOLDS ok=1 warn_enter=%.5f warn_exit=%.5f alarm_enter=%.5f alarm_exit=%.5f\n",
+                g_profile.warning_enter, g_profile.warning_exit, g_profile.alarm_enter, g_profile.alarm_exit);
+}
+
+void startStreamingCalibration(int8_t mode) {
+  g_stream_cal_mode = mode;
+  g_stream_cal_start_ms = millis();
+  g_stream_cal_count = 0;
+  g_stream_cal_sum = 0.0;
+  applyIndicator();
+  if (mode == STREAM_CAL_TARE) {
+    Serial.println("[CAL_STREAM] ack=TARE_START ok=1 status=RECORDING_TARE min_duration_s=3");
+  } else {
+    Serial.printf("[CAL_STREAM] ack=CAL_START ok=1 stage=%d status=RECORDING min_duration_s=3\n", mode);
+  }
+}
+
+void stopStreamingCalibration() {
+  if (g_stream_cal_mode == STREAM_CAL_IDLE) {
+    Serial.println("[CAL_STREAM] ack=STOP ok=0 reason=NO_ACTIVE_RECORDING");
+    return;
+  }
+
+  uint32_t elapsed_ms = millis() - g_stream_cal_start_ms;
+  if (elapsed_ms < 3000) {
+    Serial.printf("[CAL_STREAM] ack=STOP ok=0 reason=MIN_3_SECONDS_REQUIRED elapsed_ms=%lu remaining_ms=%lu count=%u\n",
+                  elapsed_ms, 3000 - elapsed_ms, g_stream_cal_count);
+    return;
+  }
+
+  if (g_stream_cal_count == 0) {
+    Serial.println("[CAL_STREAM] ack=STOP ok=0 reason=NO_VALID_SAMPLES_CAPTURED");
+    g_stream_cal_mode = STREAM_CAL_IDLE;
+    applyIndicator();
+    return;
+  }
+
+  float avg = static_cast<float>(g_stream_cal_sum / g_stream_cal_count);
+
+  if (g_stream_cal_mode == STREAM_CAL_TARE) {
+    g_tare_floor_g = avg;
+    g_stream_cal_mode = STREAM_CAL_IDLE;
+    saveProfile();
+    applyIndicator();
+    Serial.printf("[CAL_STREAM] ack=TARE_STOP ok=1 tare_floor_g=%.5f elapsed_s=%.1f samples=%u\n",
+                  g_tare_floor_g, elapsed_ms / 1000.0f, g_stream_cal_count);
+  } else {
+    int stage = g_stream_cal_mode;
+    g_calibrated_stage_vrms[stage] = avg;
+    g_stage_calibrated[stage] = true;
+    g_stream_cal_mode = STREAM_CAL_IDLE;
+    saveProfile();
+    applyIndicator();
+    Serial.printf("[CAL_STREAM] ack=CAL_STOP ok=1 stage=%d avg_vrms=%.5f elapsed_s=%.1f samples=%u\n",
+                  stage, avg, elapsed_ms / 1000.0f, g_stream_cal_count);
+  }
+}
+
+void commitCalibratedThresholds() {
+  float v0 = g_stage_calibrated[0] ? g_calibrated_stage_vrms[0] : 0.206f;
+  float v1 = g_stage_calibrated[1] ? g_calibrated_stage_vrms[1] : (v0 + 0.50f);
+  float v2 = g_stage_calibrated[2] ? g_calibrated_stage_vrms[2] : (v1 + 0.35f);
+
+  if (v1 <= v0) v1 = v0 + 0.20f;
+  if (v2 <= v1) v2 = v1 + 0.25f;
+
+  float warn_enter = v0 + 0.50f * (v1 - v0);
+  float warn_exit  = v0 + 0.25f * (v1 - v0);
+  float alarm_enter = v1 + 0.50f * (v2 - v1);
+  float alarm_exit  = v1 + 0.25f * (v2 - v1);
+
+  g_profile.baseline_rms = v0;
+  g_profile.warning_enter = warn_enter;
+  g_profile.warning_exit = warn_exit;
+  g_profile.alarm_enter = alarm_enter;
+  g_profile.alarm_exit = alarm_exit;
+  g_profile.approved = 1;
+  saveProfile();
+  resetConditionCounters();
+  commitState(ConditionState::NORMAL);
+
+  Serial.printf("[CAL_STREAM] ack=CAL_COMMIT ok=1 v0=%.5f v1=%.5f v2=%.5f warn_enter=%.5f warn_exit=%.5f alarm_enter=%.5f alarm_exit=%.5f tare=%.5f\n",
+                v0, v1, v2, warn_enter, warn_exit, alarm_enter, alarm_exit, g_tare_floor_g);
+}
+
+void resetCalibrationDefaults() {
+  g_tare_floor_g = 0.0f;
+  g_calibrated_stage_vrms[0] = 0.20600f;
+  g_calibrated_stage_vrms[1] = 0.84000f;
+  g_calibrated_stage_vrms[2] = 1.07900f;
+  g_stage_calibrated[0] = false;
+  g_stage_calibrated[1] = false;
+  g_stage_calibrated[2] = false;
+
+  g_profile.baseline_rms = 0.20600f;
+  g_profile.warning_enter = 0.80000f;
+  g_profile.warning_exit = 0.75000f;
+  g_profile.alarm_enter = 0.95000f;
+  g_profile.alarm_exit = 0.88000f;
+  g_profile.approved = 1;
+  saveProfile();
+  resetConditionCounters();
+  commitState(ConditionState::NORMAL);
+
+  Serial.println("[CAL_STREAM] ack=CAL_RESET ok=1 baseline=0.20600 warn=0.80000 alarm=0.95000 tare=0.00000");
+}
+
+void setCustomAlarm(float alarmVal) {
+  if (!g_profile.approved) {
+    Serial.println("[COMMAND] ack=SET_ALARM ok=0 reason=NO_APPROVED_PROFILE");
+    return;
+  }
+  if (alarmVal <= g_profile.warning_enter) {
+    Serial.println("[COMMAND] ack=SET_ALARM ok=0 reason=ALARM_MUST_BE_GREATER_THAN_WARN");
+    return;
+  }
+  g_profile.alarm_enter = alarmVal;
+  g_profile.alarm_exit = g_profile.warning_enter + ALARM_EXIT_FRACTION * (g_profile.alarm_enter - g_profile.warning_enter);
+  saveProfile();
+  resetConditionCounters();
+  commitState(ConditionState::NORMAL);
+  Serial.printf("[COMMAND] ack=SET_ALARM ok=1 alarm_enter=%.5f alarm_exit=%.5f\n",
+                g_profile.alarm_enter, g_profile.alarm_exit);
+}
+
 void handleCommand(String command) {
   command.trim();
   if (command.length() == 0) return;
@@ -1075,12 +1312,52 @@ void handleCommand(String command) {
   else if (upper == "?" || upper == "H") printHelpMenu();
   else if (upper.startsWith("NAME=")) setPendingName(command.substring(5));
   else if (upper.startsWith("MASS=")) setPendingMass(command.substring(5));
+  else if (upper == "CAL" || upper == "CAL_AUTO" || upper == "CALIBRATE") {
+    g_vibeEngine.startBaselineCalibration();
+    Serial.println("[CAL] Started 8.0s automated baseline calibration (Median + MAD)...");
+  }
   else if (upper == "CAL_OFF") collectStationaryReference();
   else if (upper == "CAL_RUN") collectHealthyRun();
   else if (upper == "PROFILE_APPROVE") approveCandidate();
   else if (upper == "CAL_CANCEL") cancelCalibration();
   else if (upper == "PROFILE_CLEAR") eraseSavedProfile();
   else if (upper == "STATUS") printStatus();
+  else if (upper == "TARE_START" || upper == "TARE") startStreamingCalibration(STREAM_CAL_TARE);
+  else if (upper == "TARE_STOP") stopStreamingCalibration();
+  else if (upper.startsWith("CAL_START")) {
+    int stage = 0;
+    String arg = command.substring(9);
+    arg.trim();
+    if (arg.length() > 0) {
+      if (arg.startsWith("=") || arg.startsWith("_") || arg.startsWith(" ")) {
+        arg = arg.substring(1);
+        arg.trim();
+      }
+      stage = arg.toInt();
+    }
+    if (stage < 0 || stage > 2) stage = 0;
+    startStreamingCalibration(static_cast<int8_t>(stage));
+  }
+  else if (upper == "CAL_STOP") stopStreamingCalibration();
+  else if (upper == "CAL_COMMIT" || upper == "CAL_SAVE") commitCalibratedThresholds();
+  else if (upper == "CAL_RESET" || upper == "CAL_DEFAULT") resetCalibrationDefaults();
+  else if (upper.startsWith("SET_ALARM=")) {
+    float a = command.substring(10).toFloat();
+    setCustomAlarm(a);
+  }
+  else if (upper.startsWith("SET_THRESHOLDS=") || upper.startsWith("SET_THRESHOLDS ")) {
+    String args = command.substring(15);
+    args.trim();
+    int sep = args.indexOf(',');
+    if (sep < 0) sep = args.indexOf(' ');
+    if (sep > 0) {
+      float w = args.substring(0, sep).toFloat();
+      float a = args.substring(sep + 1).toFloat();
+      setCustomThresholds(w, a);
+    } else {
+      Serial.println("[COMMAND] ack=SET_THRESHOLDS ok=0 reason=EXPECTED_TWO_VALUES");
+    }
+  }
   else if (upper == "TEST_ON") {
     if (!g_profile.approved) {
       Serial.println("[COMMAND] ack=TEST_ON ok=0 reason=NO_APPROVED_PROFILE");
@@ -1178,6 +1455,12 @@ void setup() {
       g_committed_state = ConditionState::UNKNOWN;
       Serial.println("[PROFILE] loaded=0 action=RUN_AUTOTUNE");
     }
+
+    if (g_vibeEngine.loadFromNVS(g_preferences)) {
+      Serial.println("[DSP_ENGINE] Loaded Deep Research baseline calibration from NVS.");
+    } else {
+      Serial.println("[DSP_ENGINE] Default Deep Research baseline active. Send 'CAL' or press BOOT to autotune.");
+    }
   } else {
     g_sensor_ready = false;
     g_mode = OperatingMode::SENSOR_FAULT;
@@ -1192,6 +1475,13 @@ void setup() {
 
 void loop() {
   processSerialCommands();
+
+  // Hardware BOOT button (GPIO 0) triggers automated calibration
+  if (digitalRead(PIN_BOOT_BUTTON) == LOW && g_vibeEngine.getCalibrationState() == CAL_IDLE) {
+    g_vibeEngine.startBaselineCalibration();
+    Serial.println("[CAL] BOOT button pressed: Started 8.0s automated baseline calibration (Median + MAD)...");
+    delay(250);
+  }
 
   if (!g_sensor_ready) {
     applyIndicator();
@@ -1224,20 +1514,33 @@ void loop() {
   if (!g_sensor_ready || g_invalid_window_count >= INVALID_WINDOWS_FOR_FAULT) {
     if (g_mode != OperatingMode::SENSOR_FAULT) g_mode_before_fault = g_mode;
     g_mode = OperatingMode::SENSOR_FAULT;
+    g_sensor_ready = false;
+    g_last_sensor_retry_ms = millis();
     commitState(ConditionState::SENSOR_FAULT);
     Serial.printf("[FAULT] reason=%s invalid_windows=%u\n",
-                  g_sensor_ready ? "INVALID_WINDOWS" : "SENSOR_DISCONNECTED",
+                  g_invalid_window_count >= INVALID_WINDOWS_FOR_FAULT ? "INVALID_WINDOWS" : "SENSOR_DISCONNECTED",
                   g_invalid_window_count);
     return;
   }
 
-  ConditionState next = evaluateCondition(metrics.vector_rms, metrics.valid);
+  if (metrics.valid) {
+    if (g_smoothed_vrms < 0.0f) {
+      g_smoothed_vrms = metrics.condition_vrms;
+    } else {
+      g_smoothed_vrms = 0.08f * metrics.condition_vrms + 0.92f * g_smoothed_vrms;
+    }
+  }
+
+  ConditionState next = evaluateCondition(metrics, metrics.valid);
   commitState(next);
+  applyIndicator();
 
   uint32_t now = millis();
   if (metrics.valid && (g_state_changed || now - g_last_telemetry_ms >= TELEMETRY_INTERVAL_MS)) {
     g_last_telemetry_ms = now;
-    printTelemetry(metrics);
+    WindowMetrics smoothMetrics = metrics;
+    if (g_smoothed_vrms >= 0.0f) smoothMetrics.condition_vrms = g_smoothed_vrms;
+    printTelemetry(smoothMetrics);
     g_state_changed = false;
   }
 

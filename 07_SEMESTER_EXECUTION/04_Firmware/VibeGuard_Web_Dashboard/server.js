@@ -62,7 +62,13 @@ const commandMap = Object.freeze({
   PROFILE_CLEAR: 'PROFILE_CLEAR',
   STATUS: 'STATUS',
   TEST_ON: 'TEST_ON',
-  TEST_OFF: 'TEST_OFF'
+  TEST_OFF: 'TEST_OFF',
+  TARE_START: 'TARE_START',
+  TARE_STOP: 'TARE_STOP',
+  CAL_START: 'CAL_START',
+  CAL_STOP: 'CAL_STOP',
+  CAL_COMMIT: 'CAL_COMMIT',
+  CAL_RESET: 'CAL_RESET'
 });
 let serial = null;
 let serialState = {
@@ -160,6 +166,9 @@ async function connectSerial() {
     const trimmed = line.trim();
     if (trimmed.startsWith('[CAL') || trimmed.startsWith('[STATUS') || trimmed.startsWith('[COMMAND') || trimmed.startsWith('[RESET') || trimmed.startsWith('[EVENT') || trimmed.startsWith('[LIVE')) {
       console.log(trimmed);
+      if (trimmed.startsWith('[CAL_STREAM]') || trimmed.startsWith('[COMMAND]')) {
+        broadcast('bridge_event', { text: trimmed });
+      }
       return;
     }
     if (trimmed.includes('sensor=OK') || trimmed.includes('[DATA]') || trimmed.startsWith('>VRMS:')) {
@@ -199,14 +208,17 @@ function sendCommand(message, socket) {
     return;
   }
   let wire = command;
-  if (command === 'SET_THRESHOLDS') {
+  if (command === 'CAL_START') {
+    const stage = message.payload?.stage ?? 0;
+    wire = `CAL_START ${stage}`;
+  } else if (command === 'SET_THRESHOLDS') {
     const warning = Number(message.payload?.warningRmsG);
     const alarm = Number(message.payload?.alarmRmsG);
     if (!(warning > 0 && alarm > warning)) {
       socket.send(envelope('command_result', { requestId, ok: false, error: 'Thresholds must satisfy 0 < warning < alarm' }));
       return;
     }
-    wire = `${command} ${warning.toFixed(6)} ${alarm.toFixed(6)}`;
+    wire = `${command} ${warning.toFixed(5)} ${alarm.toFixed(5)}`;
   }
   serial.write(`${wire}\n`, err => socket.send(envelope('command_result', {
     requestId, ok: !err, command, error: err?.message || null
