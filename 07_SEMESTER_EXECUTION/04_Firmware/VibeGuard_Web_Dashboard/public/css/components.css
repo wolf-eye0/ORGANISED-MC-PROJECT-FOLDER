@@ -8,7 +8,7 @@
 @media(max-width:767px){.status-strip{grid-template-columns:1fr 1fr}.condition-cell{grid-column:1/-1}.metric-cell{border-bottom:1px solid var(--divider)}.metric-cell:nth-child(odd){border-right:0}.metric-cell:last-child{grid-column:1/-1}.metric-cell strong{font-size:var(--text-xl)}.panel-header .segmented-control{order:3;width:100%;overflow:auto}.segmented-control button{flex:1}.chart-wrap{height:19rem}.chart-footer{gap:var(--space-3);flex-wrap:wrap}.live-follow{margin-left:0}.twin-stage{min-height:16rem}.twin-status{grid-template-columns:1fr}.twin-status div{border-right:0;border-bottom:1px solid var(--divider)}.swipe-hint{display:block}.event-list li{grid-template-columns:1fr}.event-list time{margin-bottom:-.5rem}}
 
 /* Field Calibration Suite */
-.calibration-panel{display:block;margin-top:var(--space-4)}
+.calibration-panel{grid-column:1/-1;padding:var(--panel-pad);display:block}
 .cal-status-badge{display:inline-flex;align-items:center;min-height:1.5rem;padding:0 var(--space-3);border-radius:var(--radius-pill);font-size:var(--text-xs);font-weight:700;letter-spacing:.08em;background:var(--surface-3);color:var(--text-2);transition:all .2s ease}
 .cal-status-badge.recording{background:color-mix(in oklab,#9333ea 20%,transparent);color:#c084fc;animation:pulse-purple 1.2s ease-out infinite}
 @keyframes pulse-purple{50%{box-shadow:0 0 0 .35rem color-mix(in oklab,#9333ea 25%,transparent)}}
@@ -16,15 +16,23 @@
 .cal-card{padding:var(--space-4);background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-md);display:flex;flex-direction:column;justify-content:space-between;gap:var(--space-3);transition:border-color .2s ease,box-shadow .2s ease}
 .cal-card.recording{border-color:#a855f7;box-shadow:0 0 12px rgba(168,85,247,.25)}
 .cal-card-header{display:flex;align-items:center;gap:var(--space-3)}
+.cal-card-header strong{display:block;font-size:var(--text-sm)}
+.cal-card-header small{display:block;color:var(--text-3);font-size:0.7rem;margin-top:2px}
 .cal-step-num{width:1.6rem;height:1.6rem;display:grid;place-items:center;border-radius:50%;background:var(--surface-3);font-size:var(--text-xs);font-weight:700}
-.cal-card.s0 .cal-step-num{color:var(--normal)}
-.cal-card.s1 .cal-step-num{color:var(--warning)}
-.cal-card.s2 .cal-step-num{color:var(--alarm)}
+.cal-card.s0 .cal-step-num{color:var(--normal);background:color-mix(in oklab,var(--normal) 15%,var(--surface-3))}
+.cal-card.s1 .cal-step-num{color:var(--warning);background:color-mix(in oklab,var(--warning) 15%,var(--surface-3))}
+.cal-card.s2 .cal-step-num{color:var(--alarm);background:color-mix(in oklab,var(--alarm) 15%,var(--surface-3))}
 .cal-card-val{font-family:var(--font-mono);font-size:var(--text-lg);font-weight:600}
-.cal-btn{min-height:2.25rem;padding:0 var(--space-3);border-radius:var(--radius-md);font-size:var(--text-xs);font-weight:600;border:1px solid var(--border);background:var(--surface-3);color:var(--text-1);cursor:pointer;transition:all .15s ease}
+.cal-btn{min-height:2.5rem;padding:0 var(--space-3);border-radius:var(--radius-md);font-size:var(--text-xs);font-weight:600;border:1px solid var(--border);background:var(--surface-3);color:var(--text-1);cursor:pointer;transition:all .15s ease}
 .cal-btn:hover:not(:disabled){background:var(--surface-hover)}
 .cal-btn:disabled{opacity:.5;cursor:not-allowed}
-.cal-btn.recording{background:#7e22ce;color:#fff;border-color:#a855f7}
+.cal-card.s0 .cal-btn{border-color:color-mix(in oklab,var(--normal) 40%,var(--border))}
+.cal-card.s0 .cal-btn:hover:not(:disabled){background:color-mix(in oklab,var(--normal) 15%,var(--surface-3))}
+.cal-card.s1 .cal-btn{border-color:color-mix(in oklab,var(--warning) 40%,var(--border))}
+.cal-card.s1 .cal-btn:hover:not(:disabled){background:color-mix(in oklab,var(--warning) 15%,var(--surface-3))}
+.cal-card.s2 .cal-btn{border-color:color-mix(in oklab,var(--alarm) 40%,var(--border))}
+.cal-card.s2 .cal-btn:hover:not(:disabled){background:color-mix(in oklab,var(--alarm) 15%,var(--surface-3))}
+.cal-btn.recording{background:#7e22ce!important;color:#fff!important;border-color:#a855f7!important}
 .cal-footer{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);margin-top:var(--space-5);padding-top:var(--space-4);border-top:1px solid var(--divider);flex-wrap:wrap}
 .cal-results{display:flex;gap:var(--space-5);font-size:var(--text-sm);color:var(--text-2);flex-wrap:wrap}
 .cal-results strong{font-family:var(--font-mono);color:var(--text-1)}
