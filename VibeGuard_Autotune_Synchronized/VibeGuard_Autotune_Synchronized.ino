@@ -1073,7 +1073,8 @@ void printTelemetry(const WindowMetrics& m) {
                 m.condition_vrms, m.j_smooth, m.stage_4, state, modeName(g_mode));
 
   // Machine-readable tagged telemetry for bridge.py / server.js
-  Serial.printf("[DATA] schema=3 seq=%lu device_ms=%lu mode=%s state=%s stage4=%u J=%.4f f1=%.2f cSag=%.2f shock=%d forced=%d profile=%s approved=%d mass_g=%.2f mean=(%.5f,%.5f,%.5f) rms=(%.5f,%.5f,%.5f) vector=%.5f peak=%.5f crest=%.4f baseline=%.5f warning=%.5f alarm=%.5f valid=%d clipped=%d tare=%.5f calMode=%d calSec=%.1f\n",
+  float cur_cal_avg = (g_stream_cal_count > 0) ? static_cast<float>(g_stream_cal_sum / g_stream_cal_count) : 0.0f;
+  Serial.printf("[DATA] schema=3 seq=%lu device_ms=%lu mode=%s state=%s stage4=%u J=%.4f f1=%.2f cSag=%.2f shock=%d forced=%d profile=%s approved=%d mass_g=%.2f mean=(%.5f,%.5f,%.5f) rms=(%.5f,%.5f,%.5f) vector=%.5f peak=%.5f crest=%.4f baseline=%.5f warning=%.5f alarm=%.5f valid=%d clipped=%d tare=%.5f calMode=%d calSec=%.1f calCount=%u calAvg=%.5f\n",
                 ++g_sequence, millis(), modeName(g_mode), state, m.stage_4,
                 m.j_smooth, m.f1_hz, m.c_sag, m.shock_rejected ? 1 : 0,
                 g_forced_alarm,
@@ -1085,7 +1086,9 @@ void printTelemetry(const WindowMetrics& m) {
                 baseline, warning, alarm, m.valid, m.clipped,
                 g_tare_floor_g,
                 static_cast<int>(g_stream_cal_mode),
-                (g_stream_cal_mode != STREAM_CAL_IDLE) ? ((millis() - g_stream_cal_start_ms) / 1000.0f) : 0.0f);
+                (g_stream_cal_mode != STREAM_CAL_IDLE) ? ((millis() - g_stream_cal_start_ms) / 1000.0f) : 0.0f,
+                g_stream_cal_count,
+                cur_cal_avg);
 }
 
 // ============================================================================
@@ -1211,7 +1214,7 @@ void stopStreamingCalibration() {
     g_stream_cal_mode = STREAM_CAL_IDLE;
     saveProfile();
     applyIndicator();
-    Serial.printf("[CAL_STREAM] ack=TARE_STOP ok=1 tare_floor_g=%.5f elapsed_s=%.1f samples=%u\n",
+    Serial.printf("[CAL_STREAM] ack=TARE_STOP ok=1 tare_floor=%.5f elapsed_s=%.1f samples=%u\n",
                   g_tare_floor_g, elapsed_ms / 1000.0f, g_stream_cal_count);
   } else {
     int stage = g_stream_cal_mode;

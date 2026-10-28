@@ -13,7 +13,7 @@ const $=selector=>document.querySelector(selector);
 
 function setText(selector,value){const node=$(selector);if(node&&node.textContent!==String(value))node.textContent=value;}
 function stateBanner(state){const banner=$('#systemBanner'),latest=state.latest,age=state.connection.dataAgeMs;let spec=null;if(state.mode==='PREVIEW')spec={title:'Preview data is active',message:'Values on this screen are not from the hardware.'};if(state.mode==='LIVE'&&state.connection.browserToBridge!=='CONNECTED')spec={title:'Local bridge unavailable',message:`Unable to reach ${state.connection.endpoint}.`};if(latest?.state==='CALIBRATING')spec={title:'Calibrating baseline',message:'Keep the motor off and the sensor still.'};if(latest?.state==='SENSOR_FAULT')spec={title:'ADXL345 unavailable',message:'Check 3.3 V, ground and SPI wiring.'};if(Number.isFinite(age)&&age>2500)spec={title:'Telemetry is stale',message:`Last valid reading was ${(age/1000).toFixed(1)} seconds ago.`};banner.hidden=!spec;if(spec){setText('#bannerTitle',spec.title);setText('#bannerMessage',spec.message);}}
-function renderKpis(state){const s=state.latest,age=state.connection.dataAgeMs,stale=Number.isFinite(age)&&age>2500;const meta=s?stateMeta[s.state]:stateMeta.BOOTING;const condition=$('.condition-cell');condition.dataset.state=s?.state||'BOOTING';setText('#stateValue',stale?`LAST ${meta.label.toUpperCase()}`:meta.label.toUpperCase());setText('#stateSupport',stale?'Telemetry is not current':meta.support);setText('#vectorValue',formatG(s?.rms?.vectorG));setText('#peakValue',formatG(s?.peakVectorG));setText('#crestValue',formatCrest(s?.crestFactor));setText('#trendCurrent',formatG(s?.rms?.vectorG));const warning=s?.warningRmsG??state.thresholds.warningRmsG,alarm=s?.alarmRmsG??state.thresholds.alarmRmsG,vector=s?.rms?.vectorG;const margin=Number.isFinite(vector)?warning-vector:null;setText('#marginValue',formatG(margin));setText('#marginSupport',margin===null?'Until warning':margin>=0?'Until warning':'Warning exceeded');setText('#vectorSupport',Number.isFinite(vector)?`${Math.round(vector/alarm*100)}% of alarm limit`:'Waiting for data');$('#marginTrack').style.width=Number.isFinite(vector)?`${Math.min(100,Math.max(0,vector/alarm*100))}%`:'0%';$('#warningTick').style.left=`${warning/alarm*100}%`;$('#alarmTick').style.left='100%';setText('#dataAge',formatAge(age));setText('#thresholdDetails',`${formatG(warning)} / ${formatG(alarm)} g`);setText('#sourceDetails',state.thresholds.source);setText('#calActiveWarn',formatG(warning));setText('#calActiveAlarm',formatG(alarm));if(s?.tareFloorG!==undefined)setText('#calActiveTare',formatG(s.tareFloorG));}
+function renderKpis(state){const s=state.latest,age=state.connection.dataAgeMs,stale=Number.isFinite(age)&&age>2500;const meta=s?stateMeta[s.state]:stateMeta.BOOTING;const condition=$('.condition-cell');condition.dataset.state=s?.state||'BOOTING';setText('#stateValue',stale?`LAST ${meta.label.toUpperCase()}`:meta.label.toUpperCase());setText('#stateSupport',stale?'Telemetry is not current':meta.support);setText('#vectorValue',formatG(s?.rms?.vectorG));setText('#peakValue',formatG(s?.peakVectorG));setText('#crestValue',formatCrest(s?.crestFactor));setText('#trendCurrent',formatG(s?.rms?.vectorG));const warning=s?.warningRmsG??state.thresholds.warningRmsG,alarm=s?.alarmRmsG??state.thresholds.alarmRmsG,vector=s?.rms?.vectorG;const margin=Number.isFinite(vector)?warning-vector:null;setText('#marginValue',formatG(margin));setText('#marginSupport',margin===null?'Until warning':margin>=0?'Until warning':'Warning exceeded');setText('#vectorSupport',Number.isFinite(vector)?`${Math.round(vector/alarm*100)}% of alarm limit`:'Waiting for data');$('#marginTrack').style.width=Number.isFinite(vector)?`${Math.min(100,Math.max(0,vector/alarm*100))}%`:'0%';$('#warningTick').style.left=`${warning/alarm*100}%`;$('#alarmTick').style.left='100%';setText('#dataAge',formatAge(age));setText('#thresholdDetails',`${formatG(warning)} / ${formatG(alarm)} g`);setText('#sourceDetails',state.thresholds.source);setText('#calActiveWarn',formatG(warning));setText('#calActiveAlarm',formatG(alarm));if(s?.tareFloorG!==undefined)setText('#calActiveTare',formatG(s.tareFloorG));if(s?.calMode!==undefined&&s.calMode>=0&&Number.isFinite(s.calAvg)&&s.calCount>0){const activeId=s.calMode===99?'#calTareVal':`#calS${s.calMode}Val`;setText(activeId,`${formatG(s.calAvg)} (${s.calCount})`);}}
 function renderConnections(state){const bridge=$('#bridgeStatus'),sensor=$('#sensorStatus');const bridgeOk=state.mode==='PREVIEW'||state.connection.browserToBridge==='CONNECTED';bridge.className=`connection-item ${bridgeOk?'connected':'fault'}`;bridge.innerHTML=`<i class="status-dot"></i>${state.mode==='PREVIEW'?'Preview source':bridgeOk?'Bridge connected':'Bridge offline'}`;const sensorOk=state.mode==='PREVIEW'||state.connection.sensor==='CONNECTED';sensor.className=`connection-item ${sensorOk?'connected':'fault'}`;sensor.innerHTML=`<i class="status-dot"></i>${state.mode==='PREVIEW'?'Sensor preview':sensorOk?'Sensor connected':'Sensor unavailable'}`;setText('#modeBadge',state.mode);}
 function renderAxis(state){const s=state.latest;if(!s?.quality.valid){for(const axis of ['x','y','z']){setText(`#${axis}Value`,'—');$(`#${axis}Bar`).style.width='0%';}setText('#axisSummary','Waiting for valid axis data.');return;}const max=Math.max(s.alarmRmsG,s.rms.xG,s.rms.yG,s.rms.zG);for(const axis of ['x','y','z']){const v=s.rms[`${axis}G`];setText(`#${axis}Value`,`${formatG(v)} g`);$(`#${axis}Bar`).style.width=`${Math.min(100,v/max*100)}%`;}const entries=[['X',s.rms.xG],['Y',s.rms.yG],['Z',s.rms.zG]].sort((a,b)=>b[1]-a[1]);setText('#axisSummary',`${entries[0][0]} is the dominant axis in the current DSP window. This is directional evidence, not a fault diagnosis.`);}
 function renderEvents(state){const html=state.events.slice(0,8).map(e=>`<li data-severity="${e.severity}"><time datetime="${new Date(e.timestampMs).toISOString()}">${formatTime(e.timestampMs)}</time><div><strong>${escapeHtml(e.title)}</strong><p>${escapeHtml(e.detail||'')}</p></div></li>`).join('')||'<li class="empty-row">Waiting for session events.</li>';$('#eventList').innerHTML=html;$('#allEventList').innerHTML=state.events.map(e=>`<li data-severity="${e.severity}"><time>${formatTime(e.timestampMs)}</time><div><strong>${escapeHtml(e.title)}</strong><p>${escapeHtml(e.detail||'')}</p></div></li>`).join('')||'<li class="empty-row">No session events.</li>';}
@@ -120,31 +120,17 @@ function bindFieldCalibration() {
       calTimer = null;
     }
     btn.disabled = true;
-    btn.textContent = 'Saving...';
+    btn.textContent = 'Computing Mean...';
 
     try {
+      setFeedback(`Finalizing mathematical average across all recorded windows for ${label}...`);
       await source.sendCommand(stopCmd);
-      const currentVector = store.state.latest?.rms?.vectorG;
-      if (currentVector !== null && currentVector !== undefined) {
-        setText(valId, formatG(currentVector));
-        if (stageNum !== null) recordedStages[`s${stageNum}`] = currentVector;
-        else recordedStages.tare = currentVector;
-      }
-      setFeedback(`${label} captured successfully.`);
-      if (recordedStages.s0 !== null && recordedStages.s1 !== null && btnCommit) {
-        btnCommit.disabled = false;
-      }
     } catch (e) {
       setFeedback(`Failed to stop: ${e.message}`, true);
-    } finally {
       btn.disabled = false;
       btn.classList.remove('recording');
       btn.textContent = `Start ${label}`;
       updateCardState(cardId, false);
-      if (statusBadge) {
-        statusBadge.textContent = 'IDLE';
-        statusBadge.classList.remove('recording');
-      }
       activeCalMode = null;
     }
   };
@@ -214,8 +200,81 @@ function handleBridgeEvent(event) {
   const text = event?.text || '';
   const feedback = $('#calFeedback');
   const btnCommit = $('#btnCalCommit');
+  const statusBadge = $('#calStatusBadge');
   
-  if (text.includes('ack=CAL_COMMIT ok=1')) {
+  if (text.includes('ack=CAL_STOP ok=1')) {
+    const stageMatch = text.match(/stage=(\d+)/);
+    const avgMatch = text.match(/avg_vrms=([0-9.]+)/);
+    const samplesMatch = text.match(/samples=(\d+)/);
+    if (stageMatch && avgMatch) {
+      const stage = stageMatch[1];
+      const avg = parseFloat(avgMatch[1]);
+      const samples = samplesMatch ? samplesMatch[1] : '?';
+      recordedStages[`s${stage}`] = avg;
+      const valId = `#calS${stage}Val`;
+      setText(valId, formatG(avg));
+      const btn = $(`#btnCalS${stage}`);
+      if (btn) {
+        btn.disabled = false;
+        btn.classList.remove('recording');
+        btn.textContent = `Start Stage ${stage}`;
+      }
+      const card = $(`#calCardS${stage}`);
+      if (card) card.classList.remove('recording');
+      if (statusBadge) {
+        statusBadge.textContent = 'IDLE';
+        statusBadge.classList.remove('recording');
+      }
+      activeCalMode = null;
+      if (feedback) {
+        feedback.textContent = `✓ Stage ${stage} calibrated: True mathematical mean = ${formatG(avg)} g across ${samples} windows.`;
+        feedback.className = 'cal-feedback success';
+      }
+      if (recordedStages.s0 !== null && recordedStages.s1 !== null) {
+        if (btnCommit) btnCommit.disabled = false;
+        if (recordedStages.s0 >= recordedStages.s1) {
+          if (feedback) {
+            feedback.textContent = `⚠️ Warning: Stage 0 (${formatG(recordedStages.s0)} g) is ≥ Stage 1 (${formatG(recordedStages.s1)} g). Ensure the imbalance bolt is securely mounted for Stage 1, or re-record.`;
+            feedback.className = 'cal-feedback error';
+          }
+        }
+      }
+    }
+  } else if (text.includes('ack=TARE_STOP ok=1')) {
+    const tareMatch = text.match(/tare_floor(?:_g)?=([0-9.]+)/);
+    const samplesMatch = text.match(/samples=(\d+)/);
+    if (tareMatch) {
+      const tare = parseFloat(tareMatch[1]);
+      const samples = samplesMatch ? samplesMatch[1] : '?';
+      recordedStages.tare = tare;
+      setText('#calTareVal', formatG(tare));
+      setText('#calActiveTare', formatG(tare));
+      const btn = $('#btnTare');
+      if (btn) {
+        btn.disabled = false;
+        btn.classList.remove('recording');
+        btn.textContent = 'Start Tare';
+      }
+      const card = $('#calCardTare');
+      if (card) card.classList.remove('recording');
+      if (statusBadge) {
+        statusBadge.textContent = 'IDLE';
+        statusBadge.classList.remove('recording');
+      }
+      activeCalMode = null;
+      if (feedback) {
+        feedback.textContent = `✓ Tare baseline zeroed: Noise floor mean = ${formatG(tare)} g across ${samples} windows.`;
+        feedback.className = 'cal-feedback success';
+      }
+    }
+  } else if (text.includes('ack=CAL_COMMIT ok=1')) {
+    const warnMatch = text.match(/warn_enter=([0-9.]+)/);
+    const alarmMatch = text.match(/alarm_enter=([0-9.]+)/);
+    const tareMatch = text.match(/tare=([0-9.]+)/);
+    if (warnMatch) setText('#calActiveWarn', formatG(parseFloat(warnMatch[1])));
+    if (alarmMatch) setText('#calActiveAlarm', formatG(parseFloat(alarmMatch[1])));
+    if (tareMatch) setText('#calActiveTare', formatG(parseFloat(tareMatch[1])));
+    
     if (feedback) {
       feedback.textContent = '✓ Thresholds successfully saved to ESP32 Flash memory!';
       feedback.className = 'cal-feedback success';

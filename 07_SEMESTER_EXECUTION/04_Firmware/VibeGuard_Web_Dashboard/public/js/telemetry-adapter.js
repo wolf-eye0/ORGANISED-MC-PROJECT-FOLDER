@@ -51,6 +51,8 @@ export function normalizePacket(packet, source='LIVE', bridgeTsMs=null) {
     tareFloorG: finite(value('tareFloorG','tare','TARE','Tare')) ?? 0.0,
     calMode: finite(value('calMode','cal_mode')) ?? -1,
     calSec: finite(value('calSec','cal_sec')) ?? 0.0,
+    calCount: finite(value('calCount','cal_count')) ?? 0,
+    calAvg: finite(value('calAvg','cal_avg')),
     stage: finite(value('stage_4','stage','Stage','stage4')),
     jVal: finite(value('j_val','j_smooth','j','J')),
     f1Hz: finite(value('f1_hz','f1','F1')),
