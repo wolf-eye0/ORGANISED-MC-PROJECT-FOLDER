@@ -680,25 +680,58 @@ ConditionState evaluateCondition(const WindowMetrics& m, bool valid) {
   if (!activeMonitoring || !g_profile.approved) return ConditionState::UNKNOWN;
   if (!valid) return g_committed_state;
 
-  // Primary: Substrate-Invariant 4-Stage Hysteresis Engine
-  // Stage 0 (Bare Arm) -> NORMAL (Solid Green)
-  // Stage 1 (Bolt Only) -> WARNING (Solid Yellow)
-  // Stage 2 (Bolt + 1 Nut) -> ALARM (Red)
-  // Stage 3 (Bolt + 2 Nuts) -> ALARM (Red)
-  if (m.stage_4 >= 2) {
-    resetConditionCounters();
-    return ConditionState::ALARM;
-  }
-  if (m.stage_4 == 1) {
-    resetConditionCounters();
-    return ConditionState::WARNING;
-  }
-  if (m.stage_4 == 0) {
-    resetConditionCounters();
-    return ConditionState::NORMAL;
-  }
+  // Net vibration magnitude (after Tare floor removal)
+  float vrms = m.condition_vrms;
 
-  return ConditionState::NORMAL;
+  // Dual-Criterion State Evaluation:
+  // 1. Primary: Calibrated Threshold Corridors (saved in Flash)
+  // 2. Secondary: Harmonic Substrate-Invariant Stage (if stage_4 >= 1)
+  bool alarmEvidence   = (vrms >= g_profile.alarm_enter)   || (m.stage_4 >= 2);
+  bool warningEvidence = (vrms >= g_profile.warning_enter) || (m.stage_4 == 1);
+  bool alarmReleased   = (vrms < g_profile.alarm_exit)     && (m.stage_4 < 2);
+  bool warningReleased = (vrms < g_profile.warning_exit)   && (m.stage_4 == 0);
+
+  g_alarm_count   = alarmEvidence   ? incrementSaturated(g_alarm_count)   : decayCounter(g_alarm_count);
+  g_warning_count = warningEvidence ? incrementSaturated(g_warning_count) : decayCounter(g_warning_count);
+
+  switch (g_committed_state) {
+    case ConditionState::NORMAL:
+      g_recovery_count = 0;
+      if (g_alarm_count >= g_profile.alarm_persist) return ConditionState::ALARM;
+      if (g_warning_count >= g_profile.warning_persist) return ConditionState::WARNING;
+      return ConditionState::NORMAL;
+
+    case ConditionState::WARNING:
+      if (g_alarm_count >= g_profile.alarm_persist) {
+        g_recovery_count = 0;
+        return ConditionState::ALARM;
+      }
+      if (warningReleased) {
+        g_recovery_count = incrementSaturated(g_recovery_count);
+        if (g_recovery_count >= g_profile.recovery_persist) {
+          g_recovery_count = 0;
+          return ConditionState::NORMAL;
+        }
+      } else {
+        g_recovery_count = 0;
+      }
+      return ConditionState::WARNING;
+
+    case ConditionState::ALARM:
+      if (alarmReleased) {
+        g_recovery_count = incrementSaturated(g_recovery_count);
+        if (g_recovery_count >= g_profile.recovery_persist) {
+          g_recovery_count = 0;
+          return warningEvidence ? ConditionState::WARNING : ConditionState::NORMAL;
+        }
+      } else {
+        g_recovery_count = 0;
+      }
+      return ConditionState::ALARM;
+
+    default:
+      return ConditionState::NORMAL;
+  }
 }
 
 
