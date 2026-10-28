@@ -210,5 +210,36 @@ function bindFieldCalibration() {
   });
 }
 
-window.addEventListener('DOMContentLoaded',()=>{charts.init();bind();store.subscribe(render);store.addEvent({type:'session_started',severity:'info',title:'Dashboard session started',detail:`${mode} source selected.`});source.subscribe(sample=>store.ingest(sample),status=>{store.setConnection({browserToBridge:status.status,bridgeToSerial:status.serial||store.state.connection.bridgeToSerial,sensor:status.sensor||store.state.connection.sensor});if(status.capabilities)store.setCapabilities(status.capabilities);});source.connect();setInterval(()=>store.tick(),500);});
+function handleBridgeEvent(event) {
+  const text = event?.text || '';
+  const feedback = $('#calFeedback');
+  const btnCommit = $('#btnCalCommit');
+  
+  if (text.includes('ack=CAL_COMMIT ok=1')) {
+    if (feedback) {
+      feedback.textContent = '✓ Thresholds successfully saved to ESP32 Flash memory!';
+      feedback.className = 'cal-feedback success';
+    }
+    if (btnCommit) {
+      btnCommit.textContent = 'Saved to Flash ✓';
+      btnCommit.disabled = true;
+    }
+  } else if (text.includes('ack=UNKNOWN') && text.includes('CAL_COMMIT')) {
+    if (feedback) {
+      feedback.textContent = '⚠️ ESP32 rejected CAL_COMMIT: hardware is running older firmware. Please flash the updated sketch to ESP32.';
+      feedback.className = 'cal-feedback error';
+    }
+    if (btnCommit) {
+      btnCommit.disabled = false;
+      btnCommit.textContent = 'Save Thresholds to Flash';
+    }
+  } else if (text.includes('ack=CAL_RESET ok=1')) {
+    if (feedback) {
+      feedback.textContent = '✓ Factory defaults restored in Flash memory.';
+      feedback.className = 'cal-feedback info';
+    }
+  }
+}
+
+window.addEventListener('DOMContentLoaded',()=>{charts.init();bind();store.subscribe(render);store.addEvent({type:'session_started',severity:'info',title:'Dashboard session started',detail:`${mode} source selected.`});source.subscribe(sample=>store.ingest(sample),status=>{store.setConnection({browserToBridge:status.status,bridgeToSerial:status.serial||store.state.connection.bridgeToSerial,sensor:status.sensor||store.state.connection.sensor});if(status.capabilities)store.setCapabilities(status.capabilities);},event=>handleBridgeEvent(event));source.connect();setInterval(()=>store.tick(),500);});
 window.addEventListener('beforeunload',()=>source.disconnect());

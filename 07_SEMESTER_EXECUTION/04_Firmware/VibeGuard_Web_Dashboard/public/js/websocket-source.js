@@ -1,8 +1,8 @@
 import { normalizePacket } from './telemetry-adapter.js';
 
 export class WebSocketSource {
-  constructor(url){this.url=url;this.socket=null;this.messageHandler=()=>{};this.statusHandler=()=>{};this.attempt=0;this.closed=false;this.pending=new Map();}
-  subscribe(onMessage,onStatus){this.messageHandler=onMessage;this.statusHandler=onStatus;}
+  constructor(url){this.url=url;this.socket=null;this.messageHandler=()=>{};this.statusHandler=()=>{};this.eventHandler=()=>{};this.attempt=0;this.closed=false;this.pending=new Map();}
+  subscribe(onMessage,onStatus,onEvent){this.messageHandler=onMessage;this.statusHandler=onStatus;if(onEvent)this.eventHandler=onEvent;}
   connect(){this.closed=false;this.open();}
   open(){
     this.statusHandler({status:'CONNECTING',attempt:this.attempt});
@@ -12,6 +12,7 @@ export class WebSocketSource {
       try{const message=JSON.parse(event.data);
         if(message.type==='telemetry'){const sample=normalizePacket(message.packet,'LIVE',message.bridgeTsMs);this.messageHandler(sample);}
         if(message.type==='hello'||message.type==='bridge_status')this.statusHandler({status:'CONNECTED',serial:message.connection?.status,sensor:message.connection?.sensor,capabilities:message.capabilities});
+        if(message.type==='bridge_event')this.eventHandler(message);
         if(message.type==='command_result'){const pending=this.pending.get(message.requestId);if(pending){this.pending.delete(message.requestId);message.ok?pending.resolve(message):pending.reject(new Error(message.error));}}
       }catch(error){this.statusHandler({status:'FAULT',error:error.message});}
     });
